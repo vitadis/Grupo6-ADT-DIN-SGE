@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane minHeight="450.0" minWidth="700.0" prefHeight="650.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NavController">
+
+    <left>
+        <VBox alignment="TOP_LEFT" fillWidth="true" maxWidth="280.0" minWidth="230.0" prefWidth="240.0" spacing="8.0">
+            <padding>
+                <Insets bottom="16.0" left="12.0" right="12.0" top="16.0" />
+            </padding>
+            <children>
+                <HBox alignment="CENTER" prefHeight="72.0" prefWidth="196.0">
+                    <children>
+                        <ImageView fitHeight="72.0" fitWidth="140.0" pickOnBounds="true" smooth="false">
+                            <image>
+                                <Image url="@../img/logoMinimalista.jpg" />
+                            </image>
+                        </ImageView>
+                    </children>
+                </HBox>
+
+                <Separator />
+
+                <HBox fx:id="btnInicio" alignment="CENTER_LEFT" maxWidth="Infinity" onMouseClicked="#irInicio" prefHeight="44.0" spacing="20.0">
+                    <padding>
+                        <Insets left="12.0" />
+                    </padding>
+                    <children>
+                        <StackPane maxWidth="32.0" minWidth="32.0" prefWidth="32.0">
+                            <ImageView fx:id="iconInicio" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../img/icon_home.png" />
+                        </image></ImageView>
+                        </StackPane>
+                        <Label text="Inicio" />
+                    </children>
+                </HBox>
+
+                <HBox fx:id="btnCaja" alignment="CENTER_LEFT" maxWidth="Infinity" onMouseClicked="#irCaja" prefHeight="44.0" spacing="20.0">
+                    <padding>
+                        <Insets left="12.0" />
+                    </padding>
+                    <children>
+                        <StackPane maxWidth="32.0" minWidth="32.0" prefWidth="32.0">
+                            <ImageView fx:id="iconCaja" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../img/icon_caja.png" />
+                        </image></ImageView>
+                        </StackPane>
+                        <Label text="Caja y pedidos" />
+                    </children>
+                </HBox>
+
+                <HBox fx:id="btnEconomia" alignment="CENTER_LEFT" maxWidth="Infinity" onMouseClicked="#irEconomia" prefHeight="44.0" spacing="20.0">
+                    <padding>
+                        <Insets left="12.0" />
+                    </padding>
+                    <children>
+                        <StackPane maxWidth="32.0" minWidth="32.0" prefWidth="32.0">
+                            <ImageView fx:id="iconEconomia" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../img/icon_euro.png" />
+                        </image></ImageView>
+                        </StackPane>
+                        <Label text="Gestión económica" />
+                    </children>
+                </HBox>
+
+                <HBox fx:id="btnStock" alignment="CENTER_LEFT" maxWidth="Infinity" onMouseClicked="#irStock" prefHeight="44.0" spacing="20.0">
+                    <padding>
+                        <Insets left="12.0" />
+                    </padding>
+                    <children>
+                        <StackPane maxWidth="32.0" minWidth="32.0" prefWidth="32.0">
+                            <ImageView fx:id="iconStock" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../img/icon_box.png" />
+                        </image></ImageView>
+                        </StackPane>
+                        <Label text="Gestión stock" />
+                    </children>
+                </HBox>
+
+                <HBox fx:id="btnCompras" alignment="CENTER_LEFT" maxWidth="Infinity" onMouseClicked="#irCompras" prefHeight="44.0" spacing="20.0">
+                    <padding>
+                        <Insets left="12.0" />
+                    </padding>
+                    <children>
+                        <StackPane maxWidth="32.0" minWidth="32.0" prefWidth="32.0">
+                            <ImageView fx:id="iconCompras" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../img/icon_proveedores.png" />
+                        </image></ImageView>
+                        </StackPane>
+                        <Label text="Compras y proveedores" />
+                    </children>
+                </HBox>
+
+                <HBox fx:id="btnAnalisis" alignment="CENTER_LEFT" maxWidth="Infinity" onMouseClicked="#irAnalisis" prefHeight="44.0" spacing="20.0">
+                    <padding>
+                        <Insets left="12.0" />
+                    </padding>
+                    <children>
+                        <StackPane maxWidth="32.0" minWidth="32.0" prefWidth="32.0">
+                            <ImageView fx:id="iconAnalisis" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../img/icon_analisis.png" />
+                        </image></ImageView>
+                        </StackPane>
+                        <Label text="Análisis e informes" />
+                    </children>
+                </HBox>
+
+                <HBox fx:id="btnAdmin" alignment="CENTER_LEFT" maxWidth="Infinity" onMouseClicked="#irAdmin" prefHeight="44.0" spacing="20.0">
+                    <padding>
+                        <Insets left="12.0" />
+                    </padding>
+                    <children>
+                        <StackPane maxWidth="32.0" minWidth="32.0" prefWidth="32.0">
+                            <ImageView fx:id="iconAdmin" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../img/icon_administracion.png" />
+                        </image></ImageView>
+                        </StackPane>
+                        <Label text="Administración" />
+                    </children>
+                </HBox>
+
+                <Region VBox.vgrow="ALWAYS" />
+
+                <Separator />
+
+                <HBox fx:id="btnPerfil" alignment="CENTER_LEFT" maxWidth="Infinity" onMouseClicked="#abrirPerfil" prefHeight="44.0" spacing="20.0">
+                    <padding>
+                        <Insets left="12.0" />
+                    </padding>
+                    <children>
+                        <StackPane maxWidth="32.0" minWidth="32.0" prefWidth="32.0">
+                            <ImageView fx:id="iconPerfil" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../img/icon_perfil.png" />
+                        </image></ImageView>
+                        </StackPane>
+                        <Label text="Perfil" />
+                    </children>
+                </HBox>
+
+                <HBox fx:id="btnCerrarSesion" alignment="CENTER_LEFT" maxWidth="Infinity" onMouseClicked="#cerrarSesion" prefHeight="44.0" spacing="20.0">
+                    <padding>
+                        <Insets left="12.0" />
+                    </padding>
+                    <children>
+                        <StackPane maxWidth="32.0" minWidth="32.0" prefWidth="32.0">
+                            <ImageView fx:id="iconCerrarSesion" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                        <image>
+                           <Image url="@../img/icon_cs.png" />
+                        </image></ImageView>
+                        </StackPane>
+                        <Label text="Cerrar sesión" />
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </left>
+
+    <center>
+        <StackPane fx:id="contenido" BorderPane.alignment="CENTER" />
+    </center>
+</BorderPane>

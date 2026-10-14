@@ -1,15 +1,12 @@
-package com.mycompany.origenapp;
+package com.origen;
 
-import controller.InstanciarEscena;
 import javafx.application.Application;
+import controller.InstanciarEscena;
 
 /**
  * JavaFX App
- * 
- * @author Joel, Hodei, An
  */
 public class App {
-
     public static void main(String[] args) {
         Application.launch(InstanciarEscena.class, args);
     }

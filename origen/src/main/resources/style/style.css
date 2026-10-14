@@ -1,0 +1,126 @@
+/* ===== Paleta =====
+   Fondo:        #EFEADF
+   Tarjeta:      #F8F6F0
+   Verde oscuro: #3F5A3A  (títulos)
+   Verde botón:  #5F7A57
+   Texto gris:   #6B6B63
+   Bordes:       #D8D4BF
+*/
+
+.login-root {
+    -fx-background-color: #EFEADF;
+}
+
+/* ===== Tarjeta ===== */
+.login-card {
+    -fx-background-color: #F8F6F0;
+    -fx-background-radius: 18;
+    -fx-border-color: #E6E1D2;
+    -fx-border-radius: 18;
+    -fx-padding: 40 38 28 38;
+    -fx-effect: dropshadow(gaussian, rgba(80,70,40,0.18), 22, 0.1, 0, 5);
+}
+
+/* ===== Logo ===== */
+.logo-box {
+    -fx-background-color: white;
+    -fx-border-color: #CFC9B5;
+    -fx-border-style: segments(7, 5);
+    -fx-border-width: 1.5;
+    -fx-padding: 8;
+}
+
+/* ===== Textos ===== */
+.login-title {
+    -fx-font-size: 23px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3F5A3A;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-padding: 22 0 0 0;
+}
+
+.login-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: #6B6B63;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+    -fx-padding: 0 0 18 0;
+}
+
+.login-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #6B6B63;
+    -fx-padding: 8 0 0 0;
+}
+
+/* ===== Campos ===== */
+.login-field {
+    -fx-font-size: 14px;
+    -fx-text-fill: #2E2E2A;
+    -fx-prompt-text-fill: #A7A495;
+    -fx-pref-height: 46px;
+    -fx-background-color: white;
+    -fx-background-radius: 10;
+    -fx-border-color: #D8D4BF;
+    -fx-border-radius: 10;
+    -fx-padding: 0 80 0 14;
+}
+
+.login-field:focused {
+    -fx-border-color: #5F7A57;
+    -fx-effect: dropshadow(gaussian, rgba(95,122,87,0.30), 8, 0.3, 0, 0);
+}
+
+/* ===== Botón "Mostrar" ===== */
+.show-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #5F7A57;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-padding: 0 14 0 0;
+}
+
+.show-button:hover {
+    -fx-text-fill: #3F5A3A;
+}
+
+/* ===== Botón principal ===== */
+.login-button {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-pref-height: 50px;
+    -fx-background-color: #5F7A57;
+    -fx-background-radius: 12;
+    -fx-cursor: hand;
+}
+
+.login-button:hover {
+    -fx-background-color: #4F6849;
+}
+
+.login-button:pressed {
+    -fx-background-color: #3F5A3A;
+}
+
+/* ===== Notas ===== */
+.login-note {
+    -fx-font-size: 11px;
+    -fx-text-fill: #6B6B63;
+    -fx-padding: 12 0 0 0;
+}
+
+.login-error {
+    -fx-font-size: 12px;
+    -fx-text-fill: #B3412F;
+}
+
+.login-footer {
+    -fx-font-size: 11px;
+    -fx-text-fill: #6B6B63;
+    -fx-alignment: center;
+    -fx-text-alignment: center;
+}

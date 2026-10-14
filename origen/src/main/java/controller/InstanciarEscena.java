@@ -50,7 +50,7 @@ public final class InstanciarEscena extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/loginView.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/navView.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Iniciar sesión");
         stage.setScene(scene);
