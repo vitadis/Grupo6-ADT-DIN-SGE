@@ -5,13 +5,15 @@
 package controller;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+
 /**
  * FXML Controller class
  *
@@ -19,69 +21,60 @@ import javafx.scene.layout.StackPane;
  */
 public class NavController implements Initializable {
 
-
-    @FXML
-    private HBox btnInicio;
-    @FXML
-    private HBox btnCaja;
-    @FXML
-    private HBox btnEconomia;
-    @FXML
-    private HBox btnStock;
-    @FXML
-    private HBox btnCompras;
-    @FXML
-    private HBox btnAnalisis;
-    @FXML
-    private HBox btnAdmin;
-    @FXML
-    private HBox btnPerfil;
-    @FXML
-    private HBox btnCerrarSesion;
     @FXML
     private StackPane contenido;
+    @FXML
+    private VBox vbContenido;
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
-    
-    @FXML
-    private void irInicio(MouseEvent event) {
+        // tener un interprete de permisos, pedir, el usurio, 
+        // puedo tener un getUser acceder a los permisos y crear las vistas 
+        // a corde a eso
+        List<String> ocultar = List.of("Gestión stock", "Administración");
+
+        vbContenido.getChildren().removeIf(nodo
+                -> nodo instanceof ToggleButton && ocultar.contains(((ToggleButton) nodo).getText())
+        );
     }
 
     @FXML
-    private void irCaja(MouseEvent event) {
+    private void irInicio(ActionEvent event) {
     }
 
     @FXML
-    private void irEconomia(MouseEvent event) {
+    private void irCaja(ActionEvent event) {
     }
 
     @FXML
-    private void irStock(MouseEvent event) {
+    private void irEconomia(ActionEvent event) {
     }
 
     @FXML
-    private void irCompras(MouseEvent event) {
+    private void irStock(ActionEvent event) {
     }
 
     @FXML
-    private void irAnalisis(MouseEvent event) {
+    private void irCompras(ActionEvent event) {
     }
 
     @FXML
-    private void irAdmin(MouseEvent event) {
+    private void irAnalisis(ActionEvent event) {
     }
 
     @FXML
-    private void abrirPerfil(MouseEvent event) {
+    private void irAdmin(ActionEvent event) {
     }
 
     @FXML
-    private void cerrarSesion(MouseEvent event) {
+    private void abrirPerfil(ActionEvent event) {
+    }
+
+    @FXML
+    private void cerrarSesion(ActionEvent event) {
     }
 
 }
