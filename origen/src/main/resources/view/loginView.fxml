@@ -49,6 +49,6 @@
    </children>
    <stylesheets>
       <URL value="@login.css" />
-      <URL value="@../style/style.css" />
+      <URL value="@../css/style.css" />
    </stylesheets>
 </StackPane>

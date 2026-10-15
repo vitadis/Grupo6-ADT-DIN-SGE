@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane minHeight="450.0" minWidth="700.0" prefHeight="650.0" prefWidth="1000.0" stylesheets="@../style/nav.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NavController">
+<BorderPane minHeight="450.0" minWidth="700.0" prefHeight="650.0" prefWidth="1000.0" stylesheets="@../css/nav.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NavController">
 
     <left>
         <VBox fx:id="vbContenido" fillWidth="true" maxWidth="280.0" minWidth="230.0" prefWidth="240.0" spacing="8.0">
@@ -32,7 +32,7 @@
 
                 <Separator />
 
-                <ToggleButton maxWidth="1.7976931348623157E308" onAction="#irInicio" styleClass="nav-item" text="Inicio">
+                <ToggleButton maxWidth="1.7976931348623157E308" onAction="#irInicio" selected="true" styleClass="nav-item" text="Inicio">
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="24.0" preserveRatio="true">
                             <image><Image url="@../img/icon_home.png" /></image>
