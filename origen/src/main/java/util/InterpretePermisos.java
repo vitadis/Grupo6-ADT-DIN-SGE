@@ -1,51 +1,74 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package util;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 /**
+ * Interpreta los permisos del usuario para decidir qué apartados del menú deben
+ * ocultarse.
  *
  * @author Joel
  */
 public class InterpretePermisos {
 
     /**
-     * Devuelve los apartados del navegador a los que el usuario no puede
-     * acceder.
-     * <p>
-     * Un apartado se considera accesible si el usuario tiene su permiso base
-     * (por ejemplo {@code "gestion"}) o cualquiera de sus subpermisos (por
-     * ejemplo {@code "gestion.ingresosGastos"}). Si el usuario tiene el permiso
-     * {@code "total"}, no se devuelve ningún apartado.
+     * Mapa de navegación: texto del botón del menú -> clave base de permiso. Se
+     * usa {@link LinkedHashMap} para conservar el orden de aparición en el
+     * menú.
+     */
+    private static final Map<String, String> NAV = new LinkedHashMap<>();
+
+    static {
+        NAV.put("Inicio", "inicio");
+        NAV.put("Caja y pedidos", "caja");
+        NAV.put("Gestión económica", "gestion");
+        NAV.put("Gestión stock", "stock");
+        NAV.put("Compras y proveedores", "compras");
+        NAV.put("Análisis e informes", "informes");
+        NAV.put("Administración", "administracion");
+    }
+
+    /**
+     * Devuelve los apartados del menú a los que el usuario NO tiene acceso.
      *
-     * @param permisos lista de permisos asignados al usuario
-     * @return lista de apartados del navegador sin acceso, en el orden del nav;
-     * vacía si el usuario tiene {@code "total"} o acceso a todos
+     * <p>
+     * Flujo:</p>
+     * <ol>
+     * <li>Si la lista de permisos contiene {@code "total"}, el usuario tiene
+     * acceso a todo y se devuelve una lista vacía.</li>
+     * <li>En caso contrario, se parte de todos los textos de botón definidos en
+     * {@link #NAV}, en el orden del menú.</li>
+     * <li>Para cada apartado se obtiene su clave base (por ejemplo
+     * {@code "gestion"}). Si algún permiso del usuario es igual a esa clave o
+     * es un subpermiso que empieza por ella seguida de un punto
+     * ({@code "gestion.ingresosGastos"}), el apartado se considera accesible y
+     * se descarta de la lista.</li>
+     * <li>Lo que queda es lo que debe ocultarse en el menú.</li>
+     * </ol>
+     *
+     * <p>
+     * Ejemplo: con {@code ["caja", "gestion.ingresosGastos", "inicio"]} el
+     * resultado es {@code [Gestión stock, Compras y proveedores,
+     * Análisis e informes, Administración]}.</p>
+     *
+     * @param permisos lista de permisos del usuario (no debe ser {@code null})
+     * @return lista con el texto de los botones sin acceso, en el orden del
+     * menú; vacía si el usuario tiene acceso a todo
      */
     public static List<String> apartadosSinAcceso(List<String> permisos) {
+        List<String> sinAcceso = new ArrayList<>();
         if (permisos.contains("total")) {
-            return new ArrayList<>();
+            return sinAcceso;
         }
 
-        Map<String, String> nav = new HashMap<>();
-        nav.put("Inicio", "inicio");
-        nav.put("Caja y pedidos", "caja");
-        nav.put("Gestión económica", "gestion");
-        nav.put("Gestión stock", "stock");
-        nav.put("Compras y proveedores", "compras");
-        nav.put("Análisis e informes", "informes");
-        nav.put("Administración", "administracion");
-
-        List<String> sinAcceso = new ArrayList<>(nav.keySet());
-        sinAcceso.removeIf(apartado -> {
-            String base = nav.get(apartado);
-            return permisos.stream().anyMatch(p -> p.equals(base) || p.startsWith(base + "."));
+        NAV.forEach((apartado, base) -> {
+            boolean tieneAcceso = permisos.stream()
+                    .anyMatch(p -> p.equals(base) || p.startsWith(base + "."));
+            if (!tieneAcceso) {
+                sinAcceso.add(apartado);
+            }
         });
         return sinAcceso;
     }

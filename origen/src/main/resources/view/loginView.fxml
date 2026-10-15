@@ -11,11 +11,11 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane minHeight="600.0" minWidth="380.0" prefHeight="700.0" prefWidth="800.0" styleClass="login-root" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginController">
+<StackPane minHeight="600.0" minWidth="380.0" prefHeight="700.0" prefWidth="800.0" styleClass="login-root" stylesheets="@../css/theme.css, @../css/style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginController">
    <children>
 
       <!-- Tarjeta -->
-      <VBox alignment="TOP_CENTER" fillWidth="true" maxHeight="720.0" maxWidth="440.0" minHeight="560.0" spacing="8.0" styleClass="login-card">
+      <VBox alignment="TOP_CENTER" fillWidth="true" maxHeight="720.0" maxWidth="440.0" minHeight="560.0" spacing="8.0" >
          <children>
             <ImageView fitHeight="211.0" fitWidth="223.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -47,8 +47,4 @@
          </children>
       </VBox>
    </children>
-   <stylesheets>
-      <URL value="@login.css" />
-      <URL value="@../css/style.css" />
-   </stylesheets>
 </StackPane>

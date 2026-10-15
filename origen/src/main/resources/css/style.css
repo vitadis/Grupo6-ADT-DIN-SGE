@@ -1,126 +1,460 @@
-/* ===== Paleta =====
-   Fondo:        #EFEADF
-   Tarjeta:      #F8F6F0
-   Verde oscuro: #3F5A3A  (títulos)
-   Verde botón:  #5F7A57
-   Texto gris:   #6B6B63
-   Bordes:       #D8D4BF
-*/
+/* ==========================================================
+   1. BASE (VALORES POR DEFECTO)
+   ========================================================== */
+.root {
+    -fx-background-color: -beige-principal;
+    -fx-text-fill: -texto-principal;
+    -fx-font-size: 14px;
 
-.login-root {
-    -fx-background-color: #EFEADF;
+    -fx-accent: -verde-principal;                 /* Selecciones */
+    -fx-focus-color: -verde-principal;            /* Anillo de foco */
+    -fx-faint-focus-color: transparent;
+    -fx-control-inner-background: -blanco;        /* Fondo de campos y listas */
 }
 
-/* ===== Tarjeta ===== */
-.login-card {
-    -fx-background-color: #F8F6F0;
-    -fx-background-radius: 18;
-    -fx-border-color: #E6E1D2;
-    -fx-border-radius: 18;
-    -fx-padding: 40 38 28 38;
-    -fx-effect: dropshadow(gaussian, rgba(80,70,40,0.18), 22, 0.1, 0, 5);
+.label {
+    -fx-text-fill: -texto-principal;
 }
 
-/* ===== Logo ===== */
-.logo-box {
-    -fx-background-color: white;
-    -fx-border-color: #CFC9B5;
-    -fx-border-style: segments(7, 5);
-    -fx-border-width: 1.5;
-    -fx-padding: 8;
+
+/* ==========================================================
+   2. NAVEGACIÓN (MENÚ LATERAL)
+   ========================================================== */
+.sidebar {
+    -fx-background-color: -beige-claro;
+    -fx-border-color: transparent -beige-intermedio transparent transparent;
+    -fx-border-width: 0 1 0 0;
 }
 
-/* ===== Textos ===== */
-.login-title {
-    -fx-font-size: 23px;
+.sidebar .separator .line {
+    -fx-border-color: -beige-intermedio;
+    -fx-border-width: 1 0 0 0;
+}
+
+/* Elementos del menú (ToggleButton y Button) */
+.nav-item {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 0 4;
+    -fx-text-fill: -texto-principal;
+    -fx-font-size: 14px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-graphic-text-gap: 20;
+    -fx-padding: 0 0 0 12;
+    -fx-pref-height: 44;
+    -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.nav-item:hover {
+    -fx-background-color: -beige-intermedio;
+}
+
+.nav-item:pressed {
+    -fx-background-color: -verde-suave;
+}
+
+/* Apartado activo (solo ToggleButton) */
+.nav-item:selected {
+    -fx-background-color: -verde-suave;
+    -fx-border-color: transparent transparent transparent -verde-principal;
+    -fx-text-fill: -verde-oscuro;
     -fx-font-weight: bold;
-    -fx-text-fill: #3F5A3A;
-    -fx-alignment: center;
-    -fx-text-alignment: center;
-    -fx-padding: 22 0 0 0;
+}
+
+/* Acción destructiva dentro del menú (ej. Cerrar sesión):
+   styleClass="nav-item nav-peligro" */
+.nav-peligro {
+    -fx-text-fill: -rojo-moderado;
+}
+
+
+/* ==========================================================
+   3. APARTADOS
+   ========================================================== */
+
+/* ---------- 3.1 Inicio (prefijo: inicio-) ---------- */
+
+
+/* ---------- 3.2 Caja y pedidos (prefijo: caja-) ---------- */
+
+/* ---------- Tarjeta de producto (prefijo: producto-) ---------- */
+.producto-card:hover {
+    -fx-border-color: -verde-principal;
+    -fx-cursor: hand;
+}
+
+.producto-imagen-box {
+    -fx-background-color: -beige-intermedio;
+    -fx-background-radius: 8;
+    -fx-padding: 4;
+}
+
+.producto-precio {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -verde-oscuro;
+}
+
+/* ---------- 3.3 Gestión económica (prefijo: gestion-) ---------- */
+
+
+/* ---------- 3.4 Gestión stock (prefijo: stock-) ---------- */
+
+
+/* ---------- 3.5 Compras y proveedores (prefijo: compras-) ---------- */
+
+
+/* ---------- 3.6 Análisis e informes (prefijo: informes-) ---------- */
+
+
+/* ---------- 3.7 Administración (prefijo: admin-) ---------- */
+
+
+
+/* ==========================================================
+   4. COMPONENTES GENERALES
+   ========================================================== */
+
+/* ---------- 4.1 Tipografía ---------- */
+.titulo {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -verde-oscuro;
+}
+
+.subtitulo {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -texto-principal;
+}
+
+.texto-secundario {
+    -fx-font-size: 12px;
+    -fx-text-fill: -texto-secundario;
+}
+
+
+/* ---------- 4.2 Botones ---------- */
+.button {
+    -fx-background-radius: 6;
+    -fx-cursor: hand;
+    -fx-padding: 8 16 8 16;
+}
+
+/* Principal / acción positiva: styleClass="btn-primario" */
+.btn-primario {
+    -fx-background-color: -verde-principal;
+    -fx-text-fill: -blanco;
+    -fx-font-weight: bold;
+}
+.btn-primario:hover   { -fx-background-color: -verde-oscuro; }
+.btn-primario:pressed { -fx-background-color: -verde-oscuro; }
+
+/* Secundario: styleClass="btn-secundario" */
+.btn-secundario {
+    -fx-background-color: -beige-claro;
+    -fx-border-color: -beige-intermedio;
+    -fx-border-radius: 6;
+    -fx-text-fill: -texto-principal;
+}
+.btn-secundario:hover   { -fx-background-color: -beige-intermedio; }
+.btn-secundario:pressed { -fx-background-color: -verde-suave; }
+
+/* Destructivo: styleClass="btn-peligro" (eliminar, anular...) */
+.btn-peligro {
+    -fx-background-color: -rojo-moderado;
+    -fx-text-fill: -blanco;
+    -fx-font-weight: bold;
+}
+.btn-peligro:hover   { -fx-opacity: 0.85; }
+.btn-peligro:pressed { -fx-opacity: 0.7; }
+
+/* Deshabilitado (aplica a todos) */
+.button:disabled {
+    -fx-opacity: 0.5;
+    -fx-cursor: default;
+}
+
+
+/* ---------- 4.3 Formularios ---------- */
+.text-field,
+.password-field,
+.text-area,
+.combo-box-base,
+.date-picker {
+    -fx-background-color: -beige-claro;
+    -fx-border-color: -beige-intermedio;
+    -fx-border-radius: 6;
+    -fx-background-radius: 6;
+    -fx-text-fill: -texto-principal;
+    -fx-prompt-text-fill: -texto-secundario;
+}
+
+.text-field,
+.password-field {
+    -fx-padding: 8 10 8 10;
+}
+
+.text-field:focused,
+.password-field:focused,
+.text-area:focused,
+.combo-box-base:focused,
+.date-picker:focused {
+    -fx-border-color: -verde-principal;
+}
+
+/* Campo con error: styleClass="campo-error" */
+.campo-error {
+    -fx-border-color: -rojo-moderado;
+}
+
+.check-box:selected .mark,
+.radio-button:selected .dot {
+    -fx-background-color: -verde-principal;
+}
+
+
+/* ---------- 4.4 Tarjetas y paneles ---------- */
+/* Superficie de contenido: styleClass="tarjeta" */
+.tarjeta {
+    -fx-background-color: -beige-claro;
+    -fx-background-radius: 10;
+    -fx-border-color: -beige-intermedio;
+    -fx-border-radius: 10;
+    -fx-padding: 16;
+}
+
+/* Tarjeta informativa / indicador positivo: styleClass="tarjeta-info" */
+.tarjeta-info {
+    -fx-background-color: -verde-suave;
+    -fx-background-radius: 10;
+    -fx-padding: 16;
+}
+
+
+/* ---------- 4.5 Tablas ---------- */
+.table-view {
+    -fx-background-color: -blanco;
+    -fx-border-color: -beige-intermedio;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: -beige-intermedio;
+}
+
+.table-view .column-header,
+.table-view .filler {
+    -fx-background-color: -beige-intermedio;
+    -fx-border-color: transparent;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: -verde-oscuro;
+    -fx-font-weight: bold;
+}
+
+.table-row-cell {
+    -fx-background-color: -blanco;
+    -fx-table-cell-border-color: -beige-intermedio;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: -beige-claro;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: -verde-suave;
+}
+
+.table-row-cell:selected .table-cell {
+    -fx-text-fill: -verde-oscuro;
+}
+
+
+/* ---------- 4.6 Estados y avisos ---------- */
+/* Para Label u otros nodos de texto/etiquetas */
+.estado-ok {
+    -fx-background-color: -verde-suave;
+    -fx-text-fill: -verde-oscuro;
+    -fx-background-radius: 12;
+    -fx-padding: 2 10 2 10;
+}
+
+.estado-aviso {
+    -fx-background-color: -ambar-suave;
+    -fx-text-fill: -texto-principal;
+    -fx-background-radius: 12;
+    -fx-padding: 2 10 2 10;
+}
+
+.estado-error {
+    -fx-background-color: -rojo-moderado;
+    -fx-text-fill: -blanco;
+    -fx-background-radius: 12;
+    -fx-padding: 2 10 2 10;
+}
+
+/* Solo color de texto */
+.texto-error { -fx-text-fill: -rojo-moderado; }
+.texto-aviso { -fx-text-fill: -ambar-suave; }
+.texto-ok    { -fx-text-fill: -verde-principal; }
+
+
+/* ---------- 4.7 Separadores y scroll ---------- */
+.separator .line {
+    -fx-border-color: -beige-intermedio;
+    -fx-border-width: 1 0 0 0;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: -beige-intermedio;
+    -fx-background-radius: 6;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: -texto-secundario;
+}
+
+
+/* ==========================================================
+   5. LOGIN (prefijo: login-)
+   Va al final a propósito: así sus reglas ganan a las
+   generales de .text-field, .password-field y .button.
+   ========================================================== */
+.login-root {
+    /* Colores propios del login (sacados de la imagen) */
+    -login-fondo: #EFEADF;
+    -login-tarjeta: #F8F6F0;
+    -login-circulo: #E9EFE3;
+
+    -fx-background-color: -login-fondo;
+}
+
+/* Círculos decorativos del fondo */
+.login-circle {
+    -fx-background-color: -login-circulo;
+    -fx-background-radius: 1000;
+}
+
+/* Tarjeta central */
+.login-card {
+    -fx-background-color: -login-tarjeta;
+    -fx-background-radius: 18;
+    -fx-border-color: #E6E1D3;
+    -fx-border-radius: 18;
+    -fx-padding: 36 38 24 38;
+    -fx-effect: dropshadow(gaussian, rgba(60, 50, 20, 0.12), 24, 0.0, 0, 6);
+}
+
+.login-title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -verde-oscuro;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-padding: 14 0 0 0;
 }
 
 .login-subtitle {
     -fx-font-size: 13px;
-    -fx-text-fill: #6B6B63;
-    -fx-alignment: center;
-    -fx-text-alignment: center;
-    -fx-padding: 0 0 18 0;
+    -fx-text-fill: -texto-secundario;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-padding: 0 0 14 0;
 }
 
 .login-label {
     -fx-font-size: 12px;
     -fx-font-weight: bold;
-    -fx-text-fill: #6B6B63;
+    -fx-text-fill: -texto-secundario;
     -fx-padding: 8 0 0 0;
 }
 
-/* ===== Campos ===== */
-.login-field {
-    -fx-font-size: 14px;
-    -fx-text-fill: #2E2E2A;
-    -fx-prompt-text-fill: #A7A495;
-    -fx-pref-height: 46px;
-    -fx-background-color: white;
+/* Campos de usuario y contraseña */
+.text-field.login-field,
+.password-field.login-field {
+    -fx-background-color: -blanco;
     -fx-background-radius: 10;
-    -fx-border-color: #D8D4BF;
+    -fx-border-color: -beige-intermedio;
     -fx-border-radius: 10;
-    -fx-padding: 0 80 0 14;
+    -fx-border-width: 1;
+    -fx-pref-height: 46;
+    -fx-padding: 0 14 0 14;
+    -fx-font-size: 14px;
+    -fx-text-fill: -texto-principal;
+    -fx-prompt-text-fill: -texto-secundario;
+    -fx-faint-focus-color: transparent;
+    -fx-focus-color: transparent;
 }
 
-.login-field:focused {
-    -fx-border-color: #5F7A57;
-    -fx-effect: dropshadow(gaussian, rgba(95,122,87,0.30), 8, 0.3, 0, 0);
+.text-field.login-field:focused,
+.password-field.login-field:focused {
+    -fx-border-color: -verde-principal;
+    -fx-effect: dropshadow(gaussian, rgba(95, 122, 87, 0.25), 6, 0.0, 0, 0);
 }
 
-/* ===== Botón "Mostrar" ===== */
-.show-button {
+/* Deja hueco al botón "Mostrar" dentro del campo de contraseña */
+.password-field.login-field,
+.text-field.login-field.con-mostrar {
+    -fx-padding: 0 78 0 14;
+}
+
+/* Botón "Mostrar" */
+.button.show-button {
     -fx-background-color: transparent;
-    -fx-text-fill: #5F7A57;
+    -fx-text-fill: -verde-principal;
     -fx-font-size: 12px;
     -fx-font-weight: bold;
+    -fx-padding: 6 14 6 8;
     -fx-cursor: hand;
-    -fx-padding: 0 14 0 0;
+}
+.button.show-button:hover {
+    -fx-text-fill: -verde-oscuro;
+    -fx-underline: true;
 }
 
-.show-button:hover {
-    -fx-text-fill: #3F5A3A;
-}
-
-/* ===== Botón principal ===== */
-.login-button {
+/* Botón principal */
+.button.login-button {
+    -fx-background-color: -verde-principal;
+    -fx-background-radius: 12;
+    -fx-text-fill: -blanco;
     -fx-font-size: 15px;
     -fx-font-weight: bold;
-    -fx-text-fill: white;
-    -fx-pref-height: 50px;
-    -fx-background-color: #5F7A57;
-    -fx-background-radius: 12;
+    -fx-pref-height: 50;
     -fx-cursor: hand;
 }
+.button.login-button:hover   { -fx-background-color: -verde-oscuro; }
+.button.login-button:pressed { -fx-background-color: -verde-oscuro; -fx-opacity: 0.9; }
+.button.login-button:default { -fx-background-color: -verde-principal; }
+.button.login-button:default:hover { -fx-background-color: -verde-oscuro; }
 
-.login-button:hover {
-    -fx-background-color: #4F6849;
-}
-
-.login-button:pressed {
-    -fx-background-color: #3F5A3A;
-}
-
-/* ===== Notas ===== */
 .login-note {
     -fx-font-size: 11px;
-    -fx-text-fill: #6B6B63;
+    -fx-text-fill: -texto-secundario;
     -fx-padding: 12 0 0 0;
 }
 
 .login-error {
     -fx-font-size: 12px;
-    -fx-text-fill: #B3412F;
+    -fx-text-fill: -rojo-moderado;
+    -fx-min-height: 18;
 }
 
 .login-footer {
     -fx-font-size: 11px;
-    -fx-text-fill: #6B6B63;
-    -fx-alignment: center;
-    -fx-text-alignment: center;
+    -fx-text-fill: -texto-secundario;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
 }

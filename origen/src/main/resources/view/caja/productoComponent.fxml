@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<!--fx:controller="controller.ProductoComponentController"-->
+
+<VBox maxWidth="220.0" minWidth="180.0" prefWidth="200.0" spacing="8.0" styleClass="tarjeta producto-card" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1"> 
+   <children>
+
+      <!-- Imagen + etiqueta de stock -->
+      <StackPane maxHeight="120.0" minHeight="120.0" prefHeight="120.0" styleClass="producto-imagen-box">
+         <children>
+            <ImageView fx:id="imgProducto" fitHeight="110.0" fitWidth="170.0" pickOnBounds="true" preserveRatio="true" />
+            <Label fx:id="lblStock" styleClass="estado-ok" text="En stock" StackPane.alignment="TOP_RIGHT" />
+         </children>
+      </StackPane>
+
+      <!-- Datos -->
+      <Label fx:id="lblNombre" maxWidth="Infinity" styleClass="subtitulo" text="Nombre del producto" wrapText="true" />
+      <Label fx:id="lblCategoria" maxWidth="Infinity" styleClass="texto-secundario" text="Categoría" />
+
+      <Region VBox.vgrow="ALWAYS" />
+
+      <!-- Precio + acción -->
+      <HBox alignment="CENTER_LEFT" spacing="8.0">
+         <children>
+            <Label fx:id="lblPrecio" styleClass="producto-precio" text="0,00 €" />
+            <Region HBox.hgrow="ALWAYS" />
+            <Button fx:id="btnAnadir" mnemonicParsing="false" styleClass="btn-primario" text="Añadir" /> <!--onAction="#anadir" -->
+         </children>
+      </HBox>
+   </children>
+   <stylesheets>
+      <URL value="@../../css/theme.css" />
+      <URL value="@../../css/style.css" />
+   </stylesheets>
+</VBox>

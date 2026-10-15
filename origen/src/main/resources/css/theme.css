@@ -1,0 +1,22 @@
+/*VARIABLES GLOBALES DEL STYLE*/
+
+.root {
+    /* Verdes */
+    -verde-principal: #527A52;   /* Botones principales, elementos activos, acciones positivas */
+    -verde-oscuro:    #35563B;   /* Títulos destacados, estados seleccionados, mayor contraste */
+    -verde-suave:     #E5EFE2;   /* Tarjetas informativas, indicadores positivos, áreas secundarias */
+
+    /* Beiges */
+    -beige-principal:  #F3EBDD;  /* Fondo general de la aplicación */
+    -beige-claro:      #FAF7F0;  /* Tarjetas, formularios y superficies de contenido */
+    -beige-intermedio: #E5D8C3;  /* Bordes suaves, separadores y elementos secundarios */
+
+    /* Neutros */
+    -blanco:           #FFFFFF;  /* Superficies que necesitan máxima claridad */
+    -texto-principal:  #2F352E;  /* Títulos, etiquetas y contenido */
+    -texto-secundario: #72776E;  /* Descripciones y metadatos */
+
+    /* Estados */
+    -rojo-moderado: #B94A48;     /* Solo errores, pérdidas, caducidades críticas y acciones destructivas */
+    -ambar-suave:   #D8A441;     /* Stock bajo, avisos y situaciones que requieren atención */
+}

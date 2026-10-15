@@ -12,10 +12,13 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane minHeight="450.0" minWidth="700.0" prefHeight="650.0" prefWidth="1000.0" stylesheets="@../css/nav.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NavController">
+<BorderPane minHeight="450.0" minWidth="700.0" prefHeight="650.0" prefWidth="1000.0"
+            stylesheets="@../css/theme.css, @../css/style.css"
+            xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.NavController">
 
     <left>
-        <VBox fx:id="vbContenido" fillWidth="true" maxWidth="280.0" minWidth="230.0" prefWidth="240.0" spacing="8.0">
+        <VBox fx:id="vbContenido" styleClass="sidebar" fillWidth="true" maxWidth="280.0" minWidth="230.0" prefWidth="240.0" spacing="8.0">
             <padding>
                 <Insets bottom="16.0" left="12.0" right="12.0" top="16.0" />
             </padding>
@@ -35,7 +38,9 @@
                 <ToggleButton maxWidth="1.7976931348623157E308" onAction="#irInicio" selected="true" styleClass="nav-item" text="Inicio">
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="24.0" preserveRatio="true">
-                            <image><Image url="@../img/icon_home.png" /></image>
+                            <image>
+                                <Image url="@../img/icon_home.png" />
+                            </image>
                         </ImageView>
                     </graphic>
                 </ToggleButton>
@@ -43,7 +48,9 @@
                 <ToggleButton maxWidth="1.7976931348623157E308" onAction="#irCaja" styleClass="nav-item" text="Caja y pedidos">
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="24.0" preserveRatio="true">
-                            <image><Image url="@../img/icon_caja.png" /></image>
+                            <image>
+                                <Image url="@../img/icon_caja.png" />
+                            </image>
                         </ImageView>
                     </graphic>
                 </ToggleButton>
@@ -51,7 +58,9 @@
                 <ToggleButton maxWidth="1.7976931348623157E308" onAction="#irEconomia" styleClass="nav-item" text="Gestión económica">
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="24.0" preserveRatio="true">
-                            <image><Image url="@../img/icon_euro.png" /></image>
+                            <image>
+                                <Image url="@../img/icon_euro.png" />
+                            </image>
                         </ImageView>
                     </graphic>
                 </ToggleButton>
@@ -59,7 +68,9 @@
                 <ToggleButton maxWidth="1.7976931348623157E308" onAction="#irStock" styleClass="nav-item" text="Gestión stock">
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="24.0" preserveRatio="true">
-                            <image><Image url="@../img/icon_box.png" /></image>
+                            <image>
+                                <Image url="@../img/icon_box.png" />
+                            </image>
                         </ImageView>
                     </graphic>
                 </ToggleButton>
@@ -67,7 +78,9 @@
                 <ToggleButton maxWidth="1.7976931348623157E308" onAction="#irCompras" styleClass="nav-item" text="Compras y proveedores">
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="24.0" preserveRatio="true">
-                            <image><Image url="@../img/icon_proveedores.png" /></image>
+                            <image>
+                                <Image url="@../img/icon_proveedores.png" />
+                            </image>
                         </ImageView>
                     </graphic>
                 </ToggleButton>
@@ -75,7 +88,9 @@
                 <ToggleButton maxWidth="1.7976931348623157E308" onAction="#irAnalisis" styleClass="nav-item" text="Análisis e informes">
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="24.0" preserveRatio="true">
-                            <image><Image url="@../img/icon_analisis.png" /></image>
+                            <image>
+                                <Image url="@../img/icon_analisis.png" />
+                            </image>
                         </ImageView>
                     </graphic>
                 </ToggleButton>
@@ -83,7 +98,9 @@
                 <ToggleButton maxWidth="1.7976931348623157E308" onAction="#irAdmin" styleClass="nav-item" text="Administración">
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="24.0" preserveRatio="true">
-                            <image><Image url="@../img/icon_administracion.png" /></image>
+                            <image>
+                                <Image url="@../img/icon_administracion.png" />
+                            </image>
                         </ImageView>
                     </graphic>
                 </ToggleButton>
@@ -95,7 +112,9 @@
                 <Button maxWidth="1.7976931348623157E308" onAction="#abrirPerfil" styleClass="nav-item" text="Perfil">
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="24.0" preserveRatio="true">
-                            <image><Image url="@../img/icon_perfil.png" /></image>
+                            <image>
+                                <Image url="@../img/icon_perfil.png" />
+                            </image>
                         </ImageView>
                     </graphic>
                 </Button>
@@ -103,7 +122,9 @@
                 <Button maxWidth="1.7976931348623157E308" onAction="#cerrarSesion" styleClass="nav-item" text="Cerrar sesión">
                     <graphic>
                         <ImageView fitHeight="24.0" fitWidth="24.0" preserveRatio="true">
-                            <image><Image url="@../img/icon_cs.png" /></image>
+                            <image>
+                                <Image url="@../img/icon_cs.png" />
+                            </image>
                         </ImageView>
                     </graphic>
                 </Button>
