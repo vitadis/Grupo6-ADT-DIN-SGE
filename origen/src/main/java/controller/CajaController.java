@@ -4,58 +4,81 @@
  */
 package controller;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import model.CategoriaProducto;
+import model.Usuario;
+
+import java.util.Optional;
+
 /**
  * FXML Controller class
  *
  * @author Joel
  */
-public class CajaController implements Initializable {
+public class CajaController implements UsuarioImplementacion {
 
-
     @FXML
-    private ToggleGroup grupoCategorias;
+    private ToggleGroup categoriasGroup;
     @FXML
-    private HBox contenidoCaja;
-    @FXML
-    private Label lblMigas;
-    @FXML
-    private Label lblSubtituloPedido;
-    @FXML
-    private Button btnHistorial;
-    @FXML
-    private FlowPane boxCategorias;
+    private FlowPane contenedorCategorias;
     @FXML
     private RadioButton rbTodo;
+
     @FXML
-    private FlowPane gridProductos;
-    @FXML
-    private VBox panelPedido;
-    @FXML
-    private StackPane capaHistorial;
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
-    
-    @FXML
-    private void mostrarHistorial(ActionEvent event) {
+    private void initialize() {
+        // "Todo" no pertenece al enum: userData null = sin filtro
+        rbTodo.setUserData(null);
+        cargarCategorias();
     }
 
+    /**
+     * Crea un RadioButton por cada valor de model.CategoriaProducto.
+     */
+    private void cargarCategorias() {
+        for (CategoriaProducto categoria : CategoriaProducto.values()) {
+            RadioButton rb = new RadioButton(categoria.toString());
+            rb.setToggleGroup(categoriasGroup);
+            rb.setUserData(categoria);
+            rb.getStyleClass().add("chip-categoria");
+            contenedorCategorias.getChildren().add(rb);
+        }
+    }
+
+    /**
+     * Categoría seleccionada vacio si es todo -> se usa para el filtrado segun
+     * la categoria
+     */
+    public Optional<CategoriaProducto> getCategoriaSeleccionada() {
+        Toggle seleccionado = categoriasGroup.getSelectedToggle();
+        if (seleccionado == null || seleccionado.getUserData() == null) {
+            return Optional.empty();
+        }
+        return Optional.of((CategoriaProducto) seleccionado.getUserData());
+    }
+
+    // handlers, javafx
+    @FXML
+    private void onHistorialVentas() {
+    }
+
+    @FXML
+    private void onCancelar() {
+    }
+
+    @FXML
+    private void onCobrar() {
+        System.out.println(usuario);
+    }
+
+    private Usuario usuario;
+
+    @Override
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+    
 }

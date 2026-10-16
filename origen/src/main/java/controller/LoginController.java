@@ -1,19 +1,20 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package controller;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import model.Usuario;
+
 /**
  * FXML Controller class
  *
@@ -21,7 +22,7 @@ import javafx.scene.control.TextField;
  */
 public class LoginController implements Initializable {
 
-
+    // --------------------- Variables FXML ---------------------
     @FXML
     private TextField txtUsuario;
     @FXML
@@ -31,13 +32,21 @@ public class LoginController implements Initializable {
     @FXML
     private Label lblMensajeError;
 
+    // --------------------- Atributos ---------------------
+    private Usuario usuario;
 
+    // --------------------- Inicialización ---------------------
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // sobrepongo ambos elementos
         txtContrasenaVisible.textProperty().bindBidirectional(txtContrasena.textProperty());
     }
 
+    // --------------------- Usuario ---------------------
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    // --------------------- Métodos FXML ---------------------
     @FXML
     private void alternarContrasena(ActionEvent event) {
         boolean mostrando = txtContrasenaVisible.isVisible();
@@ -47,7 +56,6 @@ public class LoginController implements Initializable {
         txtContrasena.setVisible(mostrando);
         txtContrasena.setManaged(mostrando);
 
-        // compruebo el texto
         Button boton = (Button) event.getSource();
         boton.setText(mostrando ? "Mostrar" : "Ocultar");
 
@@ -58,21 +66,46 @@ public class LoginController implements Initializable {
 
     @FXML
     private void validar(ActionEvent event) {
-        String usuario = txtUsuario.getText().trim();
+        String nombre = txtUsuario.getText().trim();
         String contrasena = txtContrasena.getText();
 
-        if (usuario.isEmpty() || contrasena.isEmpty()) {
+        if (nombre.isEmpty() || contrasena.isEmpty()) {
             lblMensajeError.setText("Completa todos los campos obligatorios.");
             return;
         }
 
-        if ("usuario".equals(usuario) && "1234".equals(contrasena)) {
+        // TODO: validar con el nosql
+        if ("usuario".equals(nombre) && "1234".equals(contrasena)) {
             lblMensajeError.setText("");
-            System.out.println("Login correcto");
-            // Aquí cargo la vista
+            crearUsuarioPrueba();
+            abrirNav();
         } else {
             lblMensajeError.setText("Usuario o contraseña incorrectos.");
         }
     }
 
+    // --------------------- Métodos auxiliares ---------------------
+    private void abrirNav() {
+        try {
+            Stage stage = (Stage) txtUsuario.getScene().getWindow();
+            NavController navController = InstanciarEscena.cambiarVista(stage, "/view/navView.fxml", "Inicio");
+            navController.setUsuario(usuario);
+        } catch (IOException e) {
+            lblMensajeError.setText("No se ha podido cargar la pantalla principal.");
+            e.printStackTrace();
+        }
+    }
+
+    private void crearUsuarioPrueba() {
+        usuario = new Usuario();
+        usuario.setId("1");
+
+        List<String> permisos = new LinkedList<>();
+        permisos.add("total");
+        permisos.add("");
+        permisos.add("");
+        permisos.add("");
+        permisos.add("");
+        usuario.setPermisos(permisos);
+    }
 }
