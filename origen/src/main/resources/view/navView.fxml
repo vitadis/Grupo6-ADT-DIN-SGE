@@ -12,13 +12,10 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane minHeight="450.0" minWidth="700.0" prefHeight="650.0" prefWidth="1000.0"
-            stylesheets="@../css/theme.css, @../css/style.css"
-            xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controller.NavController">
+<BorderPane minHeight="450.0" minWidth="700.0" prefHeight="650.0" prefWidth="1000.0" stylesheets="@../css/theme.css, @../css/style.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.NavController">
 
     <left>
-        <VBox fx:id="vbContenido" styleClass="sidebar" fillWidth="true" maxWidth="280.0" minWidth="230.0" prefWidth="240.0" spacing="8.0">
+        <VBox fx:id="vbContenido" fillWidth="true" maxWidth="280.0" minWidth="230.0" prefWidth="240.0" spacing="8.0" styleClass="sidebar">
             <padding>
                 <Insets bottom="16.0" left="12.0" right="12.0" top="16.0" />
             </padding>
