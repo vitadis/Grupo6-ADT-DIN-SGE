@@ -1,22 +1,23 @@
 package controller;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Usuario;
+import util.Alertas;
 import util.InterpretePermisos;
 
 /**
@@ -55,6 +56,16 @@ public class NavController {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
         cargarVistas();
+        
+    }
+
+    @FXML
+    private void inizialize(URL location, ResourceBundle resources) {
+        // consultar al nosql, para ver los datos del usuario que inicio sesión
+        
+        
+        
+
     }
 
     // --------------------- Métodos FXML ---------------------
@@ -100,29 +111,25 @@ public class NavController {
 
     @FXML
     private void cerrarSesion(ActionEvent event) {
-        try {
-            Button btnCS = (Button) event.getSource();
-            Stage stage = (Stage) btnCS.getScene().getWindow();
 
-            Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-            alerta.initOwner(stage);
-            alerta.setTitle("Cerrar sesión");
-            alerta.setHeaderText(null);
-            alerta.setContentText("¿Seguro que quieres cerrar sesión?");
+        Alertas.mostrarConfirmacion("¿Seguro que quieres cerrar sesión?", e -> {
+            try {
+                Button btnCS = (Button) event.getSource();
+                Stage stage = (Stage) btnCS.getScene().getWindow();
 
-            if (alerta.showAndWait().filter(r -> r == ButtonType.OK).isPresent()) {
                 InstanciarEscena.cambiarVista(stage, "/view/loginView.fxml", "Inicio Sesión");
+            } catch (IOException ex) {
+                Alertas.mostrarError("No se pudo cerrar sesión: " + ex.getMessage());
             }
-        } catch (IOException ex) {
-            InstanciarEscena.mostrarError("No se pudo cerrar sesión: " + ex.getMessage());
-        }
+        });
+
     }
 
     // --------------------- Métodos auxiliares ---------------------
     private void cargarVistas() {
         List<String> permisos = usuario.getPermisos();
-
         List<String> sinAcceso = InterpretePermisos.apartadosSinAcceso(permisos);
+
         if (!sinAcceso.isEmpty()) {
             vbContenido.getChildren().removeIf(nodo
                     -> nodo instanceof ToggleButton
@@ -148,7 +155,7 @@ public class NavController {
                 contenido.getChildren().add(vista);
                 vistasCargadas.put(boton.getText(), vista);
             } catch (IOException e) {
-                InstanciarEscena.mostrarError("No se pudo cargar " + ruta + ": " + e.getMessage());
+                Alertas.mostrarError("No se pudo cargar " + ruta + ": " + e.getMessage());
             }
         });
 
@@ -157,7 +164,7 @@ public class NavController {
 
     private void seleccionarVistaInicial() {
         if (vistasCargadas.isEmpty()) {
-            InstanciarEscena.mostrarError("El usuario no tiene acceso a ningún apartado.");
+            Alertas.mostrarError("El usuario no tiene acceso a ningún apartado.");
             return;
         }
 
