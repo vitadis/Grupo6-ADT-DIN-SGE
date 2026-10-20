@@ -14,7 +14,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Usuario;
-import pruebas.UserEvent;
 
 /**
  * FXML Controller class
@@ -67,11 +66,6 @@ public class LoginController implements Initializable {
 
     @FXML
     private void validar(ActionEvent event) {
-        UserEvent otro = new UserEvent(UserEvent.LOGIN_SUCCEEDED);
-        Button bot = (Button) event.getSource();
-
-        bot.fireEvent(otro);
-
         String nombre = txtUsuario.getText().trim();
         String contrasena = txtContrasena.getText();
 
