@@ -56,15 +56,12 @@ public class NavController {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
         cargarVistas();
-        
+
     }
 
     @FXML
     private void inizialize(URL location, ResourceBundle resources) {
         // consultar al nosql, para ver los datos del usuario que inicio sesión
-        
-        
-        
 
     }
 
@@ -112,7 +109,7 @@ public class NavController {
     @FXML
     private void cerrarSesion(ActionEvent event) {
 
-        Alertas.mostrarConfirmacion("¿Seguro que quieres cerrar sesión?", e -> {
+        Alertas.mostrarConfirmacion("Confirmación", "¿Seguro que quieres cerrar sesión?", e -> {
             try {
                 Button btnCS = (Button) event.getSource();
                 Stage stage = (Stage) btnCS.getScene().getWindow();
@@ -153,6 +150,7 @@ public class NavController {
                 vista.setVisible(false);
                 vista.setManaged(false);
                 contenido.getChildren().add(vista);
+
                 vistasCargadas.put(boton.getText(), vista);
             } catch (IOException e) {
                 Alertas.mostrarError("No se pudo cargar " + ruta + ": " + e.getMessage());
@@ -181,6 +179,7 @@ public class NavController {
     private void navegar(ToggleButton elegido) {
         botones().forEach(tb -> tb.setSelected(tb == elegido));
         mostrarVista(elegido.getText());
+        cambiarTitulo(elegido.getText());
     }
 
     private void mostrarVista(String nombre) {
@@ -196,5 +195,10 @@ public class NavController {
                 .filter(n -> n instanceof ToggleButton)
                 .map(n -> (ToggleButton) n)
                 .collect(Collectors.toList());
+    }
+
+    private void cambiarTitulo(String titulo) {
+        Stage stage = (Stage) contenido.getScene().getWindow();
+        stage.setTitle(titulo);
     }
 }

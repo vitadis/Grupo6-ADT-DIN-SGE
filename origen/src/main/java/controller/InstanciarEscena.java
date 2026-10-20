@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 public final class InstanciarEscena extends Application {
@@ -22,6 +23,7 @@ public final class InstanciarEscena extends Application {
             stage.show();
         }
         stage.setMaximized(true);
+        stage.setTitle(titulo);
         return loader.getController();
     }
 
@@ -35,6 +37,10 @@ public final class InstanciarEscena extends Application {
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/loginView.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
+        
+        Image icon = new Image(getClass().getResourceAsStream("/img/icon_app.jpg"));
+        stage.getIcons().add(icon);
+        
         stage.setTitle("Iniciar sesión");
         stage.setScene(scene);
         stage.setMaximized(true);

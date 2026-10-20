@@ -32,9 +32,8 @@ public class Alertas {
         return alerta;
     }
 
-    public static void mostrarConfirmacion(String mensaje, Consumer consumible) {
-        Alert alerta = mostrarMensaje(Alert.AlertType.CONFIRMATION, mensaje, mensaje);
-        alerta.showAndWait();
+    public static void mostrarConfirmacion(String titulo,String mensaje, Consumer consumible) {
+        Alert alerta = mostrarMensaje(Alert.AlertType.CONFIRMATION, titulo, mensaje);
         if (alerta.showAndWait().filter(r -> r == ButtonType.OK).isPresent()) {
             consumible.accept(mensaje);
         }
