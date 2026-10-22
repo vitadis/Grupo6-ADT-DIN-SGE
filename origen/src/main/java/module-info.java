@@ -8,5 +8,7 @@ module com.origen {
     opens com.origen to javafx.fxml;
     
     exports com.origen;
+    requires org.mongodb.bson;
     requires org.mongodb.driver.sync.client;
+    requires org.mongodb.driver.core;
 }

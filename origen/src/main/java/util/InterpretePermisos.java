@@ -65,7 +65,7 @@ public class InterpretePermisos {
 
         NAV.forEach((apartado, base) -> {
             boolean tieneAcceso = permisos.stream()
-                    .anyMatch(p -> p.equals(base) || p.startsWith(base + "."));
+                    .anyMatch(p -> p.equals(base) || p.startsWith(base + ":"));
             if (!tieneAcceso) {
                 sinAcceso.add(apartado);
             }

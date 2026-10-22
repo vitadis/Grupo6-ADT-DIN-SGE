@@ -1,9 +1,10 @@
 package controller;
 
+import dao.implement.UsuarioDaoImp;
+import exceptions.DaoException;
 import java.io.IOException;
 import java.net.URL;
-import java.util.LinkedList;
-import java.util.List;
+import dao.UsuarioDao;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -73,14 +74,20 @@ public class LoginController implements Initializable {
             lblMensajeError.setText("Completa todos los campos obligatorios.");
             return;
         }
-
-        // TODO: validar con el nosql
-        if ("usuario".equals(nombre) && "1234".equals(contrasena)) {
+        UsuarioDao udi =  UsuarioDaoImp.getInstance();
+        
+        try {
+            Usuario usuario = udi.obtenerUsuario(nombre, contrasena);
+            if (usuario == null) {
+                lblMensajeError.setText("Usuario o contraseña incorrectos.");
+                return;
+            }
+            this.usuario = usuario;
             lblMensajeError.setText("");
-            crearUsuarioPrueba();
             abrirNav();
-        } else {
-            lblMensajeError.setText("Usuario o contraseña incorrectos.");
+
+        } catch (DaoException e) {
+            e.printStackTrace();
         }
     }
 
@@ -94,18 +101,5 @@ public class LoginController implements Initializable {
             lblMensajeError.setText("No se ha podido cargar la pantalla principal.");
             e.printStackTrace();
         }
-    }
-
-    private void crearUsuarioPrueba() {
-        usuario = new Usuario();
-        usuario.setId("1");
-
-        List<String> permisos = new LinkedList<>();
-        permisos.add("total");
-        permisos.add("");
-        permisos.add("");
-        permisos.add("");
-        permisos.add("");
-        usuario.setPermisos(permisos);
     }
 }
