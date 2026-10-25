@@ -2,7 +2,6 @@ package com.origen;
 
 import javafx.application.Application;
 import controller.InstanciarEscena;
-import prueba.MongoDBConnectionTest;
 
 /**
  * JavaFX App

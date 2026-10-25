@@ -1,5 +1,8 @@
 package model;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+
 public class Empleado {
 
     private String nombre;
@@ -24,8 +27,62 @@ public class Empleado {
         this.email = email;
         this.puesto = puesto;
         this.fecha_alta = fecha_alta;
+
+        validar();
     }
 
+    public void validar() {
+        validarTexto(nombre, "El nombre");
+        validarTexto(apellido, "El apellido");
+        validarTexto(dni, "El DNI");
+        validarTexto(telefono, "El teléfono");
+        validarTexto(email, "El email");
+        validarTexto(puesto, "El puesto");
+        validarFecha(fecha_alta);
+
+        if (!dni.matches("^[0-9]{8}[A-Za-z]$")) {
+            throw new IllegalArgumentException(
+                    "El DNI debe contener 8 números y una letra.");
+        }
+
+        if (!telefono.matches("^[0-9+() -]{9,20}$")) {
+            throw new IllegalArgumentException(
+                    "El formato del teléfono no es válido.");
+        }
+
+        if (!email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")) {
+            throw new IllegalArgumentException(
+                    "El formato del email no es válido.");
+        }
+    }
+
+    private void validarTexto(String valor, String campo) {
+        if (valor == null || valor.isBlank()) {
+            throw new IllegalArgumentException(
+                    campo + " es obligatorio.");
+        }
+
+        if (!valor.equals(valor.trim())) {
+            throw new IllegalArgumentException(
+                    campo + " no puede comenzar ni terminar con espacios.");
+        }
+    }
+
+    private void validarFecha(String fecha) {
+        if (fecha == null || fecha.isBlank()) {
+            throw new IllegalArgumentException(
+                    "La fecha de alta es obligatoria.");
+        }
+
+        try {
+            LocalDate.parse(fecha);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException(
+                    "La fecha de alta debe tener el formato yyyy-MM-dd.");
+        }
+    }
+
+    // Getters y setters
     public String getNombre() {
         return nombre;
     }
