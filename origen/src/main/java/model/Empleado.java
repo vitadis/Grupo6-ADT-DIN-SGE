@@ -1,7 +1,6 @@
 package model;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 
 public class Empleado {
 
@@ -11,14 +10,14 @@ public class Empleado {
     private String telefono;
     private String email;
     private String puesto;
-    private String fecha_alta;
+    private LocalDate fecha_alta;
 
     public Empleado() {
     }
 
     public Empleado(String nombre, String apellido, String dni,
             String telefono, String email, String puesto,
-            String fecha_alta) {
+            LocalDate fecha_alta) {
 
         this.nombre = nombre;
         this.apellido = apellido;
@@ -68,17 +67,10 @@ public class Empleado {
         }
     }
 
-    private void validarFecha(String fecha) {
-        if (fecha == null || fecha.isBlank()) {
+    private void validarFecha(LocalDate fecha) {
+        if (fecha == null) {
             throw new IllegalArgumentException(
                     "La fecha de alta es obligatoria.");
-        }
-
-        try {
-            LocalDate.parse(fecha);
-        } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException(
-                    "La fecha de alta debe tener el formato yyyy-MM-dd.");
         }
     }
 
@@ -131,11 +123,11 @@ public class Empleado {
         this.puesto = puesto;
     }
 
-    public String getFecha_alta() {
+    public LocalDate getFecha_alta() {
         return fecha_alta;
     }
 
-    public void setFecha_alta(String fecha_alta) {
+    public void setFecha_alta(LocalDate fecha_alta) {
         this.fecha_alta = fecha_alta;
     }
 }

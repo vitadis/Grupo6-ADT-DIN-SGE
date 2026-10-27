@@ -12,22 +12,6 @@ public class Producto {
     // =========================================================================
     // ============================= CLAVES BSON ===============================
     // =========================================================================
-    public static final String ID = "_id";
-    public static final String NOMBRE = "nombre";
-    public static final String TIPO = "tipo";
-    public static final String CATEGORIA = "categoria";
-    public static final String PRECIO_VENTA = "precio_venta";
-    public static final String IVA = "iva";
-    public static final String STOCK = "stock";
-    public static final String LOTES = "lotes";
-    public static final String RECETA = "receta";
-    public static final String PROVEEDORES_ID = "proveedores_id";
-    public static final String ACTIVO = "activo";
-
-    // Claves del documento stock
-    public static final String STOCK_ACTUAL = "actual";
-    public static final String STOCK_MINIMO = "minimo";
-
     // Claves de los documentos de lotes
     public static final String LOTE_CANTIDAD = "cantidad";
     public static final String LOTE_FECHA_CADUCIDAD = "fecha_caducidad";
@@ -36,8 +20,6 @@ public class Producto {
     public static final String RECETA_PRODUCTO_ID = "producto_id";
     public static final String RECETA_CANTIDAD = "cantidad";
     public static final String RECETA_UNIDAD = "unidad";
-    // ruta imagen
-    public static final String RUTA_IMAGEN = "imagen";
 
     // =======================================================================
     // ============================== ATRIBUTOS ==============================
