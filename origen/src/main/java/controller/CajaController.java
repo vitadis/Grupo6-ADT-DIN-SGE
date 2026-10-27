@@ -1,18 +1,28 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package controller;
 
+import exceptions.DaoException;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.FlowPane;
 import model.CategoriaProducto;
+import model.LineaPedido;
+import model.Producto;
+import model.VentaPedido;
 import model.Usuario;
-
-import java.util.Optional;
+import services.ProductoService;
+import util.Alertas;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.scene.control.Toggle;
+import javafx.scene.layout.VBox;
 
 /**
  * FXML Controller class
@@ -21,25 +31,71 @@ import java.util.Optional;
  */
 public class CajaController implements UsuarioImplementacion {
 
+    private static final String RUTA_TARJETA = "/view/caja/productoComponent.fxml";
+    private static final String RUTA_LINEA_PEDIDO = "/view/caja/productoPedidoComponent.fxml";
+
     @FXML
     private ToggleGroup categoriasGroup;
     @FXML
     private FlowPane contenedorCategorias;
     @FXML
+    private FlowPane contenedorProductos;
+    @FXML
     private RadioButton rbTodo;
+
+    private final ProductoService productoService = new ProductoService();
+    private List<Producto> productosVenta = new ArrayList<>();
+    private final VentaPedido pedido = new VentaPedido();
+
+    private Usuario usuario;
+
+    //contenedorLineasPedido
+    @FXML
+    private Label lblSubtitulo;
+    @FXML
+    private VBox panelPedido;
+    @FXML
+    private Label lblPedidoActual;
+    @FXML
+    private VBox contenedorLineasPedido;
+    @FXML
+    private VBox resumenPedido;
+    @FXML
+    private Label lblNumProductos;
+    @FXML
+    private Label lblTotal;
+    @FXML
+    private Label lblAyuda;
 
     @FXML
     private void initialize() {
-        // "Todo" no pertenece al enum: userData null = sin filtro
         rbTodo.setUserData(null);
-        cargarCategorias();
+
+        categoriasGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(
+                    ObservableValue<? extends Toggle> observable,
+                    Toggle anterior,
+                    Toggle nuevo) {
+
+                mostrarProductos();
+            }
+        });
+
+        cargarProductos();
+        actualizarPedido();
     }
 
+    // --------------------- Categorías ---------------------
     /**
-     * Crea un RadioButton por cada valor de model.CategoriaProducto.
+     * Crea un RadioButton solo por las categorías de model.CategoriaProducto
+     * que tienen productos de venta (se llama cuando ya se cargaron los
+     * productos).
      */
     private void cargarCategorias() {
-        for (CategoriaProducto categoria : CategoriaProducto.values()) {
+        contenedorCategorias.getChildren().removeIf(nodo -> nodo != rbTodo);
+
+        for (CategoriaProducto categoria : productoService.categoriasDeVenta(productosVenta)) {
             RadioButton rb = new RadioButton(categoria.toString());
             rb.setToggleGroup(categoriasGroup);
             rb.setUserData(categoria);
@@ -52,33 +108,155 @@ public class CajaController implements UsuarioImplementacion {
      * Categoría seleccionada vacio si es todo -> se usa para el filtrado segun
      * la categoria
      */
-    public Optional<CategoriaProducto> getCategoriaSeleccionada() {
+    public CategoriaProducto getCategoriaSeleccionada() {
         Toggle seleccionado = categoriasGroup.getSelectedToggle();
         if (seleccionado == null || seleccionado.getUserData() == null) {
-            return Optional.empty();
+            return null;
         }
-        return Optional.of((CategoriaProducto) seleccionado.getUserData());
+        return (CategoriaProducto) seleccionado.getUserData();
     }
 
-    // handlers, javafx
+    // --------------------- Productos ---------------------
+    private void cargarProductos() {
+        try {
+            productosVenta = productoService.listarProductosVenta();
+            cargarCategorias();
+            mostrarProductos();
+        } catch (DaoException e) {
+            Alertas.mostrarError("No se pudieron cargar los productos: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Pinta una tarjeta por cada producto de la categoría seleccionada.
+     */
+    private void mostrarProductos() {
+        contenedorProductos.getChildren().clear();
+
+        List<Producto> filtrados = productoService.filtrarPorCategoria(
+                productosVenta, getCategoriaSeleccionada());
+
+        if (filtrados.isEmpty()) {
+            Label vacio = new Label("No hay productos en esta categoría.");
+            vacio.getStyleClass().add("texto-secundario");
+            contenedorProductos.getChildren().add(vacio);
+            return;
+        }
+
+        for (Producto p : filtrados) {
+            try {
+                contenedorProductos.getChildren().add(crearTarjeta(p));
+            } catch (IOException ex) {
+                Alertas.mostrarError("No se pudo cargar la tarjeta de producto: " + ex.getMessage());
+                return;
+            }
+        }
+    }
+
+    // creo la tarjeta con los elementos
+    private Node crearTarjeta(Producto producto) throws IOException {
+        URL ubicacion = getClass().getResource(RUTA_TARJETA);
+        if (ubicacion == null) {
+            throw new IOException("No se encuentra el FXML de la tarjeta: " + RUTA_TARJETA);
+        }
+
+        FXMLLoader loader = new FXMLLoader(ubicacion);
+        Node tarjeta = loader.load();
+
+        ProductoComponentController controller = loader.getController();
+        controller.setProducto(producto, this::anadirAlPedido);
+
+        return tarjeta;
+    }
+
+    /**
+     * Se ejecuta al pulsar "Añadir" en una tarjeta.
+     */
+    private void anadirAlPedido(Producto producto) {
+        pedido.agregar(producto);
+        actualizarPedido();
+    }
+
+    // --------------------- Pedido ---------------------
+    /**
+     * Repinta el panel del pedido a partir del modelo: una línea (componente
+     * FXML) por cada producto distinto, con su cantidad, más total y contador.
+     */
+    private void actualizarPedido() {
+        contenedorLineasPedido.getChildren().clear();
+
+        for (LineaPedido linea : pedido.getLineas()) {
+            try {
+                contenedorLineasPedido.getChildren().add(crearLineaPedido(linea));
+            } catch (IOException ex) {
+                Alertas.mostrarError("No se pudo cargar la línea del pedido: " + ex.getMessage());
+                return;
+            }
+        }
+
+        lblNumProductos.setText(pedido.getNumProductos() + " productos");
+        lblTotal.setText(String.format("%.2f €", pedido.getTotal()));
+
+        boolean vacio = pedido.estaVacio();
+        lblAyuda.setVisible(vacio);
+        lblAyuda.setManaged(vacio);
+    }
+
+    private Node crearLineaPedido(LineaPedido linea) throws IOException {
+        URL ubicacion = getClass().getResource(RUTA_LINEA_PEDIDO);
+        if (ubicacion == null) {
+            throw new IOException("No se encuentra el FXML de la línea: " + RUTA_LINEA_PEDIDO);
+        }
+
+        FXMLLoader loader = new FXMLLoader(ubicacion);
+        Node nodo = loader.load();
+
+        ProductoPedidoComponentController controller = loader.getController();
+        controller.setLinea(linea, this::sumarUnidad, this::restarUnidad, this::quitarLinea);
+
+        return nodo;
+    }
+
+    private void sumarUnidad(Producto producto) {
+        pedido.agregar(producto);
+        actualizarPedido();
+    }
+
+    private void restarUnidad(Producto producto) {
+        pedido.restar(producto);
+        actualizarPedido();
+    }
+
+    private void quitarLinea(Producto producto) {
+        pedido.quitar(producto);
+        actualizarPedido();
+    }
+
+    // --------------------- handlers, javafx ---------------------
     @FXML
     private void onHistorialVentas() {
     }
 
     @FXML
     private void onCancelar() {
+        pedido.limpiar();
+        actualizarPedido();
     }
 
     @FXML
     private void onCobrar() {
-        System.out.println(usuario);
+        if (pedido.estaVacio()) {
+            return;
+        }
+        for (LineaPedido l : pedido.getLineas()) {
+            System.out.println(l.getCantidad() + " x " + l.getProducto().getNombre()
+                    + " - " + String.format("%.2f €", l.getSubtotal()));
+        }
     }
-
-    private Usuario usuario;
 
     @Override
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-    
+
 }
