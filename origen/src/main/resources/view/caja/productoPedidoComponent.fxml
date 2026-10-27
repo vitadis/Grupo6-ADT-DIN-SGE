@@ -5,22 +5,22 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox alignment="CENTER_LEFT" spacing="10.0" styleClass="pedido-linea" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProductoPedidoComponentController">
+<HBox alignment="CENTER_LEFT" spacing="10.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProductoPedidoComponentController">
     <children>
         <VBox spacing="2.0" HBox.hgrow="ALWAYS">
             <children>
-                <Label fx:id="lblNombre" styleClass="pedido-nombre" text="Producto" />
-                <Label fx:id="lblPrecioUnidad" styleClass="texto-secundario" text="0,00 € / ud." />
+                <Label fx:id="lblNombre" text="Producto" />
+                <Label fx:id="lblPrecioUnidad" text="0,00 € / ud." />
             </children>
         </VBox>
-        <HBox alignment="CENTER" spacing="4.0" styleClass="pedido-cantidad-box">
+        <HBox alignment="CENTER" spacing="4.0">
             <children>
-                <Button mnemonicParsing="false" onAction="#restar" styleClass="pedido-btn-cantidad" text="-" />
-                <Label fx:id="lblCantidad" styleClass="pedido-cantidad" text="1" />
-                <Button fx:id="btnMas" mnemonicParsing="false" onAction="#sumar" styleClass="pedido-btn-cantidad" text="+" />
+                <Button mnemonicParsing="false" onAction="#restar" text="-" />
+                <Label fx:id="lblCantidad" text="1" />
+                <Button fx:id="btnMas" mnemonicParsing="false" onAction="#sumar" text="+" />
             </children>
         </HBox>
-        <Label fx:id="lblSubtotal" minWidth="64.0" styleClass="pedido-subtotal" text="0,00 €" />
-        <Button mnemonicParsing="false" onAction="#quitar" styleClass="pedido-btn-quitar" text="✕" />
+        <Label fx:id="lblSubtotal" minWidth="64.0" text="0,00 €" />
+        <Button mnemonicParsing="false" onAction="#quitar" text="✕" />
     </children>
 </HBox>

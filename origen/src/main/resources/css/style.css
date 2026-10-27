@@ -99,6 +99,79 @@
     -fx-text-fill: -verde-oscuro;
 }
 
+/* ---------- Línea del pedido (prefijo: pedido-) ---------- */
+.pedido-linea {
+    -fx-background-color: -blanco;
+    -fx-background-radius: 8;
+    -fx-border-color: -beige-intermedio;
+    -fx-border-radius: 8;
+    -fx-padding: 8 10 8 12;
+}
+
+.pedido-linea:hover {
+    -fx-border-color: -verde-principal;
+}
+
+.pedido-nombre {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -texto-principal;
+}
+
+/* Selector de cantidad  [ - 2 + ] */
+.pedido-cantidad-box {
+    -fx-background-color: -beige-claro;
+    -fx-background-radius: 14;
+    -fx-border-color: -beige-intermedio;
+    -fx-border-radius: 14;
+    -fx-padding: 2 4 2 4;
+}
+
+.button.pedido-btn-cantidad {
+    -fx-background-color: transparent;
+    -fx-background-radius: 12;
+    -fx-text-fill: -verde-oscuro;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 8 0 8;
+    -fx-min-width: 26;
+}
+.button.pedido-btn-cantidad:hover   {
+    -fx-background-color: -verde-suave;
+}
+.button.pedido-btn-cantidad:pressed {
+    -fx-background-color: -beige-intermedio;
+}
+
+.pedido-cantidad {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -texto-principal;
+    -fx-min-width: 22;
+    -fx-alignment: CENTER;
+}
+
+.pedido-subtotal {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -verde-oscuro;
+    -fx-alignment: CENTER_RIGHT;
+}
+
+/* Quitar la línea entera */
+.button.pedido-btn-quitar {
+    -fx-background-color: transparent;
+    -fx-text-fill: -rojo-moderado;
+    -fx-font-weight: bold;
+    -fx-padding: 4 8 4 8;
+}
+.button.pedido-btn-quitar:hover   {
+    -fx-background-color: -beige-intermedio;
+}
+.button.pedido-btn-quitar:pressed {
+    -fx-opacity: 0.7;
+}
+
 /* ---------- 3.3 Gestión económica (prefijo: gestion-) ---------- */
 
 
@@ -151,8 +224,12 @@
     -fx-text-fill: -blanco;
     -fx-font-weight: bold;
 }
-.btn-primario:hover   { -fx-background-color: -verde-oscuro; }
-.btn-primario:pressed { -fx-background-color: -verde-oscuro; }
+.btn-primario:hover   {
+    -fx-background-color: -verde-oscuro;
+}
+.btn-primario:pressed {
+    -fx-background-color: -verde-oscuro;
+}
 
 /* Secundario: styleClass="btn-secundario" */
 .btn-secundario {
@@ -161,8 +238,12 @@
     -fx-border-radius: 6;
     -fx-text-fill: -texto-principal;
 }
-.btn-secundario:hover   { -fx-background-color: -beige-intermedio; }
-.btn-secundario:pressed { -fx-background-color: -verde-suave; }
+.btn-secundario:hover   {
+    -fx-background-color: -beige-intermedio;
+}
+.btn-secundario:pressed {
+    -fx-background-color: -verde-suave;
+}
 
 /* Destructivo: styleClass="btn-peligro" (eliminar, anular...) */
 .btn-peligro {
@@ -170,8 +251,12 @@
     -fx-text-fill: -blanco;
     -fx-font-weight: bold;
 }
-.btn-peligro:hover   { -fx-opacity: 0.85; }
-.btn-peligro:pressed { -fx-opacity: 0.7; }
+.btn-peligro:hover   {
+    -fx-opacity: 0.85;
+}
+.btn-peligro:pressed {
+    -fx-opacity: 0.7;
+}
 
 /* Deshabilitado (aplica a todos) */
 .button:disabled {
@@ -299,9 +384,15 @@
 }
 
 /* Solo color de texto */
-.texto-error { -fx-text-fill: -rojo-moderado; }
-.texto-aviso { -fx-text-fill: -ambar-suave; }
-.texto-ok    { -fx-text-fill: -verde-principal; }
+.texto-error {
+    -fx-text-fill: -rojo-moderado;
+}
+.texto-aviso {
+    -fx-text-fill: -ambar-suave;
+}
+.texto-ok    {
+    -fx-text-fill: -verde-principal;
+}
 
 
 /* ---------- 4.7 Separadores y scroll ---------- */
@@ -435,10 +526,19 @@
     -fx-pref-height: 50;
     -fx-cursor: hand;
 }
-.button.login-button:hover   { -fx-background-color: -verde-oscuro; }
-.button.login-button:pressed { -fx-background-color: -verde-oscuro; -fx-opacity: 0.9; }
-.button.login-button:default { -fx-background-color: -verde-principal; }
-.button.login-button:default:hover { -fx-background-color: -verde-oscuro; }
+.button.login-button:hover   {
+    -fx-background-color: -verde-oscuro;
+}
+.button.login-button:pressed {
+    -fx-background-color: -verde-oscuro;
+    -fx-opacity: 0.9;
+}
+.button.login-button:default {
+    -fx-background-color: -verde-principal;
+}
+.button.login-button:default:hover {
+    -fx-background-color: -verde-oscuro;
+}
 
 .login-note {
     -fx-font-size: 11px;
