@@ -44,13 +44,13 @@ public class LineaPedido {
      * Precio de venta de una unidad.
      */
     public double getPrecioUnidad() {
-        return producto.getPrecio_venta();
+        return producto.productoIvaAplicado();
     }
 
     /**
      * Precio unidad por cantidad.
      */
     public double getSubtotal() {
-        return producto.getPrecio_venta() * cantidad;
+        return producto.productoIvaAplicado() * cantidad;
     }
 }

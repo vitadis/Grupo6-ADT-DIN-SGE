@@ -55,8 +55,8 @@ public class NavController {
     private static final Map<String, String> VISTAS = Map.of(
             //"Inicio", "/view/inicio/inicioView.fxml",
             "Caja y pedidos", "/view/caja/cajaView.fxml",
-    //"Gestión económica", "/view/gestion/gestionView.fxml",
-    "Gestión stock", "/view/gestionStock/gestionStock.fxml"
+            //"Gestión económica", "/view/gestion/gestionView.fxml",
+            "Gestión stock", "/view/gestionStock/gestionStock.fxml"
     //"Compras y proveedores", "/view/compras/comprasView.fxml",
     //"Análisis e informes", "/view/informes/informesView.fxml",
     //"Administración", "/view/admin/adminView.fxml"
@@ -92,7 +92,7 @@ public class NavController {
 
     @FXML
     private void cerrarSesion(ActionEvent event) {
-        Alertas.mostrarConfirmacion("Confirmación", "¿Seguro que quieres cerrar sesión?", e -> {
+        Alertas.mostrarConfirmacion("Confirmación", "¿Seguro que quieres cerrar sesión?", () -> {
             try {
                 Button btnCS = (Button) event.getSource();
                 Stage stage = (Stage) btnCS.getScene().getWindow();

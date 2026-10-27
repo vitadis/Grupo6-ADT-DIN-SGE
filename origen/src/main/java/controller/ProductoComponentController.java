@@ -1,4 +1,4 @@
- package controller;
+package controller;
 
 import java.net.URL;
 import java.util.function.Consumer;
@@ -55,7 +55,7 @@ public class ProductoComponentController {
         );
 
         lblPrecio.setText(
-                String.format("%.2f €", producto.getPrecio_venta())
+                String.format("%.2f €", producto.productoIvaAplicado())
         );
 
         cargarImagen(producto.getImagen());

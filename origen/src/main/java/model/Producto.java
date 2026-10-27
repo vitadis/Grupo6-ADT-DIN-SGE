@@ -486,6 +486,10 @@ public class Producto {
         return imagen;
     }
 
+    public double productoIvaAplicado() {
+        return precio_venta + (iva * precio_venta);
+    }
+
     public void setImagen(String imagen) {
         this.imagen = imagen;
     }

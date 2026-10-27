@@ -239,6 +239,13 @@ public class CajaController implements UsuarioImplementacion {
 
     @FXML
     private void onCancelar() {
+        if (pedido.estaVacio()) {
+            return;
+        }
+        util.Alertas.mostrarConfirmacion("Confirmación", "¿Quieres cancelar el pedido?", this::limpiarPedido);
+    }
+
+    private void limpiarPedido() {
         pedido.limpiar();
         actualizarPedido();
     }

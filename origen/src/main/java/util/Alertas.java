@@ -4,7 +4,6 @@
  */
 package util;
 
-import java.util.function.Consumer;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
@@ -32,10 +31,10 @@ public class Alertas {
         return alerta;
     }
 
-    public static void mostrarConfirmacion(String titulo,String mensaje, Consumer consumible) {
+    public static void mostrarConfirmacion(String titulo,String mensaje, Runnable consumible) {
         Alert alerta = mostrarMensaje(Alert.AlertType.CONFIRMATION, titulo, mensaje);
         if (alerta.showAndWait().filter(r -> r == ButtonType.OK).isPresent()) {
-            consumible.accept(mensaje);
+            consumible.run();
         }
     }
 
