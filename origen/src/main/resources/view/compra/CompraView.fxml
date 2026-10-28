@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ComprasController">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="16">
+            <padding>
+                <Insets bottom="0" left="28" right="28" top="14" />
+            </padding>
+            <TextField fx:id="txtBuscar" prefWidth="320" promptText="Buscar..." />
+            <Region HBox.hgrow="ALWAYS" />
+            <StackPane styleClass="notificaciones" />
+            <Label fx:id="lblUsuario" styleClass="texto-secundario" />
+            <StackPane styleClass="avatar">
+                <Label fx:id="lblAvatar" />
+            </StackPane>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox spacing="14">
+            <padding>
+                <Insets bottom="24" left="28" right="28" top="10" />
+            </padding>
+
+            <HBox alignment="BOTTOM_LEFT">
+                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <Label fx:id="lblRuta" styleClass="texto-secundario" text="Inicio &gt; Compras y proveedores &gt; Compras" />
+                    <Label fx:id="lblTitulo" styleClass="titulo" text="Compras y proveedores" />
+                    <Label fx:id="lblSubtitulo" styleClass="subtitulo" text="Control de compras, proveedores y precios" />
+                </VBox>
+                <Region HBox.hgrow="ALWAYS" />
+                <HBox fx:id="contenedorBotonesAccion" alignment="BOTTOM_RIGHT" spacing="10">
+                    <Button fx:id="btnGenerarLista" onAction="#onGenerarLista" styleClass="btn-secundario" text="Generar lista de compra" />
+                    <Button fx:id="btnAccionPrincipal" onAction="#onAccionPrincipal" styleClass="btn-primario" text="Registrar compra" />
+                </HBox>
+            </HBox>
+
+            <TabPane fx:id="tabPaneCompras" styleClass="compras-tabpane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                <tabs>
+                    <Tab fx:id="tabCompras" text="Compras">
+                        <content>
+                            <HBox spacing="20">
+                                <padding>
+                                    <Insets top="12" />
+                                </padding>
+
+                                <VBox spacing="8" HBox.hgrow="ALWAYS">
+                                    <VBox styleClass="tarjeta" VBox.vgrow="ALWAYS">
+                                        <HBox alignment="CENTER_LEFT" styleClass="compras-tabla-cabecera">
+                                            <Label prefWidth="80" styleClass="texto-secundario" text="Fecha" />
+                                            <Label prefWidth="180" styleClass="texto-secundario" text="Proveedor" />
+                                            <Label prefWidth="120" styleClass="texto-secundario" text="Ref. factura" />
+                                            <Label prefWidth="70" styleClass="texto-secundario" text="Líneas" />
+                                            <Label prefWidth="110" styleClass="texto-secundario" text="Importe" />
+                                            <Label prefWidth="150" styleClass="texto-secundario" text="Variación de precios" />
+                                        </HBox>
+
+                                        <ScrollPane fx:id="scrollCompras" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                                            <VBox fx:id="contenedorCompras" spacing="4" styleClass="compras-lista-filas" />
+                                        </ScrollPane>
+                                    </VBox>
+                                    <Label fx:id="lblContador" styleClass="texto-secundario" />
+                                </VBox>
+
+                                <VBox fx:id="panelSugerencias" maxWidth="350" minWidth="350" prefWidth="350" spacing="14" styleClass="tarjeta">
+                                    <VBox spacing="2">
+                                        <Label fx:id="lblTituloSugerencias" styleClass="subtitulo" text="Lista de compra sugerida" />
+                                        <Label fx:id="lblSubtituloSugerencias" styleClass="texto-secundario" />
+                                    </VBox>
+
+                                    <ScrollPane fx:id="scrollSugerencias" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                                        <VBox fx:id="contenedorSugerencias" spacing="10" />
+                                    </ScrollPane>
+
+                                    <Button fx:id="btnCrearCompra" maxWidth="Infinity" onAction="#onCrearCompraConLista" styleClass="btn-primario" text="Crear compra con esta lista" />
+                                </VBox>
+                            </HBox>
+                        </content>
+                    </Tab>
+
+                    <Tab fx:id="tabProveedores" text="Proveedores">
+                        <content>
+                            <HBox spacing="18">
+                                <padding>
+                                    <Insets top="12" />
+                                </padding>
+
+                                <VBox maxWidth="380" minWidth="380" prefWidth="380" spacing="8" styleClass="tarjeta">
+                                    <HBox alignment="CENTER_LEFT" styleClass="compras-tabla-cabecera">
+                                        <Label prefWidth="170" styleClass="texto-secundario" text="Proveedor" />
+                                        <Label prefWidth="110" styleClass="texto-secundario" text="Contacto" />
+                                        <Label prefWidth="80" styleClass="texto-secundario" text="Estado" />
+                                    </HBox>
+
+                                    <ScrollPane fx:id="scrollListaProveedores" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                                        <VBox fx:id="contenedorListaProveedores" spacing="4" styleClass="compras-lista-filas" />
+                                    </ScrollPane>
+                                </VBox>
+
+                                <VBox spacing="14" HBox.hgrow="ALWAYS">
+                                    <VBox spacing="6" styleClass="tarjeta">
+                                        <HBox alignment="CENTER_LEFT" spacing="14">
+                                            <StackPane fx:id="avatarProveedor" prefHeight="48" prefWidth="48" styleClass="avatar">
+                                                <Label fx:id="lblInicialesProveedor" />
+                                            </StackPane>
+                                            <VBox spacing="2" HBox.hgrow="ALWAYS">
+                                                <Label fx:id="lblNombreProveedor" styleClass="subtitulo" />
+                                                <Label fx:id="lblContactoProveedor" styleClass="texto-secundario" />
+                                                <Label fx:id="lblCondicionesProveedor" styleClass="texto-secundario" />
+                                            </VBox>
+                                            <Button fx:id="btnEditarProveedor" onAction="#onEditarProveedor" styleClass="btn-secundario" text="✎ Editar" />
+                                        </HBox>
+                                    </VBox>
+
+                                    <VBox spacing="10" styleClass="tarjeta" VBox.vgrow="ALWAYS">
+                                        <VBox spacing="2">
+                                            <Label styleClass="subtitulo" text="Historial de compras del proveedor" />
+                                            <Label fx:id="lblSubtituloHistorial" styleClass="texto-secundario" />
+                                        </VBox>
+
+                                        <HBox alignment="CENTER_LEFT" styleClass="compras-tabla-cabecera">
+                                            <Label prefWidth="80" styleClass="texto-secundario" text="Fecha" />
+                                            <Label prefWidth="130" styleClass="texto-secundario" text="Referencia" />
+                                            <Label prefWidth="70" styleClass="texto-secundario" text="Líneas" />
+                                            <Label prefWidth="100" styleClass="texto-secundario" text="Importe" />
+                                            <Label prefWidth="120" styleClass="texto-secundario" text="Variación" />
+                                        </HBox>
+
+                                        <ScrollPane fx:id="scrollHistorialProveedor" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                                            <VBox fx:id="contenedorHistorialProveedor" spacing="4" styleClass="compras-lista-filas" />
+                                        </ScrollPane>
+                                    </VBox>
+
+                                    <VBox spacing="10" styleClass="tarjeta" VBox.vgrow="ALWAYS">
+                                        <VBox spacing="2">
+                                            <Label styleClass="subtitulo" text="Comparación de precios" />
+                                            <Label fx:id="lblSubtituloComparacion" styleClass="texto-secundario" />
+                                        </VBox>
+
+                                        <HBox fx:id="cabeceraComparacionProveedor" alignment="CENTER_LEFT" styleClass="compras-tabla-cabecera">
+                                            <Label prefWidth="140" styleClass="texto-secundario" text="Producto" />
+                                            <HBox fx:id="contenedorCabeceraProveedores" alignment="CENTER_LEFT" spacing="10" HBox.hgrow="ALWAYS" />
+                                            <Label prefWidth="130" styleClass="texto-secundario" text="Mejor opción" />
+                                        </HBox>
+
+                                        <ScrollPane fx:id="scrollComparacionProveedor" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                                            <VBox fx:id="contenedorComparacionProveedor" spacing="4" styleClass="compras-lista-filas" />
+                                        </ScrollPane>
+                                    </VBox>
+                                </VBox>
+                            </HBox>
+                        </content>
+                    </Tab>
+
+                    <Tab fx:id="tabCompararPrecios" text="Comparar precios">
+                        <content>
+                            <VBox spacing="8">
+                                <padding>
+                                    <Insets top="12" />
+                                </padding>
+
+                                <VBox styleClass="tarjeta" VBox.vgrow="ALWAYS">
+                                    <HBox alignment="CENTER_LEFT" styleClass="compras-tabla-cabecera">
+                                        <Label prefWidth="180" styleClass="texto-secundario" text="Producto" />
+                                        <Label prefWidth="160" styleClass="texto-secundario" text="Mejor proveedor" />
+                                        <Label prefWidth="110" styleClass="texto-secundario" text="Mejor precio" />
+                                        <Label prefWidth="110" styleClass="texto-secundario" text="Precio medio" />
+                                        <Label prefWidth="140" styleClass="texto-secundario" text="Última compra" />
+                                    </HBox>
+
+                                    <ScrollPane fx:id="scrollCompararPrecios" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                                        <VBox fx:id="contenedorCompararPrecios" spacing="4" styleClass="compras-lista-filas" />
+                                    </ScrollPane>
+                                </VBox>
+                                <Label fx:id="lblContadorComparar" styleClass="texto-secundario" />
+                            </VBox>
+                        </content>
+                    </Tab>
+                </tabs>
+            </TabPane>
+        </VBox>
+    </center>
+</BorderPane>

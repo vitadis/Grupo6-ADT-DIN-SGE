@@ -179,7 +179,104 @@
 
 
 /* ---------- 3.5 Compras y proveedores (prefijo: compras-) ---------- */
+/* TabPane sin bordes grises por defecto */
+.compras-tabpane {
+    -fx-tab-min-height: 34;
+    -fx-tab-max-height: 34;
+}
 
+.compras-tabpane .tab-header-area {
+    -fx-padding: 0;
+}
+
+.compras-tabpane .tab-header-background {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent -beige-intermedio transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.compras-tabpane .tab {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 3 0;
+    -fx-padding: 4 14 6 14;
+    -fx-cursor: hand;
+}
+
+.compras-tabpane .tab .tab-label {
+    -fx-text-fill: -texto-secundario;
+    -fx-font-size: 14px;
+}
+
+.compras-tabpane .tab:selected {
+    -fx-border-color: transparent transparent -verde-principal transparent;
+}
+
+.compras-tabpane .tab:selected .tab-label {
+    -fx-text-fill: -verde-oscuro;
+    -fx-font-weight: bold;
+}
+
+.compras-tabpane .tab:hover .tab-label {
+    -fx-text-fill: -verde-oscuro;
+}
+
+.compras-tabpane .tab-content-area {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.compras-tabla-cabecera {
+    -fx-padding: 0 0 10 0;
+    -fx-border-color: transparent transparent -beige-intermedio transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.compras-tabla-cabecera .label {
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+}
+
+.compras-lista-filas {
+    -fx-padding: 6 0 0 0;
+}
+
+.compra-fila {
+    -fx-padding: 8 4 8 4;
+    -fx-border-color: transparent transparent -beige-intermedio transparent;
+    -fx-border-width: 0 0 1 0;
+    -fx-alignment: CENTER_LEFT;
+}
+
+.compra-fila:hover {
+    -fx-background-color: -beige-principal;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+
+.compra-dato-destacado {
+    -fx-font-weight: bold;
+    -fx-text-fill: -texto-principal;
+}
+.avatar {
+    -fx-background-color: -verde-oscuro;
+    -fx-background-radius: 24;
+    -fx-alignment: CENTER;
+}
+
+.avatar .label {
+    -fx-text-fill: -blanco;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+}
+
+/* Fila de proveedor seleccionada en la lista izquierda */
+.proveedor-fila-seleccionada {
+    -fx-background-color: -verde-suave;
+    -fx-background-radius: 6;
+}
 
 /* ---------- 3.6 Análisis e informes (prefijo: informes-) ---------- */
 
