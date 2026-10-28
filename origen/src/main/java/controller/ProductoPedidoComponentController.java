@@ -34,15 +34,15 @@ public class ProductoPedidoComponentController {
             Consumer<Producto> alSumar,
             Consumer<Producto> alRestar,
             Consumer<Producto> alQuitar) {
-        this.producto = linea.getProducto();
+        this.producto = linea.producto();
         this.alSumar = alSumar;
         this.alRestar = alRestar;
         this.alQuitar = alQuitar;
 
         lblNombre.setText(producto.getNombre());
-        lblPrecioUnidad.setText(String.format("%.2f € / ud.", linea.getPrecioUnidad()));
+        lblPrecioUnidad.setText(String.format("%.2f € / ud.", linea.precioUnidad()));
         lblCantidad.setText(String.valueOf(linea.getCantidad()));
-        lblSubtotal.setText(String.format("%.2f €", linea.getSubtotal()));
+        lblSubtotal.setText(String.format("%.2f €", linea.subtotalConIva()));
         btnMas.setDisable(!linea.puedeIncrementar());
     }
 

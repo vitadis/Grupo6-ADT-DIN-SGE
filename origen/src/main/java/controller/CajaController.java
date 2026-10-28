@@ -185,7 +185,7 @@ public class CajaController implements UsuarioImplementacion {
     private void actualizarPedido() {
         contenedorLineasPedido.getChildren().clear();
 
-        for (LineaPedido linea : pedido.getLineas()) {
+        for (LineaPedido linea : pedido.lineas()) {
             try {
                 contenedorLineasPedido.getChildren().add(crearLineaPedido(linea));
             } catch (IOException ex) {
@@ -194,8 +194,8 @@ public class CajaController implements UsuarioImplementacion {
             }
         }
 
-        lblNumProductos.setText(pedido.getNumProductos() + " productos");
-        lblTotal.setText(String.format("%.2f €", pedido.getTotal()));
+        lblNumProductos.setText(pedido.numProductos() + " productos");
+        lblTotal.setText(String.format("%.2f €", pedido.totalConIva()));
 
         boolean vacio = pedido.estaVacio();
         lblAyuda.setVisible(vacio);
@@ -255,9 +255,22 @@ public class CajaController implements UsuarioImplementacion {
         if (pedido.estaVacio()) {
             return;
         }
-        for (LineaPedido l : pedido.getLineas()) {
-            System.out.println(l.getCantidad() + " x " + l.getProducto().getNombre()
-                    + " - " + String.format("%.2f €", l.getSubtotal()));
+
+        try {
+            controller.InstanciarEscena.createNewStage("/view/caja/confirmarPagoDialog.fxml", "ConfirmarPago", this::abrirPago);
+        } catch (IOException ex) {
+            System.getLogger(CajaController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+
+    }
+
+    // dialog metodo de pago
+    private void abrirPago(Object controller) {
+        try {
+            ConfirmarPagoDialogController controllerDialog = (ConfirmarPagoDialogController) controller;
+            controllerDialog.setPedido(pedido);
+        } catch (Exception e) {
+            System.out.println("Error con el dialog perfil: " + e.getMessage());
         }
     }
 
@@ -265,5 +278,4 @@ public class CajaController implements UsuarioImplementacion {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-
 }
