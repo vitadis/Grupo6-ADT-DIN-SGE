@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <BorderPane styleClass="caja-root" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CajaController">
@@ -18,15 +17,6 @@
     <fx:define>
         <ToggleGroup fx:id="categoriasGroup" />
     </fx:define>
-    <top>
-        <HBox alignment="CENTER_RIGHT" spacing="12" styleClass="barra-superior">
-            <padding>
-                <Insets bottom="0" left="24" right="24" top="12" />
-            </padding>
-            <StackPane styleClass="notificaciones" />
-            <StackPane styleClass="avatar" />
-        </HBox>
-    </top>
 
     <center>
         <HBox spacing="20" styleClass="zona-central">
@@ -38,33 +28,31 @@
 
                 <HBox alignment="TOP_LEFT" styleClass="cabecera">
                     <VBox spacing="4" HBox.hgrow="ALWAYS">
-                        <Label fx:id="lblTitulo" styleClass="titulo" text="Caja y pedidos" />
+                        <Label styleClass="titulo" text="Caja y pedidos" />
                         <Label fx:id="lblSubtitulo" styleClass="subtitulo" text="Pedido nº 01 · Mostrador · Nombre del trabajador." />
                     </VBox>
                     <Region HBox.hgrow="ALWAYS" />
-                    <Button fx:id="btnHistorialVentas" onAction="#onHistorialVentas" styleClass="btn-historial" text="Historial de ventas" />
+                    <Button onAction="#onHistorialVentas" styleClass="btn-historial" text="Historial de ventas" />
                 </HBox>
 
                 <FlowPane fx:id="contenedorCategorias" hgap="10" styleClass="categorias" vgap="10">
-                    <RadioButton fx:id="rbTodo" selected="true" styleClass="chip-categoria" text="Todo">
-                  <toggleGroup>
-                     <ToggleGroup fx:id="categoriasGroup" />
-                  </toggleGroup></RadioButton>
+                    <RadioButton fx:id="rbTodo" selected="true" styleClass="chip-categoria" text="Todo" toggleGroup="$categoriasGroup" />
                 </FlowPane>
 
-                <ScrollPane fx:id="scrollProductos" fitToWidth="true" hbarPolicy="NEVER" styleClass="scroll-productos" VBox.vgrow="ALWAYS">
-                    <FlowPane fx:id="contenedorProductos" hgap="12" styleClass="contenedor-productos" vgap="12" />
+                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="scroll-productos" VBox.vgrow="ALWAYS">
+                    <FlowPane fx:id="contenedorProductos" alignment="CENTER" hgap="12" styleClass="contenedor-productos" vgap="12" />
                 </ScrollPane>
             </VBox>
 
-            <VBox fx:id="panelPedido" maxWidth="360" minWidth="360" prefWidth="360" spacing="12" styleClass="panel-pedido">
+            <VBox fx:id="panelPedido" maxWidth="360" minWidth="360.0" prefWidth="360.0" spacing="12" styleClass="panel-pedido">
                 <padding>
                     <Insets bottom="16" left="16" right="16" top="18" />
                 </padding>
-                 <Label fx:id="lblPedidoActual" styleClass="pedido-titulo" text="Pedido actual" />
+                <Label styleClass="pedido-titulo" text="Pedido actual" />
+                <Label fx:id="lblAyuda" styleClass="texto-secundario" text="Pulsa «Añadir» en un producto para empezar el pedido." wrapText="true" />
 
-                <ScrollPane fx:id="scrollLineas" fitToWidth="true" hbarPolicy="NEVER" styleClass="scroll-lineas" VBox.vgrow="ALWAYS">
-                    <VBox fx:id="contenedorLineasPedido" spacing="0" styleClass="lineas-pedido" />
+                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="scroll-lineas" VBox.vgrow="ALWAYS">
+                    <VBox fx:id="contenedorLineasPedido" spacing="8" styleClass="lineas-pedido" />
                 </ScrollPane>
 
                 <VBox fx:id="resumenPedido" spacing="10" styleClass="pedido-resumen">
@@ -86,13 +74,14 @@
                     </HBox>
 
                     <HBox spacing="10" styleClass="acciones-pedido">
-                        <Button fx:id="btnCancelar" onAction="#onCancelar" styleClass="btn-cancelar" text="Cancelar" />
-                        <Button fx:id="btnCobrar" maxWidth="Infinity" onAction="#onCobrar" styleClass="btn-cobrar" text="Cobrar 0,00 €" HBox.hgrow="ALWAYS" />
+                        <Button onAction="#onCancelar" styleClass="btn-cancelar" text="Cancelar" />
+                        <Button maxWidth="Infinity" onAction="#onCobrar" styleClass="btn-cobrar" text="Cobrar" HBox.hgrow="ALWAYS" />
                     </HBox>
-
-                    <Label fx:id="lblAyuda" alignment="CENTER" maxWidth="Infinity" styleClass="pedido-ayuda" text="Elimina líneas con ✕ · Cantidad con − / +" />
                 </VBox>
             </VBox>
         </HBox>
     </center>
+    <top>
+        <Region prefHeight="34.0" prefWidth="834.0" BorderPane.alignment="CENTER" />
+    </top>
 </BorderPane>

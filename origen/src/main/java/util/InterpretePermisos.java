@@ -49,7 +49,7 @@ public class InterpretePermisos {
      * </ol>
      *
      * <p>
-     * Ejemplo: con {@code ["caja", "gestion.ingresosGastos", "inicio"]} el
+     * Ejemplo: con {@code ["caja", "gestion:ingresosGastos", "inicio"]} el
      * resultado es {@code [Gestión stock, Compras y proveedores,
      * Análisis e informes, Administración]}.</p>
      *

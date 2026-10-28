@@ -1,11 +1,13 @@
 package controller;
 
 import java.io.IOException;
+import java.util.function.Consumer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public final class InstanciarEscena extends Application {
@@ -45,6 +47,24 @@ public final class InstanciarEscena extends Application {
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.show();
+    }
+   
+    public static <T> T createNewStage(String ruta, String nombreVentana, Consumer<T> configurador) throws IOException {
+        FXMLLoader loader = new FXMLLoader(InstanciarEscena.class.getResource(ruta));
+        Parent root = loader.load();
+
+        T controller = loader.getController();
+        if (configurador != null) {
+            configurador.accept(controller);
+        }
+
+        Stage nuevaVentana = new Stage();
+        nuevaVentana.setTitle(nombreVentana);
+        nuevaVentana.initModality(Modality.APPLICATION_MODAL);
+        nuevaVentana.setScene(new Scene(root));
+        nuevaVentana.showAndWait();
+
+        return controller;
     }
     
 }

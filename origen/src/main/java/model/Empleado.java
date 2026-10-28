@@ -1,5 +1,7 @@
 package model;
 
+import java.time.LocalDate;
+
 public class Empleado {
 
     private String nombre;
@@ -8,14 +10,14 @@ public class Empleado {
     private String telefono;
     private String email;
     private String puesto;
-    private String fecha_alta;
+    private LocalDate fecha_alta;
 
     public Empleado() {
     }
 
     public Empleado(String nombre, String apellido, String dni,
             String telefono, String email, String puesto,
-            String fecha_alta) {
+            LocalDate fecha_alta) {
 
         this.nombre = nombre;
         this.apellido = apellido;
@@ -24,8 +26,55 @@ public class Empleado {
         this.email = email;
         this.puesto = puesto;
         this.fecha_alta = fecha_alta;
+
+        validar();
     }
 
+    public void validar() {
+        validarTexto(nombre, "El nombre");
+        validarTexto(apellido, "El apellido");
+        validarTexto(dni, "El DNI");
+        validarTexto(telefono, "El teléfono");
+        validarTexto(email, "El email");
+        validarTexto(puesto, "El puesto");
+        validarFecha(fecha_alta);
+
+        if (!dni.matches("^[0-9]{8}[A-Za-z]$")) {
+            throw new IllegalArgumentException(
+                    "El DNI debe contener 8 números y una letra.");
+        }
+
+        if (!telefono.matches("^[0-9+() -]{9,20}$")) {
+            throw new IllegalArgumentException(
+                    "El formato del teléfono no es válido.");
+        }
+
+        if (!email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")) {
+            throw new IllegalArgumentException(
+                    "El formato del email no es válido.");
+        }
+    }
+
+    private void validarTexto(String valor, String campo) {
+        if (valor == null || valor.isBlank()) {
+            throw new IllegalArgumentException(
+                    campo + " es obligatorio.");
+        }
+
+        if (!valor.equals(valor.trim())) {
+            throw new IllegalArgumentException(
+                    campo + " no puede comenzar ni terminar con espacios.");
+        }
+    }
+
+    private void validarFecha(LocalDate fecha) {
+        if (fecha == null) {
+            throw new IllegalArgumentException(
+                    "La fecha de alta es obligatoria.");
+        }
+    }
+
+    // Getters y setters
     public String getNombre() {
         return nombre;
     }
@@ -74,11 +123,11 @@ public class Empleado {
         this.puesto = puesto;
     }
 
-    public String getFecha_alta() {
+    public LocalDate getFecha_alta() {
         return fecha_alta;
     }
 
-    public void setFecha_alta(String fecha_alta) {
+    public void setFecha_alta(LocalDate fecha_alta) {
         this.fecha_alta = fecha_alta;
     }
 }

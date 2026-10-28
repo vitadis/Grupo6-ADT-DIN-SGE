@@ -15,6 +15,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Usuario;
+import services.LoginService;
 
 /**
  * FXML Controller class
@@ -36,10 +37,16 @@ public class LoginController implements Initializable {
     // --------------------- Atributos ---------------------
     private Usuario usuario;
 
+    private LoginService loginService;
+
     // --------------------- Inicialización ---------------------
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        txtContrasenaVisible.textProperty().bindBidirectional(txtContrasena.textProperty());
+        txtContrasenaVisible.textProperty()
+                .bindBidirectional(txtContrasena.textProperty());
+
+        UsuarioDao usuarioDao = UsuarioDaoImp.getInstance();
+        loginService = new LoginService(usuarioDao);
     }
 
     // --------------------- Usuario ---------------------
@@ -67,26 +74,22 @@ public class LoginController implements Initializable {
 
     @FXML
     private void validar(ActionEvent event) {
-        String nombre = txtUsuario.getText().trim();
-        String contrasena = txtContrasena.getText();
-
-        if (nombre.isEmpty() || contrasena.isEmpty()) {
-            lblMensajeError.setText("Completa todos los campos obligatorios.");
-            return;
-        }
-        UsuarioDao udi =  UsuarioDaoImp.getInstance();
-        
         try {
-            Usuario usuario = udi.obtenerUsuario(nombre, contrasena);
-            if (usuario == null) {
-                lblMensajeError.setText("Usuario o contraseña incorrectos.");
-                return;
-            }
-            this.usuario = usuario;
+            usuario = loginService.iniciarSesion(
+                    txtUsuario.getText(),
+                    txtContrasena.getText()
+            );
+
             lblMensajeError.setText("");
             abrirNav();
 
+        } catch (IllegalArgumentException e) {
+            lblMensajeError.setText(e.getMessage());
+
         } catch (DaoException e) {
+            lblMensajeError.setText(
+                    "No se ha podido iniciar sesión."
+            );
             e.printStackTrace();
         }
     }
