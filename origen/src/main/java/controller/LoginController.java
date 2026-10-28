@@ -15,7 +15,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Usuario;
-import services.LoginService;
+import services.UsuarioService;
 
 /**
  * FXML Controller class
@@ -37,7 +37,7 @@ public class LoginController implements Initializable {
     // --------------------- Atributos ---------------------
     private Usuario usuario;
 
-    private LoginService loginService;
+    private UsuarioService loginService;
 
     // --------------------- Inicialización ---------------------
     @Override
@@ -46,7 +46,7 @@ public class LoginController implements Initializable {
                 .bindBidirectional(txtContrasena.textProperty());
 
         UsuarioDao usuarioDao = UsuarioDaoImp.getInstance();
-        loginService = new LoginService(usuarioDao);
+        loginService = new UsuarioService(usuarioDao);
     }
 
     // --------------------- Usuario ---------------------

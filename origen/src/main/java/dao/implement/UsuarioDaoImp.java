@@ -55,7 +55,6 @@ public class UsuarioDaoImp extends AccesoMongoDB implements dao.UsuarioDao {
 
     @Override
     public void altaUsuario(Usuario user) {
-        //user.validar();
 
         try (MongoClient client = abrirConexion()) {
             MongoCollection<Usuario> coleccion = getCollection(client, COLECCION, Usuario.class);
@@ -84,5 +83,31 @@ public class UsuarioDaoImp extends AccesoMongoDB implements dao.UsuarioDao {
     @Override
     public void modificarUsuario(Usuario user) {
 
+        if (user == null) {
+            throw new IllegalArgumentException(
+                    "El usuario no puede ser nulo.");
+        }
+
+        if (user.getId() == null) {
+            throw new IllegalArgumentException(
+                    "El id del usuario no puede ser nulo.");
+        }
+
+        try (MongoClient client = abrirConexion()) {
+
+            MongoCollection<Usuario> coleccion = getCollection(client, COLECCION, Usuario.class);
+
+            Usuario usuarioExistente = coleccion.find(Filters.eq("_id", user.getId())).first();
+
+            if (usuarioExistente == null) {
+                throw new IllegalArgumentException("No existe ningún usuario con el id " + user.getId() + ".");
+            }
+
+            coleccion.replaceOne(Filters.eq("_id", user.getId()), user);
+
+        } catch (MongoException e) {
+            throw new DaoException(
+                    "Error al modificar el usuario.", e);
+        }
     }
 }

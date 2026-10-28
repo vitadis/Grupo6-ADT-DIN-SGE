@@ -36,7 +36,10 @@
                 </HBox>
 
                 <FlowPane fx:id="contenedorCategorias" hgap="10" styleClass="categorias" vgap="10">
-                    <RadioButton fx:id="rbTodo" selected="true" styleClass="chip-categoria" text="Todo" toggleGroup="$categoriasGroup" />
+                    <RadioButton fx:id="rbTodo" selected="true" styleClass="chip-categoria" text="Todo">
+                  <toggleGroup>
+                     <ToggleGroup fx:id="categoriasGroup" />
+                  </toggleGroup></RadioButton>
                 </FlowPane>
 
                 <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="scroll-productos" VBox.vgrow="ALWAYS">
@@ -81,7 +84,4 @@
             </VBox>
         </HBox>
     </center>
-    <top>
-        <Region prefHeight="34.0" prefWidth="834.0" BorderPane.alignment="CENTER" />
-    </top>
 </BorderPane>
