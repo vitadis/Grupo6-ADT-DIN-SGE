@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="360.0" prefWidth="304.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RegistrarPerdidaController">
+   <children>
+      <Label fx:id="titulo" layoutX="34.0" layoutY="35.0" text="REGISTRAR PERDIDA" />
+      <Label layoutX="34.0" layoutY="80.0" text="Producto:" />
+      <Label layoutX="34.0" layoutY="128.0" text="Cantidad:" />
+      <ComboBox layoutX="99.0" layoutY="76.0" prefWidth="150.0" />
+      <TextField layoutX="100.0" layoutY="124.0" />
+      <Button layoutX="34.0" layoutY="317.0" mnemonicParsing="false" text="Guardar" />
+      <Button layoutX="124.0" layoutY="317.0" mnemonicParsing="false" text="Cancelar" />
+      <Label layoutX="34.0" layoutY="168.0" text="Nota:" />
+      <TextArea layoutX="100.0" layoutY="168.0" prefHeight="107.0" prefWidth="150.0" promptText="Escribe un resumen de lo sucedido" wrapText="true" />
+   </children>
+</AnchorPane>
