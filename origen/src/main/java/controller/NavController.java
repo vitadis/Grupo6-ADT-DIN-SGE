@@ -55,7 +55,7 @@ public class NavController {
     private static final Map<String, String> VISTAS = Map.of(
             //"Inicio", "/view/inicio/inicioView.fxml",
             "Caja y pedidos", "/view/caja/cajaView.fxml",
-            //"Gestión económica", "/view/gestion/gestionView.fxml",
+            "Gestión económica", "/view/compra/CompraView.fxml",
             "Gestión stock", "/view/gestionStock/gestionStock.fxml"
     //"Compras y proveedores", "/view/compras/comprasView.fxml",
     //"Análisis e informes", "/view/informes/informesView.fxml",
