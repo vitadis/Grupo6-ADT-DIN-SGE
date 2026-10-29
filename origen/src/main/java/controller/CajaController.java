@@ -3,6 +3,8 @@ package controller;
 import exceptions.DaoException;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.fxml.FXML;
@@ -23,6 +25,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Toggle;
 import javafx.scene.layout.VBox;
+import model.EstadoPedido;
+import model.MetodoPago;
+import services.PedidoService;
 
 /**
  * FXML Controller class
@@ -44,6 +49,7 @@ public class CajaController implements UsuarioImplementacion {
     private RadioButton rbTodo;
 
     private final ProductoService productoService = new ProductoService();
+    private final PedidoService pedidoService = new PedidoService();
     private List<Producto> productosVenta = new ArrayList<>();
     private final VentaPedido pedido = new VentaPedido();
 
@@ -185,7 +191,7 @@ public class CajaController implements UsuarioImplementacion {
     private void actualizarPedido() {
         contenedorLineasPedido.getChildren().clear();
 
-        for (LineaPedido linea : pedido.getLineas()) {
+        for (LineaPedido linea : pedido.lineas()) {
             try {
                 contenedorLineasPedido.getChildren().add(crearLineaPedido(linea));
             } catch (IOException ex) {
@@ -194,8 +200,8 @@ public class CajaController implements UsuarioImplementacion {
             }
         }
 
-        lblNumProductos.setText(pedido.getNumProductos() + " productos");
-        lblTotal.setText(String.format("%.2f €", pedido.getTotal()));
+        lblNumProductos.setText(pedido.numProductos() + " productos");
+        lblTotal.setText(String.format("%.2f €", pedido.totalConIva()));
 
         boolean vacio = pedido.estaVacio();
         lblAyuda.setVisible(vacio);
@@ -255,9 +261,64 @@ public class CajaController implements UsuarioImplementacion {
         if (pedido.estaVacio()) {
             return;
         }
-        for (LineaPedido l : pedido.getLineas()) {
-            System.out.println(l.getCantidad() + " x " + l.getProducto().getNombre()
-                    + " - " + String.format("%.2f €", l.getSubtotal()));
+
+        try {
+            controller.InstanciarEscena.createNewStage("/view/caja/confirmarPagoDialog.fxml", "ConfirmarPago", this::abrirPago);
+
+        } catch (IOException ex) {
+            System.getLogger(CajaController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
+
+    }
+
+    // dialog metodo de pago
+    private void abrirPago(Object controller) {
+        try {
+            ConfirmarPagoDialogController controllerDialog = (ConfirmarPagoDialogController) controller;
+            controllerDialog.setPedido(pedido);
+            controllerDialog.setAlPagar(this::agregarPedido);
+
+        } catch (Exception e) {
+            System.out.println("Error con el dialog perfil: " + e.getMessage());
+        }
+    }
+
+    // metodo para agregar el pedido a la base de datos
+    private void agregarPedido(VentaPedido pedido) {
+        if (pedido.estaVacio()) {
+            return;
+        }
+        pedido.setUsuario_id(usuario.getId());
+        pedido.setId(100);
+
+        LocalDate fecha = LocalDate.now();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        pedido.setFecha(fecha.format(formato));
+        pedido.setEstado(EstadoPedido.COBRADO);
+
+        try {
+            pedidoService.realizarPedido(pedido);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        actualizarStock(pedido);
+        // borrar
+        pedido.limpiar();
+        actualizarPedido();
+    }
+
+    // cambiar el stock de todos los productos
+    private void actualizarStock(VentaPedido pedido) {
+        if (pedido.estaVacio()) {
+            return;
+        }
+        for (LineaPedido lp : pedido.getDetalle()) {
+            try {
+                productoService.modificarProducto(lp.productoModificadoStock());
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 
@@ -265,5 +326,4 @@ public class CajaController implements UsuarioImplementacion {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
-
 }

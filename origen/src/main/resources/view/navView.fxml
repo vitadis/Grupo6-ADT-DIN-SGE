@@ -61,12 +61,27 @@
             </children>
         </VBox>
     </left>
-
-    <center>
-        <StackPane fx:id="contenido" BorderPane.alignment="CENTER" />
-    </center>
    <stylesheets>
       <URL value="@../css/style.css" />
       <URL value="@../css/theme.css" />
    </stylesheets>
+   <center>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="TOP_RIGHT" prefHeight="26.0" prefWidth="760.0">
+               <children>
+                  <ImageView fitHeight="30.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/icon_notification.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <padding>
+                  <Insets right="20.0" top="20.0" />
+               </padding>
+            </HBox>
+              <StackPane fx:id="contenido" />
+         </children>
+      </VBox>
+   </center>
 </BorderPane>

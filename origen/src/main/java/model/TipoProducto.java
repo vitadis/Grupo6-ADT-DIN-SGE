@@ -5,31 +5,29 @@
 package model;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 /**
  *
  * @author Joel
  */
 public enum TipoProducto {
-    VENTA("venta", "Venta"),
-    INGREDIENTE("ingrediente", "Ingrediente");
+    VENTA("Venta"),
+    INGREDIENTE("Ingrediente");
 
-    private final String valor; // lo que guardo en mongo
     private final String etiqueta; // para enseñarlo en pantalla
 
-    TipoProducto(String valor, String etiqueta) {
-        this.valor = valor;
+    TipoProducto(String etiqueta) {
         this.etiqueta = etiqueta;
     }
 
-    public String getValor() {
-        return valor;
+    public String getEtiqueta() {
+        return etiqueta;
     }
 
     /**
-     * Las categorías de este tipo: Tipo.VENTA.getCategorias() -> bebidas,
+     * Categorías de este tipo: TipoProducto.VENTA.getCategorias() -> bebidas,
      * cafetería...
      */
     public List<CategoriaProducto> getCategorias() {
@@ -38,19 +36,8 @@ public enum TipoProducto {
                 .collect(Collectors.toList());
     }
 
-    public static TipoProducto deValor(String valor) {
-        for (TipoProducto t : values()) {
-            if (valor != null
-                    && (t.valor.equalsIgnoreCase(valor.trim())
-                    || t.etiqueta.equalsIgnoreCase(valor.trim()))) {
-                return t;
-            }
-        }
-        throw new IllegalArgumentException("Tipo desconocido: " + valor);
-    }
-
     @Override
     public String toString() {
-        return etiqueta;
-    } // para el ComboBox
+        return etiqueta; // para el ComboBox
+    }
 }

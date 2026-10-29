@@ -86,7 +86,18 @@ public class NavController {
 
     // --------------------- Métodos FXML ---------------------
     @FXML
-    private void abrirPerfil(ActionEvent event) {
+    private void abrirPerfil(ActionEvent event) throws IOException {
+        InstanciarEscena.createNewStage("/view/perfilView.fxml", "Perfil de usuario", this::dialogPerfil);
+    }
+
+    // metodo
+    private void dialogPerfil(Object controller) {
+        try {
+            DialogPerfilController controllerDialog = (DialogPerfilController) controller;
+            controllerDialog.setusuario(usuario);
+        } catch (Exception e) {
+            System.out.println("Error con el dialog perfil: " + e.getMessage());
+        }
 
     }
 

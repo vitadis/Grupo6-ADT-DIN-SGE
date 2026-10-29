@@ -11,52 +11,31 @@ package model;
 public enum CategoriaProducto {
 
     // VENTA
-    BEBIDAS(TipoProducto.VENTA, "bebidas", "Bebidas"),
-    CAFETERIA_VENTA(TipoProducto.VENTA, "cafeteria", "Cafetería"),
-    BOLLERIA(TipoProducto.VENTA, "bolleria", "Bollería"),
-    COMIDA(TipoProducto.VENTA, "comida", "Comida"),
+    BEBIDAS(TipoProducto.VENTA, "Bebidas"),
+    CAFETERIA_VENTA(TipoProducto.VENTA, "Cafetería"),
+    BOLLERIA(TipoProducto.VENTA, "Bollería"),
+    COMIDA(TipoProducto.VENTA, "Comida"),
     // INGREDIENTE
-    VERDURAS(TipoProducto.INGREDIENTE, "verduras", "Verduras"),
-    HUEVOS(TipoProducto.INGREDIENTE, "huevos", "Huevos"),
-    ACEITES(TipoProducto.INGREDIENTE, "aceites", "Aceites"),
-    EMBUTIDOS(TipoProducto.INGREDIENTE, "embutidos", "Embutidos"),
-    CAFETERIA_INGREDIENTE(TipoProducto.INGREDIENTE, "cafeteria", "Cafetería"),
-    LACTEOS(TipoProducto.INGREDIENTE, "lacteos", "Lácteos"),
-    INFUSIONES(TipoProducto.INGREDIENTE, "infusiones", "Infusiones"),
-    CONGELADOS(TipoProducto.INGREDIENTE, "congelados", "Congelados"),
-    PANADERIA(TipoProducto.INGREDIENTE, "panaderia", "Panadería");
+    VERDURAS(TipoProducto.INGREDIENTE, "Verduras"),
+    HUEVOS(TipoProducto.INGREDIENTE, "Huevos"),
+    ACEITES(TipoProducto.INGREDIENTE, "Aceites"),
+    EMBUTIDOS(TipoProducto.INGREDIENTE, "Embutidos"),
+    CAFETERIA_INGREDIENTE(TipoProducto.INGREDIENTE, "Cafetería"),
+    LACTEOS(TipoProducto.INGREDIENTE, "Lácteos"),
+    INFUSIONES(TipoProducto.INGREDIENTE, "Infusiones"),
+    CONGELADOS(TipoProducto.INGREDIENTE, "Congelados"),
+    PANADERIA(TipoProducto.INGREDIENTE, "Panadería");
 
     private final TipoProducto tipo;
-    private final String valor;
     private final String etiqueta;
 
-    CategoriaProducto(TipoProducto tipo, String valor, String etiqueta) {
+    CategoriaProducto(TipoProducto tipo, String etiqueta) {
         this.tipo = tipo;
-        this.valor = valor;
         this.etiqueta = etiqueta;
     }
 
     public TipoProducto getTipo() {
         return tipo;
-    }
-
-    public String getValor() {
-        return valor;
-    }
-
-    /**
-     * Hay que pasar el tipo, porque "cafeteria" existe en venta y en
-     * ingrediente.
-     */
-    public static CategoriaProducto deValor(TipoProducto tipo, String valor) {
-        for (CategoriaProducto c : values()) {
-            if (c.tipo == tipo && valor != null
-                    && (c.valor.equalsIgnoreCase(valor.trim())
-                    || c.etiqueta.equalsIgnoreCase(valor.trim()))) {
-                return c;
-            }
-        }
-        throw new IllegalArgumentException("Categoría desconocida: " + tipo + "/" + valor);
     }
 
     public String getEtiqueta() {

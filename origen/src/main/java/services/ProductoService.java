@@ -58,4 +58,13 @@ public class ProductoService {
 
         return producto.getCategoria() == categoria;
     }
+
+    // modificación
+    public void modificarProducto(Producto producto) {
+        if (producto == null) {
+            throw new IllegalArgumentException(
+                    "El producto no puede ser nulo.");
+        }
+        productoDao.modificarProducto(producto);
+    }
 }
