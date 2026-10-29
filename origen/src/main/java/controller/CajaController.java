@@ -302,9 +302,24 @@ public class CajaController implements UsuarioImplementacion {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        actualizarStock(pedido);
         // borrar
         pedido.limpiar();
         actualizarPedido();
+    }
+
+    // cambiar el stock de todos los productos
+    private void actualizarStock(VentaPedido pedido) {
+        if (pedido.estaVacio()) {
+            return;
+        }
+        for (LineaPedido lp : pedido.getDetalle()) {
+            try {
+                productoService.modificarProducto(lp.productoModificadoStock());
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     @Override

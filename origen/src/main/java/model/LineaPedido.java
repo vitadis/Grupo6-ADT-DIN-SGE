@@ -40,6 +40,13 @@ public class LineaPedido {
         return producto;
     }
 
+    // producto con stock modificado
+    public Producto productoModificadoStock() {
+        Producto p = producto;
+        p.setStock_actual(p.getStock_actual() - cantidad);
+        return p;
+    }
+
     public void incrementar() {
         cantidad++;
         recalcular();

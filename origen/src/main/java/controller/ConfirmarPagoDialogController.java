@@ -52,15 +52,12 @@ public class ConfirmarPagoDialogController {
     @FXML
     private void onPagar() {
         metodoPagado = cmbMetodoPago.getValue();
-        
+
         // cambio el metodo de pago
         venta.setMetodo_pago(cmbMetodoPago.getValue());
 
-        // De momento solo imprime
-        System.out.println(venta);
+        // Dentro del lambda recojo la accion que se va a realizar
         alPagar.accept(venta);
-        
-        System.out.println(venta);
         cerrar();
     }
 
