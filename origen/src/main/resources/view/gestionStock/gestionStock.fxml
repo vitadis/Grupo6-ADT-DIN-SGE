@@ -7,6 +7,7 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -14,7 +15,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.gestionStock">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.GestionStockController">
    <center>
       <GridPane BorderPane.alignment="CENTER">
         <columnConstraints>
@@ -27,17 +28,17 @@
           <RowConstraints maxHeight="429.40001525878904" minHeight="10.0" prefHeight="421.6" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <HBox prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="15.0">
                <children>
-                  <Label prefHeight="18.0" prefWidth="177.0" styleClass="titulo" text="GESTION DE STOCK" />
-                  <Button mnemonicParsing="false" onAction="#prueba" prefHeight="26.0" prefWidth="182.0" text="Registrar perdida" />
-                  <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="164.0" text="Registrar movimiento" />
+                  <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="-Infinity" styleClass="titulo" text="GESTION DE STOCK" HBox.hgrow="ALWAYS" />
+                  <Button mnemonicParsing="false" onAction="#registrarPerdida" prefHeight="26.0" prefWidth="182.0" text="Registrar perdida" />
+                  <Button mnemonicParsing="false" onAction="#añadirProducto" prefHeight="26.0" prefWidth="164.0" text="Registrar movimiento" />
                </children>
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
             </HBox>
-            <GridPane GridPane.rowIndex="1">
+            <GridPane fx:id="gridInfoStock" styleClass="gridStock" GridPane.rowIndex="1">
               <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -49,39 +50,39 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <VBox prefHeight="200.0" prefWidth="100.0" styleClass="stockCajas">
+                  <VBox prefHeight="200.0" prefWidth="100.0" styleClass="stockCajas, cajaVerde">
                      <children>
-                        <Label text="Productos" />
-                        <Label fx:id="cantProduc" text="0" />
+                        <Label styleClass="stockTitulo" text="Productos" />
+                        <Label fx:id="cantProduc" styleClass="stockValor" text="0" />
                      </children>
                   </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0" styleClass="stockCajas" GridPane.columnIndex="1">
+                  <VBox prefHeight="200.0" prefWidth="100.0" styleClass="stockCajas, cajaOscura" GridPane.columnIndex="1">
                      <children>
-                        <Label text="Valor de stock" />
-                        <Label fx:id="precioStock" text="0" />
+                        <Label styleClass="stockTitulo" text="Valor de stock" />
+                        <Label fx:id="precioStock" styleClass="stockValor" text="0" />
                      </children>
                   </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0" styleClass="stockCajas" GridPane.columnIndex="2">
+                  <VBox prefHeight="200.0" prefWidth="100.0" styleClass="stockCajas, cajaRoja" GridPane.columnIndex="2">
                      <children>
-                        <Label text="Agotados" />
-                        <Label fx:id="cantStockBajo" text="0" />
+                        <Label styleClass="stockTitulo" text="Agotados" />
+                        <Label fx:id="cantAgotados" styleClass="stockValor" text="0" />
                      </children>
                   </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0" styleClass="stockCajas" GridPane.columnIndex="3">
+                  <VBox prefHeight="200.0" prefWidth="100.0" styleClass="stockCajas, cajaAmbar" GridPane.columnIndex="3">
                      <children>
-                        <Label text="Stock bajo" />
-                        <Label fx:id="cantAgotados" text="0" />
+                        <Label styleClass="stockTitulo" text="Stock bajo" />
+                        <Label fx:id="cantStockBajo" styleClass="stockValor" text="0" />
                      </children>
                   </VBox>
-                  <VBox prefHeight="200.0" prefWidth="100.0" styleClass="stockCajas" GridPane.columnIndex="4">
+                  <VBox prefHeight="200.0" prefWidth="100.0" styleClass="stockCajas, cajaRoja" GridPane.columnIndex="4">
                      <children>
-                        <Label text="Caducan en 7 dias" />
-                        <Label fx:id="cantCaducar" text="0" />
+                        <Label styleClass="stockTitulo" text="Caducan en 7 dias" />
+                        <Label fx:id="cantCaducar" styleClass="stockValor" text="0" />
                      </children>
                   </VBox>
                </children>
             </GridPane>
-            <GridPane GridPane.rowIndex="2">
+            <GridPane fx:id="gridFiltroStock" styleClass="stock-filtros" GridPane.rowIndex="2">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="341.5999755859375" minWidth="10.0" prefWidth="274.3999877929688" />
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="197.60001220703123" minWidth="10.0" prefWidth="197.60001220703123" />
@@ -92,41 +93,37 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <HBox prefHeight="54.0" prefWidth="228.0" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                  <HBox prefHeight="54.0" prefWidth="228.0" styleClass="stock-filtro" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                      <children>
-                        <Label prefHeight="18.0" prefWidth="125.0" text="Categoria" />
+                        <Label styleClass="stock-filtro-label" text="Categoria" />
                         <ComboBox fx:id="categoriaDisplay" prefWidth="150.0" />
                      </children>
                   </HBox>
-                  <HBox prefHeight="54.0" prefWidth="216.0" GridPane.columnIndex="2">
+                  <HBox prefHeight="54.0" prefWidth="216.0" styleClass="stock-filtro" GridPane.columnIndex="2">
                      <children>
-                        <Label prefHeight="18.0" prefWidth="74.0" text="Estado" />
+                        <Label styleClass="stock-filtro-label" text="Estado" />
                         <ComboBox fx:id="estadoDisplay" prefWidth="150.0" />
                      </children>
                   </HBox>
-                  <Label text="Solo alertas" GridPane.columnIndex="3" />
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox prefHeight="100.0" prefWidth="200.0" styleClass="stock-filtro">
                      <children>
-                        <Label text="🔍">
-                           <padding>
-                              <Insets right="15.0" />
-                           </padding></Label>
-                        <TextField />
+                        <Label text="🔍" />
+                        <TextField fx:id="txtBuscar" styleClass="stock-buscar" />
                      </children>
                   </HBox>
+                  <ToggleButton fx:id="soloAlertas" mnemonicParsing="false" text="Solo alertas" GridPane.columnIndex="3" />
                </children>
             </GridPane>
-            <TableView fx:id="tablaStock" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
-              <columns>
-                <TableColumn maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="200.0" text="Producto" />
-                <TableColumn maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="150.0" text="Categoria" />
-                  <TableColumn maxWidth="1.7976931348623157E308" text="Existencia" />
-                  <TableColumn maxWidth="1.7976931348623157E308" minWidth="-Infinity" text="Minimo" />
-                  <TableColumn maxWidth="1.7976931348623157E308" minWidth="-Infinity" text="Unidad" />
-                  <TableColumn maxWidth="1.7976931348623157E308" minWidth="-Infinity" text="Coste /u" />
-                  <TableColumn maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="90.0" text="Valor est." />
-                  <TableColumn maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="90.0" text="Estado" />
-              </columns>
+           <TableView fx:id="tablaStock" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="3">
+                <columns>
+                  <TableColumn fx:id="colProducto" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="200.0" text="Producto" />
+                  <TableColumn fx:id="colCategoria" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="150.0" text="Categoria" />
+                  <TableColumn fx:id="colExistencia" maxWidth="1.7976931348623157E308" text="Existencia" />
+                  <TableColumn fx:id="colMinimo" maxWidth="1.7976931348623157E308" minWidth="-Infinity" text="Minimo" />
+                  <TableColumn fx:id="colPrecio" maxWidth="1.7976931348623157E308" minWidth="-Infinity" text="Precio" />
+                  <TableColumn fx:id="colValor" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="90.0" text="Valor est." />
+                  <TableColumn fx:id="colEstado" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefWidth="90.0" text="Estado" />
+                </columns>
             </TableView>
          </children>
       </GridPane>

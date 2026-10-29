@@ -698,7 +698,6 @@
 .cajaAmbar   { -acento: -ambar-suave; }       /* Stock bajo */
 
 /* Css para las emergentes de Stock*/
-/* ===== Base de las ventanas ===== */
 .ventana {
     -acento: -verde-principal;
     -acento-titulo: -verde-oscuro;
@@ -721,7 +720,6 @@
     -fx-text-fill: -acento-titulo;
 }
 
-/* ===== TextField ===== */
 .ventana .text-field {
     -fx-background-color: -blanco;
     -fx-background-radius: 8;
@@ -738,7 +736,6 @@
     -fx-border-color: -acento;
 }
 
-/* ===== TextArea ===== */
 .ventana .text-area {
     -fx-background-color: -beige-intermedio, -blanco;
     -fx-background-insets: 0, 1;
@@ -758,7 +755,6 @@
     -fx-background-color: -acento, -blanco;
 }
 
-/* ===== ComboBox ===== */
 .ventana .combo-box-base {
     -fx-background-color: -blanco;
     -fx-background-radius: 8;
@@ -791,7 +787,6 @@
     -fx-text-fill: -texto-secundario;
 }
 
-/* Lista desplegable (es otra ventana, por eso no cuelga de .ventana) */
 .combo-box-popup > .list-view {
     -fx-background-color: -blanco;
     -fx-background-radius: 8;
@@ -813,7 +808,6 @@
     -fx-text-fill: -blanco;
 }
 
-/* ===== Botones ===== */
 .ventana .button {
     -fx-background-color: -beige-intermedio;
     -fx-text-fill: -texto-principal;
@@ -834,4 +828,70 @@
 
 .ventana .btnPrimario:hover {
     -fx-background-color: derive(-acento, -12%);
+}
+
+/* ---------- 3.4 Gestión stock (prefijo: stock-) ---------- */
+
+/* Barra de filtros */
+.stock-filtros {
+    -fx-background-color: -beige-claro;
+    -fx-background-radius: 10;
+    -fx-border-color: -beige-intermedio;
+    -fx-border-radius: 10;
+    -fx-padding: 6 12 6 12;
+    -fx-hgap: 12;
+}
+
+/* Cada grupo "etiqueta + control" */
+.stock-filtro {
+    -fx-alignment: CENTER_LEFT;
+    -fx-spacing: 8;
+}
+
+.stock-filtro-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -texto-secundario;
+}
+
+/* Campos en blanco para que destaquen sobre la barra beige */
+.stock-filtros .text-field,
+.stock-filtros .combo-box-base {
+    -fx-background-color: -blanco;
+}
+
+.stock-filtros .combo-box-base .arrow-button {
+    -fx-background-color: transparent;
+}
+
+.stock-filtros .combo-box-base .arrow {
+    -fx-background-color: -texto-secundario;
+}
+
+/* Buscador */
+.stock-filtros .stock-buscar {
+    -fx-pref-width: 220;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-padding: 6 12 6 12;
+}
+
+/* Botón "Solo alertas" (ámbar = avisos) */
+.stock-filtros .stock-btn-alertas {
+    -fx-background-color: -blanco;
+    -fx-background-insets: 0;
+    -fx-background-radius: 6;
+    -fx-border-color: -ambar-suave;
+    -fx-border-radius: 6;
+    -fx-text-fill: -texto-principal;
+}
+
+.stock-filtros .stock-btn-alertas:hover {
+    -fx-background-color: -ambar-suave;
+}
+
+/* Solo se activa si lo conviertes en ToggleButton */
+.stock-filtros .stock-btn-alertas:selected {
+    -fx-background-color: -ambar-suave;
+    -fx-font-weight: bold;
 }
