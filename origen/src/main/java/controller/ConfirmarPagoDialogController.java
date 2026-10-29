@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.function.Consumer;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
@@ -21,8 +22,7 @@ public class ConfirmarPagoDialogController {
     private ComboBox<MetodoPago> cmbMetodoPago;
 
     private VentaPedido venta;
-    private Runnable alPagar = () -> {
-    };
+    private Consumer<VentaPedido> alPagar;
     private MetodoPago metodoPagado;
 
     public ConfirmarPagoDialogController() {
@@ -41,9 +41,8 @@ public class ConfirmarPagoDialogController {
         lblTotal.setText(String.format("%.2f €", venta.totalConIva()));
     }
 
-    public void setAlPagar(Runnable alPagar) {
-        this.alPagar = (alPagar != null) ? alPagar : () -> {
-        };
+    public void setAlPagar(Consumer<VentaPedido> realizarPago) {
+        alPagar = realizarPago;
     }
 
     public MetodoPago getMetodoPagado() {
@@ -53,11 +52,15 @@ public class ConfirmarPagoDialogController {
     @FXML
     private void onPagar() {
         metodoPagado = cmbMetodoPago.getValue();
+        
+        // cambio el metodo de pago
+        venta.setMetodo_pago(cmbMetodoPago.getValue());
 
         // De momento solo imprime
         System.out.println(venta);
-
-        alPagar.run();
+        alPagar.accept(venta);
+        
+        System.out.println(venta);
         cerrar();
     }
 
@@ -69,5 +72,4 @@ public class ConfirmarPagoDialogController {
     private void cerrar() {
         ((Stage) lblTotal.getScene().getWindow()).close();
     }
-
 }

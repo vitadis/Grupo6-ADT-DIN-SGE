@@ -176,4 +176,10 @@ public class LineaPedido {
         }
         this.subtotal = subtotal;
     }
+
+    @Override
+    public String toString() {
+        return "LineaPedido{" + "producto_id=" + producto_id + ", nombre=" + nombre + ", cantidad=" + cantidad + ", precio_unitario=" + precio_unitario + ", iva=" + iva + ", subtotal=" + subtotal + ", producto=" + producto + '}';
+    }
+
 }

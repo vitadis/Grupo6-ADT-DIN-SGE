@@ -3,6 +3,8 @@ package controller;
 import exceptions.DaoException;
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.fxml.FXML;
@@ -23,6 +25,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Toggle;
 import javafx.scene.layout.VBox;
+import model.EstadoPedido;
+import model.MetodoPago;
+import services.PedidoService;
 
 /**
  * FXML Controller class
@@ -44,6 +49,7 @@ public class CajaController implements UsuarioImplementacion {
     private RadioButton rbTodo;
 
     private final ProductoService productoService = new ProductoService();
+    private final PedidoService pedidoService = new PedidoService();
     private List<Producto> productosVenta = new ArrayList<>();
     private final VentaPedido pedido = new VentaPedido();
 
@@ -258,6 +264,7 @@ public class CajaController implements UsuarioImplementacion {
 
         try {
             controller.InstanciarEscena.createNewStage("/view/caja/confirmarPagoDialog.fxml", "ConfirmarPago", this::abrirPago);
+
         } catch (IOException ex) {
             System.getLogger(CajaController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
@@ -269,9 +276,35 @@ public class CajaController implements UsuarioImplementacion {
         try {
             ConfirmarPagoDialogController controllerDialog = (ConfirmarPagoDialogController) controller;
             controllerDialog.setPedido(pedido);
+            controllerDialog.setAlPagar(this::agregarPedido);
+
         } catch (Exception e) {
             System.out.println("Error con el dialog perfil: " + e.getMessage());
         }
+    }
+
+    // metodo para agregar el pedido a la base de datos
+    private void agregarPedido(VentaPedido pedido) {
+        if (pedido.estaVacio()) {
+            return;
+        }
+        pedido.setUsuario_id(usuario.getId());
+        pedido.setId(100);
+
+        LocalDate fecha = LocalDate.now();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        pedido.setFecha(fecha.format(formato));
+        pedido.setEstado(EstadoPedido.COBRADO);
+
+        try {
+            pedidoService.realizarPedido(pedido);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        // borrar
+        pedido.limpiar();
+        actualizarPedido();
     }
 
     @Override

@@ -63,9 +63,15 @@ public class PedidoDaoImp extends AccesoMongoDB implements PedidoDao {
             MongoCollection<VentaPedido> coleccion
                     = getCollection(client, COLECCION, VentaPedido.class);
 
+            VentaPedido ultimoPedido = coleccion.find()
+                                                  .sort(Sorts.descending("_id"))
+                                                  .first();
+            
+            pedido.setId(ultimoPedido.getId()+1);
+            
             coleccion.insertOne(pedido);
         } catch (MongoException e) {
-            throw new DaoException("Error al consultar el usuario en la base de datos.", e);
+            throw new DaoException("Error al agregar un Pedido: "+e.getMessage(),e);
         }
     }
 }
