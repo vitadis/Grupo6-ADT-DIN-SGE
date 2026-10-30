@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="320.0" prefWidth="708.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HistorialController">
+   <children>
+      <Label text="Historial de Pedidos" />
+      <TableView fx:id="tvPedido" prefHeight="200.0" prefWidth="200.0">
+        <columns>
+          <TableColumn fx:id="tcId" prefWidth="75.0" text="id" />
+          <TableColumn fx:id="tcUsuarioId" prefWidth="75.0" text="usuario_id" />
+            <TableColumn fx:id="tcFecha" prefWidth="75.0" text="fecha" />
+            <TableColumn fx:id="tcEstado" prefWidth="75.0" text="estado" />
+            <TableColumn fx:id="tcMetodoPago" prefWidth="75.0" text="metodo_pago" />
+            <TableColumn fx:id="tcDetalle" prefWidth="75.0" text="detalle" />
+            <TableColumn fx:id="tcTotal" prefWidth="75.0" text="total" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</VBox>

@@ -241,6 +241,11 @@ public class CajaController implements UsuarioImplementacion {
     // --------------------- handlers, javafx ---------------------
     @FXML
     private void onHistorialVentas() {
+        try {
+            controller.InstanciarEscena.createNewStage("/view/caja/historialView.fxml", "Historial de Ventas", null);
+        } catch (IOException ex) {
+            System.getLogger(CajaController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        }
     }
 
     @FXML

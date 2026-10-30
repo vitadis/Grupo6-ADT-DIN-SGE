@@ -6,6 +6,7 @@ package services;
 
 import dao.PedidoDao;
 import dao.implement.PedidoDaoImp;
+import java.util.List;
 import model.VentaPedido;
 
 /**
@@ -14,7 +15,7 @@ import model.VentaPedido;
  */
 public class PedidoService {
 
-    private final PedidoDao usuarioDao = PedidoDaoImp.getInstance();
+    private final PedidoDao pedidoDao = PedidoDaoImp.getInstance();
 
     public PedidoService() {
     }
@@ -24,7 +25,12 @@ public class PedidoService {
             throw new IllegalArgumentException("El pedido no puede estar vacio");
         }
         pedido.validar();
-        usuarioDao.agregar(pedido);
+        pedidoDao.agregar(pedido);
+    }
+
+    public List<VentaPedido> listaPedidos() {
+        List<VentaPedido> pedidos = pedidoDao.consultar();
+        return pedidos;
     }
 
 }

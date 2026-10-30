@@ -1,5 +1,8 @@
 package controller;
 
+import controller.AñadirProductoController;
+import controller.InstanciarEscena;
+import controller.RegistrarPerdidaController;
 import dao.ProductoDao;
 import dao.implement.ProductoDaoImp;
 import exceptions.DaoException;
@@ -40,23 +43,38 @@ import org.bson.Document;
  */
 public class GestionStockController implements Initializable {
 
-    @FXML private Label cantProduc;
-    @FXML private Label precioStock;
-    @FXML private Label cantStockBajo;
-    @FXML private Label cantAgotados;
-    @FXML private Label cantCaducar;
-    @FXML private ComboBox<String> categoriaDisplay;
-    @FXML private ComboBox<String> estadoDisplay;
-    @FXML private TextField txtBuscar;
+    @FXML
+    private Label cantProduc;
+    @FXML
+    private Label precioStock;
+    @FXML
+    private Label cantStockBajo;
+    @FXML
+    private Label cantAgotados;
+    @FXML
+    private Label cantCaducar;
+    @FXML
+    private ComboBox<String> categoriaDisplay;
+    @FXML
+    private ComboBox<String> estadoDisplay;
+    @FXML
+    private TextField txtBuscar;
 
-    @FXML private TableView<FilaStock> tablaStock;
-    @FXML private TableColumn<FilaStock, String> colProducto, colValor, colEstado, colPrecio;
-    @FXML private TableColumn<FilaStock, CategoriaProducto> colCategoria;
-    @FXML private TableColumn<FilaStock, Number> colExistencia, colMinimo;
+    @FXML
+    private TableView<FilaStock> tablaStock;
+    @FXML
+    private TableColumn<FilaStock, String> colProducto, colValor, colEstado, colPrecio;
+    @FXML
+    private TableColumn<FilaStock, CategoriaProducto> colCategoria;
+    @FXML
+    private TableColumn<FilaStock, Number> colExistencia, colMinimo;
 
-    @FXML private GridPane gridInfoStock;
-    @FXML private GridPane gridFiltroStock;
-    @FXML private ToggleButton soloAlertas;
+    @FXML
+    private GridPane gridInfoStock;
+    @FXML
+    private GridPane gridFiltroStock;
+    @FXML
+    private ToggleButton soloAlertas;
 
     private final ProductoDao productoDao = ProductoDaoImp.getInstance();
 
@@ -104,7 +122,7 @@ public class GestionStockController implements Initializable {
 
         // Opciones de los combos
         categoriaDisplay.getItems().add("Todas");
-        Set<String> etiquetas = new LinkedHashSet<String>(); 
+        Set<String> etiquetas = new LinkedHashSet<String>();
         for (CategoriaProducto c : CategoriaProducto.values()) {
             etiquetas.add(c.getEtiqueta());
         }
@@ -232,7 +250,7 @@ public class GestionStockController implements Initializable {
     @FXML
     private void registrarPerdida(ActionEvent event) {
         try {
-            RegistrarPerdidaController c = InstanciarEscena.createNewStage("/view/gestionStock/registrarPerdida.fxml", "Registrar Perdida",  null);
+            RegistrarPerdidaController c = InstanciarEscena.createNewStage("/view/gestionStock/registrarPerdida.fxml", "Registrar Perdida", null);
         } catch (Exception e) {
             e.printStackTrace();
         }
