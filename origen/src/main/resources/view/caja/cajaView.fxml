@@ -29,7 +29,6 @@
                 <HBox alignment="TOP_LEFT" styleClass="cabecera">
                     <VBox spacing="4" HBox.hgrow="ALWAYS">
                         <Label styleClass="titulo" text="Caja y pedidos" />
-                        <Label fx:id="lblSubtitulo" styleClass="subtitulo" text="Pedido nº 01 · Mostrador · Nombre del trabajador." />
                     </VBox>
                     <Region HBox.hgrow="ALWAYS" />
                     <Button onAction="#onHistorialVentas" styleClass="btn-historial" text="Historial de ventas" />
@@ -47,7 +46,7 @@
                 </ScrollPane>
             </VBox>
 
-            <VBox fx:id="panelPedido" maxWidth="360" minWidth="360.0" prefWidth="360.0" spacing="12" styleClass="panel-pedido">
+            <VBox maxWidth="360" minWidth="360.0" prefWidth="360.0" spacing="12" styleClass="panel-pedido">
                 <padding>
                     <Insets bottom="16" left="16" right="16" top="18" />
                 </padding>
@@ -58,7 +57,7 @@
                     <VBox fx:id="contenedorLineasPedido" spacing="8" styleClass="lineas-pedido" />
                 </ScrollPane>
 
-                <VBox fx:id="resumenPedido" spacing="10" styleClass="pedido-resumen">
+                <VBox spacing="10" styleClass="pedido-resumen">
                     <padding>
                         <Insets bottom="14" left="14" right="14" top="14" />
                     </padding>

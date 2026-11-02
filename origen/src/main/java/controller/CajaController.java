@@ -26,7 +26,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Toggle;
 import javafx.scene.layout.VBox;
 import model.EstadoPedido;
-import model.MetodoPago;
 import services.PedidoService;
 
 /**
@@ -57,15 +56,8 @@ public class CajaController implements UsuarioImplementacion {
 
     //contenedorLineasPedido
     @FXML
-    private Label lblSubtitulo;
-    @FXML
-    private VBox panelPedido;
-    @FXML
-    private Label lblPedidoActual;
-    @FXML
     private VBox contenedorLineasPedido;
-    @FXML
-    private VBox resumenPedido;
+    
     @FXML
     private Label lblNumProductos;
     @FXML

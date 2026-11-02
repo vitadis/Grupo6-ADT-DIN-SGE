@@ -8,14 +8,22 @@ import exceptions.DaoException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Callback;
 import model.EstadoPedido;
+import model.LineaPedido;
 import model.MetodoPago;
 import model.VentaPedido;
 import services.PedidoService;
@@ -41,8 +49,9 @@ public class HistorialController implements Initializable {
     private TableColumn<VentaPedido, EstadoPedido> tcEstado;
     @FXML
     private TableColumn<VentaPedido, MetodoPago> tcMetodoPago;
+    // la columna trabaja con la lista ya mapeada a texto
     @FXML
-    private TableColumn<VentaPedido, String> tcDetalle;
+    private TableColumn<VentaPedido, List<String>> tcDetalle;
     @FXML
     private TableColumn<VentaPedido, Double> tcTotal;
 
@@ -52,7 +61,22 @@ public class HistorialController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         cargarTabla();
+    }
 
+    // Linea de la lista
+    private String getString(LineaPedido linea) {
+        return linea.getNombre() + " x" + linea.getCantidad();
+    }
+
+    // mapeo detalle
+    private List<String> mapearDetalle(VentaPedido pedido) {
+        List<LineaPedido> lineas = pedido.getDetalle();
+        if (lineas == null) {
+            return List.of();
+        }
+        return lineas.stream()
+                .map(this::getString)
+                .collect(Collectors.toList());
     }
 
     private void cargarTabla() {
@@ -65,15 +89,49 @@ public class HistorialController implements Initializable {
             tcFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
             tcEstado.setCellValueFactory(new PropertyValueFactory<>("estado"));
             tcMetodoPago.setCellValueFactory(new PropertyValueFactory<>("metodo_pago"));
-            tcDetalle.setCellValueFactory(new PropertyValueFactory<>("detalle"));
             tcTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
+
+            // asignar a la columna la lista ya mapeada (List<String>)
+            tcDetalle.setCellValueFactory(new Callback<CellDataFeatures<VentaPedido, List<String>>, ObservableValue<List<String>>>() {
+                @Override
+                public ObservableValue<List<String>> call(CellDataFeatures<VentaPedido, List<String>> cell) {
+                    return new SimpleObjectProperty<>(mapearDetalle(cell.getValue()));
+                }
+            });
+
+            // detalle dentro de comboBox
+            tcDetalle.setCellFactory(new Callback<TableColumn<VentaPedido, List<String>>, TableCell<VentaPedido, List<String>>>() {
+                @Override
+                public TableCell<VentaPedido, List<String>> call(TableColumn<VentaPedido, List<String>> col) {
+                    return new TableCell<VentaPedido, List<String>>() {
+
+                        private final ComboBox<String> comboDetalle = new ComboBox<>();
+
+                        @Override
+                        protected void updateItem(List<String> detalle, boolean empty) {
+                            super.updateItem(detalle, empty);
+
+                            if (empty || detalle == null || detalle.isEmpty()) {
+                                setGraphic(null);
+                                return;
+                            }
+
+                            // cargar la lista dentro del combobox
+                            comboDetalle.setItems(FXCollections.observableArrayList(detalle));
+
+                            comboDetalle.setPromptText("Ver detalle (" + detalle.size() + ")");
+                            comboDetalle.getSelectionModel().clearSelection();
+
+                            setGraphic(comboDetalle);
+                        }
+                    };
+                }
+            });
 
             tvPedido.setItems(listaPedidos);
 
         } catch (DaoException e) {
             System.out.println(e.getMessage());
         }
-
     }
-
 }
