@@ -57,7 +57,7 @@ public class CajaController implements UsuarioImplementacion {
     //contenedorLineasPedido
     @FXML
     private VBox contenedorLineasPedido;
-    
+
     @FXML
     private Label lblNumProductos;
     @FXML
@@ -303,6 +303,7 @@ public class CajaController implements UsuarioImplementacion {
         // borrar
         pedido.limpiar();
         actualizarPedido();
+        cargarProductos();
     }
 
     // cambiar el stock de todos los productos
