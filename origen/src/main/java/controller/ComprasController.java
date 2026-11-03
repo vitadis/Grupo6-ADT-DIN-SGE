@@ -4,12 +4,6 @@
  */
 package controller;
 
-import dao.ComprasDao;
-import dao.ProductoDao;
-import dao.ProveedorDao;
-import dao.implement.ComprasDaoImpl;
-import dao.implement.ProductoDaoImp;
-import dao.implement.ProveedorDaoImpl;
 import exceptions.DaoException;
 import java.io.IOException;
 import java.net.URL;
@@ -46,17 +40,17 @@ import model.Compra;
 import model.LineaCompra;
 import model.Producto;
 import model.Proveedor;
+import services.ComprasService;
 import model.Usuario;
 import util.Alertas;
 
 /**
  * Controlador de la pantalla «Compras y proveedores» ({@code CompraView.fxml}).
  *
- * Tiene tres pestañas:
+ * Tiene dos pestañas:
  * <ul>
  * <li><b>Compras:</b> listado de compras y lista de compra sugerida con los productos en stock bajo.</li>
  * <li><b>Proveedores:</b> lista de proveedores, su ficha y su historial de compras.</li>
- * <li><b>Comparar precios:</b> pendiente.</li>
  * </ul>
  * Abre las ventanas {@link RegistrarCompraController} y {@link EditarProveedorController}
  * y recarga los datos cuando se guarda algo.
@@ -66,17 +60,9 @@ import util.Alertas;
 public class ComprasController implements Initializable, UsuarioImplementacion {
 
     /**
-     * DAO de compras.
+     * Service de compras, proveedores y productos.
      */
-    private final ComprasDao comprasDao = ComprasDaoImpl.getInstance();
-    /**
-     * DAO de proveedores.
-     */
-    private final ProveedorDao proveedorDao = ProveedorDaoImpl.getInstance();
-    /**
-     * DAO de productos, para la lista sugerida.
-     */
-    private final ProductoDao productoDao = ProductoDaoImp.getInstance();
+    private final ComprasService comprasService = new ComprasService();
     /**
      * Proveedores por identificador, para sacar su nombre a partir de un {@code proveedor_id}.
      */
@@ -268,51 +254,6 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
      */
     @FXML
     private VBox contenedorHistorialProveedor;
-    /**
-     * Subtítulo de la comparación de precios del proveedor (pendiente).
-     */
-    @FXML
-    private Label lblSubtituloComparacion;
-    /**
-     * Cabecera de la comparación de precios del proveedor (pendiente).
-     */
-    @FXML
-    private HBox cabeceraComparacionProveedor;
-    /**
-     * Columnas de proveedores de la comparación de precios (pendiente).
-     */
-    @FXML
-    private HBox contenedorCabeceraProveedores;
-    /**
-     * Scroll de la comparación de precios del proveedor (pendiente).
-     */
-    @FXML
-    private ScrollPane scrollComparacionProveedor;
-    /**
-     * Filas de la comparación de precios del proveedor (pendiente).
-     */
-    @FXML
-    private VBox contenedorComparacionProveedor;
-    /**
-     * Pestaña Comparar precios.
-     */
-    @FXML
-    private Tab tabCompararPrecios;
-    /**
-     * Scroll de la pestaña Comparar precios (pendiente).
-     */
-    @FXML
-    private ScrollPane scrollCompararPrecios;
-    /**
-     * Filas de la pestaña Comparar precios (pendiente).
-     */
-    @FXML
-    private VBox contenedorCompararPrecios;
-    /**
-     * Contador de la pestaña Comparar precios (pendiente).
-     */
-    @FXML
-    private Label lblContadorComparar;
 
     /**
      * Fila resaltada en la lista de proveedores, para quitarle el resaltado al cambiar.
@@ -537,7 +478,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
         proveedoresSugeridos.clear();
         checksSugeridos.clear();
 
-        List<Producto> productos = productoDao.listarProductos();
+        List<Producto> productos = comprasService.listarProductos();
         for (Producto p : productos) {
             if (p.isActivo() && p.getStock_actual() < p.getStock_minimo()) {
                 int cantidad = p.getStock_minimo() - p.getStock_actual();
@@ -577,7 +518,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
      */
     private Map<Integer, Double> obtenerUltimosPrecios() {
         Map<Integer, Double> precios = new HashMap<>();
-        for (Compra c : comprasDao.obtenerCompras()) {
+        for (Compra c : comprasService.listarCompras()) {
             for (LineaCompra l : c.getDetalle()) {
                 precios.put(l.getProducto_id(), l.getPrecio_unidad());
             }
@@ -590,7 +531,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
      */
     private void cargarProveedores() {
         proveedores.clear();
-        for (Proveedor p : proveedorDao.obtenerProveedores()) {
+        for (Proveedor p : comprasService.listarProveedores()) {
             proveedores.put(p.getId(), p);
         }
     }
@@ -599,7 +540,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
      * Pinta todas las compras en la pestaña Compras y actualiza el contador.
      */
     private void cargarCompras() {
-        List<Compra> compras = comprasDao.obtenerCompras();
+        List<Compra> compras = comprasService.listarCompras();
 
         contenedorCompras.getChildren().clear();
         for (Compra c : compras) {
@@ -627,8 +568,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
                 celda(nombreProveedor, 180),
                 celda(c.getNumero_factura(), 120),
                 celda(String.valueOf(c.getDetalle().size()), 70),
-                importe,
-                celda("-", 150)
+                importe
         );
         fila.getStyleClass().add("compra-fila");
         return fila;
@@ -739,7 +679,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
      * @param p proveedor del que se muestra el historial
      */
     private void cargarHistorialProveedor(Proveedor p) {
-        List<Compra> compras = comprasDao.obtenerComprasPorProveedor(p.getId());
+        List<Compra> compras = comprasService.listarComprasPorProveedor(p.getId());
 
         contenedorHistorialProveedor.getChildren().clear();
         for (Compra c : compras) {
@@ -747,8 +687,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
                     celda(LocalDate.parse(c.getFecha()).format(FORMATO_FECHA), 80),
                     celda(c.getNumero_factura(), 130),
                     celda(String.valueOf(c.getDetalle().size()), 70),
-                    celda(String.format("%.2f €", c.getTotal()), 100),
-                    celda("-", 120)
+                    celda(String.format("%.2f €", c.getTotal()), 100)
             );
             fila.getStyleClass().add("compra-fila");
             contenedorHistorialProveedor.getChildren().add(fila);

@@ -66,7 +66,6 @@
                                             <Label prefWidth="120" styleClass="texto-secundario" text="Ref. factura" />
                                             <Label prefWidth="70" styleClass="texto-secundario" text="Líneas" />
                                             <Label prefWidth="110" styleClass="texto-secundario" text="Importe" />
-                                            <Label prefWidth="150" styleClass="texto-secundario" text="Variación de precios" />
                                         </HBox>
 
                                         <ScrollPane fx:id="scrollCompras" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
@@ -137,57 +136,14 @@
                                             <Label prefWidth="130" styleClass="texto-secundario" text="Referencia" />
                                             <Label prefWidth="70" styleClass="texto-secundario" text="Líneas" />
                                             <Label prefWidth="100" styleClass="texto-secundario" text="Importe" />
-                                            <Label prefWidth="120" styleClass="texto-secundario" text="Variación" />
                                         </HBox>
 
                                         <ScrollPane fx:id="scrollHistorialProveedor" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
                                             <VBox fx:id="contenedorHistorialProveedor" spacing="4" styleClass="compras-lista-filas" />
                                         </ScrollPane>
                                     </VBox>
-
-                                    <VBox spacing="10" styleClass="tarjeta" VBox.vgrow="ALWAYS">
-                                        <VBox spacing="2">
-                                            <Label styleClass="subtitulo" text="Comparación de precios" />
-                                            <Label fx:id="lblSubtituloComparacion" styleClass="texto-secundario" />
-                                        </VBox>
-
-                                        <HBox fx:id="cabeceraComparacionProveedor" alignment="CENTER_LEFT" styleClass="compras-tabla-cabecera">
-                                            <Label prefWidth="140" styleClass="texto-secundario" text="Producto" />
-                                            <HBox fx:id="contenedorCabeceraProveedores" alignment="CENTER_LEFT" spacing="10" HBox.hgrow="ALWAYS" />
-                                            <Label prefWidth="130" styleClass="texto-secundario" text="Mejor opción" />
-                                        </HBox>
-
-                                        <ScrollPane fx:id="scrollComparacionProveedor" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
-                                            <VBox fx:id="contenedorComparacionProveedor" spacing="4" styleClass="compras-lista-filas" />
-                                        </ScrollPane>
-                                    </VBox>
                                 </VBox>
                             </HBox>
-                        </content>
-                    </Tab>
-
-                    <Tab fx:id="tabCompararPrecios" text="Comparar precios">
-                        <content>
-                            <VBox spacing="8">
-                                <padding>
-                                    <Insets top="12" />
-                                </padding>
-
-                                <VBox styleClass="tarjeta" VBox.vgrow="ALWAYS">
-                                    <HBox alignment="CENTER_LEFT" styleClass="compras-tabla-cabecera">
-                                        <Label prefWidth="180" styleClass="texto-secundario" text="Producto" />
-                                        <Label prefWidth="160" styleClass="texto-secundario" text="Mejor proveedor" />
-                                        <Label prefWidth="110" styleClass="texto-secundario" text="Mejor precio" />
-                                        <Label prefWidth="110" styleClass="texto-secundario" text="Precio medio" />
-                                        <Label prefWidth="140" styleClass="texto-secundario" text="Última compra" />
-                                    </HBox>
-
-                                    <ScrollPane fx:id="scrollCompararPrecios" fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
-                                        <VBox fx:id="contenedorCompararPrecios" spacing="4" styleClass="compras-lista-filas" />
-                                    </ScrollPane>
-                                </VBox>
-                                <Label fx:id="lblContadorComparar" styleClass="texto-secundario" />
-                            </VBox>
                         </content>
                     </Tab>
                 </tabs>

@@ -173,7 +173,45 @@
 }
 
 /* ---------- 3.3 Gestión económica (prefijo: gestion-) ---------- */
+/* Etiqueta de tipo "Gasto" (ni positivo ni aviso) */
+.gestion-estado-neutro {
+    -fx-background-color: -beige-intermedio;
+    -fx-text-fill: -texto-principal;
+    -fx-background-radius: 12;
+    -fx-padding: 2 10 2 10;
+}
 
+/* Tarjeta de aviso en ámbar (gasto superior a la media) */
+.gestion-tarjeta-aviso {
+    -fx-background-color: #F6E7C1;
+    -fx-background-radius: 10;
+    -fx-border-color: -ambar-suave;
+    -fx-border-radius: 10;
+    -fx-padding: 16;
+}
+
+/* Gráfico de barras: fondo transparente, sin rejilla vertical y barras beige */
+.gestion-grafico .chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.gestion-grafico .chart-vertical-grid-lines {
+    -fx-stroke: transparent;
+}
+
+.gestion-grafico .chart-horizontal-grid-lines {
+    -fx-stroke: -beige-intermedio;
+}
+
+.gestion-grafico .chart-bar {
+    -fx-bar-fill: #C2B28F;
+    -fx-background-radius: 4 4 0 0;
+}
+
+.gestion-grafico .axis {
+    -fx-tick-label-fill: -texto-secundario;
+    -fx-tick-label-font-size: 11px;
+}
 
 /* ---------- 3.4 Gestión stock (prefijo: stock-) ---------- */
 
@@ -692,10 +730,18 @@
 }
 
 /* Color de acento por tarjeta */
-.cajaVerde   { -acento: -verde-principal; }   /* Productos */
-.cajaOscura  { -acento: -verde-oscuro; }      /* Valor de stock */
-.cajaRoja    { -acento: -rojo-moderado; }     /* Agotados y Caducan en 7 días */
-.cajaAmbar   { -acento: -ambar-suave; }       /* Stock bajo */
+.cajaVerde   {
+    -acento: -verde-principal;
+}   /* Productos */
+.cajaOscura  {
+    -acento: -verde-oscuro;
+}      /* Valor de stock */
+.cajaRoja    {
+    -acento: -rojo-moderado;
+}     /* Agotados y Caducan en 7 días */
+.cajaAmbar   {
+    -acento: -ambar-suave;
+}       /* Stock bajo */
 
 /* Css para las emergentes de Stock*/
 .ventana {
@@ -895,3 +941,6 @@
     -fx-background-color: -ambar-suave;
     -fx-font-weight: bold;
 }
+
+
+

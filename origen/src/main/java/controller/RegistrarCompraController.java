@@ -4,12 +4,6 @@
  */
 package controller;
 
-import dao.ComprasDao;
-import dao.ProductoDao;
-import dao.ProveedorDao;
-import dao.implement.ComprasDaoImpl;
-import dao.implement.ProductoDaoImp;
-import dao.implement.ProveedorDaoImpl;
 import exceptions.DaoException;
 import java.net.URL;
 import java.time.LocalDate;
@@ -36,6 +30,7 @@ import model.Compra;
 import model.LineaCompra;
 import model.Producto;
 import model.Proveedor;
+import services.ComprasService;
 
 /**
  * Controlador de la ventana {@code registrarCompra.fxml}.
@@ -50,17 +45,9 @@ import model.Proveedor;
 public class RegistrarCompraController implements Initializable {
 
     /**
-     * DAO para guardar la compra.
+     * Service para cargar proveedores y productos y guardar la compra.
      */
-    private final ComprasDao comprasDao = ComprasDaoImpl.getInstance();
-    /**
-     * DAO para cargar los proveedores en el ComboBox.
-     */
-    private final ProveedorDao proveedorDao = ProveedorDaoImpl.getInstance();
-    /**
-     * DAO para cargar los productos en el ComboBox.
-     */
-    private final ProductoDao productoDao = ProductoDaoImp.getInstance();
+    private final ComprasService comprasService = new ComprasService();
 
     /**
      * Líneas que se han añadido a la compra.
@@ -196,16 +183,8 @@ public class RegistrarCompraController implements Initializable {
         });
 
         try {
-            for (Proveedor p : proveedorDao.obtenerProveedores()) {
-                if (p.isActivo()) {
-                    cbProveedor.getItems().add(p);
-                }
-            }
-            for (Producto p : productoDao.listarProductos()) {
-                if (p.isActivo()) {
-                    cbProducto.getItems().add(p);
-                }
-            }
+            cbProveedor.getItems().addAll(comprasService.listarProveedoresActivos());
+            cbProducto.getItems().addAll(comprasService.listarProductosActivos());
         } catch (DaoException e) {
             lblError.setText(e.getMessage());
         }
@@ -253,8 +232,9 @@ public class RegistrarCompraController implements Initializable {
     }
 
     /**
-     * Valida el producto, la cantidad y el precio y añade una línea a la compra.
-     * Si el producto ya estaba en la compra, se sustituye su línea.
+     * Crea una línea con el producto, la cantidad y el precio y la añade a la compra.
+     * Aquí solo se comprueba que los textos son números; el resto lo valida
+     * {@link LineaCompra#validar()}. Si el producto ya estaba en la compra, se sustituye su línea.
      *
      * @param event evento del botón Añadir
      */
@@ -278,8 +258,13 @@ public class RegistrarCompraController implements Initializable {
             return;
         }
 
-        if (cantidad <= 0 || precio < 0) {
-            lblError.setText("La cantidad debe ser mayor que 0 y el precio no puede ser negativo.");
+        LineaCompra linea;
+        try {
+            // el constructor llama a validar()
+            linea = new LineaCompra(producto.getId(), producto.getNombre(), cantidad, precio,
+                    producto.getIva(), Math.round(cantidad * precio * 100) / 100.0);
+        } catch (IllegalArgumentException e) {
+            lblError.setText(e.getMessage());
             return;
         }
 
@@ -290,8 +275,7 @@ public class RegistrarCompraController implements Initializable {
             }
         }
 
-        lineas.add(new LineaCompra(producto.getId(), producto.getNombre(), cantidad, precio,
-                producto.getIva(), Math.round(cantidad * precio * 100) / 100.0));
+        lineas.add(linea);
 
         cbProducto.setValue(null);
         txtCantidad.clear();
@@ -300,7 +284,8 @@ public class RegistrarCompraController implements Initializable {
     }
 
     /**
-     * Valida los datos, crea la {@link Compra} con sus líneas y totales y la guarda.
+     * Crea la {@link Compra} con sus líneas y totales y la guarda con {@link ComprasService},
+     * que la valida con {@link Compra#validar()} y suma el stock de los productos.
      * Si todo va bien cierra la ventana; si no, muestra el error en {@link #lblError}.
      *
      * @param event evento del botón Guardar compra
@@ -309,30 +294,23 @@ public class RegistrarCompraController implements Initializable {
     private void onGuardar(ActionEvent event) {
         lblError.setText("");
 
-        Proveedor proveedor = cbProveedor.getValue();
-        String factura = txtNumeroFactura.getText().trim();
-
-        if (proveedor == null || dpFecha.getValue() == null || factura.isEmpty()) {
-            lblError.setText("El proveedor, la fecha y el número de factura son obligatorios.");
-            return;
-        }
-        if (lineas.isEmpty()) {
-            lblError.setText("Añade al menos un producto.");
-            return;
-        }
-
         Compra compra = new Compra();
-        compra.setProveedor_id(proveedor.getId());
+        // si no hay proveedor o fecha se quedan en 0 / null y validar() da el error
+        if (cbProveedor.getValue() != null) {
+            compra.setProveedor_id(cbProveedor.getValue().getId());
+        }
+        if (dpFecha.getValue() != null) {
+            compra.setFecha(dpFecha.getValue().toString());
+        }
         compra.setUsuario_id(usuarioId);
-        compra.setFecha(dpFecha.getValue().toString());
-        compra.setNumero_factura(factura);
+        compra.setNumero_factura(txtNumeroFactura.getText().trim());
         compra.setDetalle(new ArrayList<>(lineas));
         compra.setBase(base);
         compra.setTotal_iva(totalIva);
         compra.setTotal(Math.round((base + totalIva) * 100) / 100.0);
 
         try {
-            comprasDao.insertarCompra(compra);
+            comprasService.registrarCompra(compra);
             guardado = true;
             cerrar(event);
         } catch (DaoException e) {

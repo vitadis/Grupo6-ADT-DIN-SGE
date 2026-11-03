@@ -4,8 +4,6 @@
  */
 package controller;
 
-import dao.ProveedorDao;
-import dao.implement.ProveedorDaoImpl;
 import exceptions.DaoException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -22,6 +20,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Contacto;
 import model.Proveedor;
+import services.ComprasService;
 
 /**
  * Controlador de la ventana {@code editarProveedor.fxml}.
@@ -31,7 +30,8 @@ import model.Proveedor;
  * <li>Si antes de mostrarla se llama a {@link #setProveedor(Proveedor)}, funciona en modo edición.</li>
  * <li>Si no, funciona en modo alta.</li>
  * </ul>
- * Al pulsar Guardar valida los datos y los guarda con {@link ProveedorDao}.
+ * Al pulsar Guardar crea el {@link Proveedor} y lo guarda con {@link ComprasService}, que lo
+ * valida con {@link Proveedor#validar()}.
  * Quien la abre ({@link ComprasController}) consulta {@link #isGuardado()} al cerrarse.
  *
  * @author anazk
@@ -44,9 +44,9 @@ public class EditarProveedorController implements Initializable {
     private static final String[] DIAS = {"lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"};
 
     /**
-     * DAO para dar de alta y actualizar proveedores.
+     * Service para validar y guardar el proveedor.
      */
-    private final ProveedorDao proveedorDao = ProveedorDaoImpl.getInstance();
+    private final ComprasService comprasService = new ComprasService();
 
     /**
      * Proveedor que se está editando; es {@code null} cuando la ventana se usa para dar de alta uno nuevo.
@@ -218,9 +218,9 @@ public class EditarProveedorController implements Initializable {
     }
 
     /**
-     * Valida los campos, crea un {@link Proveedor} con los datos del formulario y lo da de alta
-     * o lo actualiza según el modo. Si todo va bien cierra la ventana; si no, muestra el error
-     * en {@link #lblError}.
+     * Crea un {@link Proveedor} con los datos del formulario y lo da de alta o lo actualiza
+     * según el modo. Aquí solo se comprueba que el plazo es un número; el resto lo valida el
+     * modelo. Si todo va bien cierra la ventana; si no, muestra el error en {@link #lblError}.
      *
      * @param event evento del botón Guardar
      */
@@ -228,24 +228,12 @@ public class EditarProveedorController implements Initializable {
     private void onGuardar(ActionEvent event) {
         lblError.setText("");
 
-        String nombre = txtNombre.getText().trim();
-        String nifCif = txtNifCif.getText().trim();
-
-        if (nombre.isEmpty() || nifCif.isEmpty()) {
-            lblError.setText("El nombre y el NIF/CIF son obligatorios.");
-            return;
-        }
-
         int plazo = 0;
         if (!txtPlazoEntrega.getText().trim().isEmpty()) {
             try {
                 plazo = Integer.parseInt(txtPlazoEntrega.getText().trim());
             } catch (NumberFormatException e) {
                 lblError.setText("El plazo de entrega debe ser un número entero.");
-                return;
-            }
-            if (plazo < 0) {
-                lblError.setText("El plazo de entrega no puede ser negativo.");
                 return;
             }
         }
@@ -257,15 +245,19 @@ public class EditarProveedorController implements Initializable {
             }
         }
 
-        Contacto contacto = new Contacto(txtPersona.getText().trim(), txtTelefono.getText().trim(),
-                txtEmail.getText().trim(), txtDireccion.getText().trim());
+        Contacto contacto = new Contacto();
+        contacto.setPersona(txtPersona.getText().trim());
+        contacto.setTelefono(txtTelefono.getText().trim());
+        contacto.setEmail(txtEmail.getText().trim());
+        contacto.setDireccion(txtDireccion.getText().trim());
 
         Proveedor datos = new Proveedor();
+        // con id 0 el service lo da de alta; con el id del original lo actualiza
         if (proveedor != null) {
             datos.setId(proveedor.getId());
         }
-        datos.setNombre(nombre);
-        datos.setNif_cif(nifCif);
+        datos.setNombre(txtNombre.getText().trim());
+        datos.setNif_cif(txtNifCif.getText().trim());
         datos.setIban(txtIban.getText().trim());
         datos.setPlazo_entrega(plazo);
         datos.setDias_laborales(dias);
@@ -273,11 +265,8 @@ public class EditarProveedorController implements Initializable {
         datos.setContacto(contacto);
 
         try {
-            if (proveedor == null) {
-                proveedorDao.insertarProveedores(datos);
-            } else {
-                proveedorDao.actualizarProveedores(datos);
-            }
+            // valida con Proveedor.validar() y Contacto.validar() y guarda
+            comprasService.guardarProveedor(datos);
             guardado = true;
             cerrar(event);
         } catch (DaoException e) {

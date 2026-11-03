@@ -4,6 +4,8 @@
  */
 package model;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,6 +77,7 @@ public class Compra {
      * @param base la base imponible: suma de los subtotales sin IVA
      * @param total_iva el importe total del IVA
      * @param total el importe total de la compra (base + IVA)
+     * @throws IllegalArgumentException si algún dato no es válido (ver {@link #validar()})
      */
     public Compra(int id, int proveedor_id, int usuario_id, String fecha, String numero_factura,
             List<LineaCompra> detalle, double base, double total_iva, double total) {
@@ -87,6 +90,63 @@ public class Compra {
         this.base = base;
         this.total_iva = total_iva;
         this.total = total;
+
+        validar();
+    }
+
+    // reglas del negocio (validaciones)
+    /**
+     * Comprueba que los datos de la compra son válidos: proveedor, usuario, fecha, número de
+     * factura, al menos una línea (cada una se valida con {@link LineaCompra#validar()}) y
+     * totales no negativos.
+     *
+     * El {@link #id} no se comprueba porque lo asigna el DAO al insertar la compra.
+     *
+     * @throws IllegalArgumentException con el mensaje del primer dato que no es válido
+     */
+    public void validar() {
+        if (proveedor_id <= 0) {
+            throw new IllegalArgumentException(
+                    "El proveedor es obligatorio.");
+        }
+
+        if (usuario_id <= 0) {
+            throw new IllegalArgumentException(
+                    "No hay ningún usuario identificado.");
+        }
+
+        if (fecha == null || fecha.isBlank()) {
+            throw new IllegalArgumentException(
+                    "La fecha es obligatoria.");
+        }
+
+        try {
+            LocalDate.parse(fecha);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException(
+                    "La fecha debe tener formato yyyy-MM-dd.");
+        }
+
+        if (numero_factura == null || numero_factura.isBlank()) {
+            throw new IllegalArgumentException(
+                    "El número de factura es obligatorio.");
+        }
+
+        if (detalle == null || detalle.isEmpty()) {
+            throw new IllegalArgumentException(
+                    "Añade al menos un producto.");
+        }
+
+        for (LineaCompra l : detalle) {
+            l.validar();
+        }
+
+        if (!Double.isFinite(base) || base < 0
+                || !Double.isFinite(total_iva) || total_iva < 0
+                || !Double.isFinite(total) || total < 0) {
+            throw new IllegalArgumentException(
+                    "Los totales no pueden ser negativos.");
+        }
     }
 
     /**
