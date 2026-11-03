@@ -2,7 +2,6 @@ package controller;
 
 import dao.implement.UsuarioDaoImp;
 import exceptions.DaoException;
-import java.io.IOException;
 import java.net.URL;
 import dao.UsuarioDao;
 import java.util.ResourceBundle;
@@ -105,7 +104,7 @@ public class LoginController implements Initializable {
     private void abrirNav() {
         try {
             Stage stage = (Stage) txtUsuario.getScene().getWindow();
-            NavController navController = InstanciarEscena.cambiarVista(stage, "/ca/navView.fxml", "Inicio");
+            NavController navController = InstanciarEscena.cambiarVista(stage, "/view/navView.fxml", "Inicio");
             navController.setUsuario(usuario);
         } catch (Exception e) {
             lblMensajeError.setText("No se ha podido cargar la pantalla principal.");
