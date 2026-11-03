@@ -8,6 +8,7 @@ import exceptions.DaoException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
@@ -27,6 +28,7 @@ import model.LineaPedido;
 import model.MetodoPago;
 import model.VentaPedido;
 import services.PedidoService;
+import util.AppLogger;
 
 /**
  * FXML Controller class
@@ -36,6 +38,7 @@ import services.PedidoService;
 public class HistorialController implements Initializable {
 
     private final PedidoService pedidoService = new PedidoService();
+    private final AppLogger logger = AppLogger.getInstance();
 
     @FXML
     private TableView<VentaPedido> tvPedido;
@@ -131,7 +134,8 @@ public class HistorialController implements Initializable {
             tvPedido.setItems(listaPedidos);
 
         } catch (DaoException e) {
-            System.out.println(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
+            util.Alertas.mostrarError(e.getMessage());
         }
     }
 }

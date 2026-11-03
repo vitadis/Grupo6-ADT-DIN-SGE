@@ -5,6 +5,7 @@ module com.origen {
     requires org.mongodb.driver.sync.client;
     requires org.mongodb.driver.core;
     requires java.base;
+    requires java.logging;
 
     opens controller to javafx.fxml, javafx.graphics;
     opens com.origen to javafx.fxml;

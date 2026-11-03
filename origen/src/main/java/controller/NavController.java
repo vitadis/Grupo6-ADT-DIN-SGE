@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,6 +23,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Usuario;
 import util.Alertas;
+import util.AppLogger;
 import util.InterpretePermisos;
 
 /**
@@ -40,6 +42,7 @@ public class NavController {
     // --------------------- Atributos ---------------------
     // map de los iconos de los modulos
     private static final Map<String, String> ICONOS = new LinkedHashMap<>();
+    private final AppLogger logger = AppLogger.getInstance();
 
     static {
         ICONOS.put("Inicio", "/img/icon_home.png");
@@ -55,9 +58,9 @@ public class NavController {
     private static final Map<String, String> VISTAS = Map.of(
             //"Inicio", "/view/inicio/inicioView.fxml",
             "Caja y pedidos", "/view/caja/cajaView.fxml",
-            "Gestión económica", "/view/compra/CompraView.fxml",
-            "Gestión stock", "/view/gestionStock/gestionStock.fxml"
-    //"Compras y proveedores", "/view/compras/comprasView.fxml",
+            // "Gestión económica", "/view/compra/CompraView.fxml",
+            "Gestión stock", "/view/gestionStock/gestionStock.fxml",
+            "Compras y proveedores", "/view/compra/CompraView.fxml"
     //"Análisis e informes", "/view/informes/informesView.fxml",
     //"Administración", "/view/admin/adminView.fxml"
     );
@@ -77,6 +80,7 @@ public class NavController {
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
         construirNavegacion();
+        logger.setUser(usuario.getUsername());
     }
 
     @FXML
@@ -96,7 +100,8 @@ public class NavController {
             DialogPerfilController controllerDialog = (DialogPerfilController) controller;
             controllerDialog.setusuario(usuario);
         } catch (Exception e) {
-            System.out.println("Error con el dialog perfil: " + e.getMessage());
+            Alertas.mostrarError("Error con el dialog perfil: ");
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
 
     }
@@ -111,6 +116,7 @@ public class NavController {
                 InstanciarEscena.cambiarVista(stage, "/view/loginView.fxml", "Inicio Sesión");
             } catch (IOException ex) {
                 Alertas.mostrarError("No se pudo cerrar sesión: " + ex.getMessage());
+                logger.log(Level.SEVERE, ex.getMessage(), ex);
             }
         });
     }
@@ -178,6 +184,8 @@ public class NavController {
             vistasCargadas.put(nombre, vista);
         } catch (IOException e) {
             Alertas.mostrarError("No se pudo cargar " + ruta + ": " + e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
+
         }
     }
 

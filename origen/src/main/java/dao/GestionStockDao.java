@@ -4,7 +4,7 @@ import exceptions.DaoException;
 import java.util.List;
 import model.MovimientoStock;
 import model.Producto;
-import model.Proveedor;
+import model.Proveedor_GestionStock;
 
 /**
  *
@@ -18,7 +18,7 @@ public interface GestionStockDao {
      */
     void registrarPerdida(MovimientoStock movimiento, Producto producto) throws DaoException;
 
-    List<Proveedor> listarActivos() throws DaoException;
+    List<Proveedor_GestionStock> listarActivos() throws DaoException;
 
     List<Producto> listarProductos() throws DaoException;
 

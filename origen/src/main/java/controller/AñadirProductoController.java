@@ -21,7 +21,7 @@ import javafx.scene.layout.GridPane;
 import javafx.util.StringConverter;
 import model.CategoriaProducto;
 import model.Producto;
-import model.Proveedor;
+import model.Proveedor_GestionStock;
 import model.TipoProducto;
 import static util.Alertas.mostrarError;
 
@@ -40,7 +40,7 @@ public class AñadirProductoController implements Initializable {
     @FXML
     private ComboBox<CategoriaProducto> comboCategoria;
     @FXML
-    private ComboBox<Proveedor> comboProveedor;
+    private ComboBox<Proveedor_GestionStock> comboProveedor;
     @FXML
     private TextField txtPrecio;
     @FXML
@@ -193,7 +193,7 @@ public class AñadirProductoController implements Initializable {
             throw new IllegalArgumentException("Selecciona una categoría.");
         }
 
-        Proveedor proveedor = comboProveedor.getValue();
+        Proveedor_GestionStock proveedor = comboProveedor.getValue();
         if (proveedor == null) {
             throw new IllegalArgumentException("Selecciona un proveedor.");
         }

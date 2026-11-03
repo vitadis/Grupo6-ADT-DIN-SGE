@@ -2,10 +2,10 @@ package controller;
 
 import dao.implement.UsuarioDaoImp;
 import exceptions.DaoException;
-import java.io.IOException;
 import java.net.URL;
 import dao.UsuarioDao;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Usuario;
 import services.UsuarioService;
+import  util.AppLogger;
 
 /**
  * FXML Controller class
@@ -23,7 +24,7 @@ import services.UsuarioService;
  * @author Joel
  */
 public class LoginController implements Initializable {
-
+    
     // --------------------- Variables FXML ---------------------
     @FXML
     private TextField txtUsuario;
@@ -36,7 +37,7 @@ public class LoginController implements Initializable {
 
     // --------------------- Atributos ---------------------
     private Usuario usuario;
-
+    private final AppLogger logger= AppLogger.getInstance();
     private UsuarioService loginService;
 
     // --------------------- Inicialización ---------------------
@@ -82,15 +83,20 @@ public class LoginController implements Initializable {
 
             lblMensajeError.setText("");
             abrirNav();
+            
+            // logger
+            logger.setUser(usuario.getUsername());
+            logger.info("Inicio sesión");
 
         } catch (IllegalArgumentException e) {
             lblMensajeError.setText(e.getMessage());
+            logger.info(e.getMessage());
 
         } catch (DaoException e) {
             lblMensajeError.setText(
                     "No se ha podido iniciar sesión."
             );
-            e.printStackTrace();
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -100,9 +106,9 @@ public class LoginController implements Initializable {
             Stage stage = (Stage) txtUsuario.getScene().getWindow();
             NavController navController = InstanciarEscena.cambiarVista(stage, "/view/navView.fxml", "Inicio");
             navController.setUsuario(usuario);
-        } catch (IOException e) {
+        } catch (Exception e) {
             lblMensajeError.setText("No se ha podido cargar la pantalla principal.");
-            e.printStackTrace();
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 }

@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -27,6 +28,7 @@ import javafx.scene.control.Toggle;
 import javafx.scene.layout.VBox;
 import model.EstadoPedido;
 import services.PedidoService;
+import util.AppLogger;
 
 /**
  * FXML Controller class
@@ -34,10 +36,10 @@ import services.PedidoService;
  * @author Joel
  */
 public class CajaController implements UsuarioImplementacion {
-
+    
     private static final String RUTA_TARJETA = "/view/caja/productoComponent.fxml";
     private static final String RUTA_LINEA_PEDIDO = "/view/caja/productoPedidoComponent.fxml";
-
+    
     @FXML
     private ToggleGroup categoriasGroup;
     @FXML
@@ -46,40 +48,41 @@ public class CajaController implements UsuarioImplementacion {
     private FlowPane contenedorProductos;
     @FXML
     private RadioButton rbTodo;
-
+    
     private final ProductoService productoService = new ProductoService();
     private final PedidoService pedidoService = new PedidoService();
     private List<Producto> productosVenta = new ArrayList<>();
     private final VentaPedido pedido = new VentaPedido();
-
+    private final AppLogger logger = AppLogger.getInstance();
+    
     private Usuario usuario;
 
     //contenedorLineasPedido
     @FXML
     private VBox contenedorLineasPedido;
-
+    
     @FXML
     private Label lblNumProductos;
     @FXML
     private Label lblTotal;
     @FXML
     private Label lblAyuda;
-
+    
     @FXML
     private void initialize() {
         rbTodo.setUserData(null);
-
+        
         categoriasGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
             @Override
             public void changed(
                     ObservableValue<? extends Toggle> observable,
                     Toggle anterior,
                     Toggle nuevo) {
-
+                
                 mostrarProductos();
             }
         });
-
+        
         cargarProductos();
         actualizarPedido();
     }
@@ -92,7 +95,7 @@ public class CajaController implements UsuarioImplementacion {
      */
     private void cargarCategorias() {
         contenedorCategorias.getChildren().removeIf(nodo -> nodo != rbTodo);
-
+        
         for (CategoriaProducto categoria : productoService.categoriasDeVenta(productosVenta)) {
             RadioButton rb = new RadioButton(categoria.toString());
             rb.setToggleGroup(categoriasGroup);
@@ -121,6 +124,7 @@ public class CajaController implements UsuarioImplementacion {
             cargarCategorias();
             mostrarProductos();
         } catch (DaoException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
             Alertas.mostrarError("No se pudieron cargar los productos: " + e.getMessage());
         }
     }
@@ -130,22 +134,23 @@ public class CajaController implements UsuarioImplementacion {
      */
     private void mostrarProductos() {
         contenedorProductos.getChildren().clear();
-
+        
         List<Producto> filtrados = productoService.filtrarPorCategoria(
                 productosVenta, getCategoriaSeleccionada());
-
+        
         if (filtrados.isEmpty()) {
             Label vacio = new Label("No hay productos en esta categoría.");
             vacio.getStyleClass().add("texto-secundario");
             contenedorProductos.getChildren().add(vacio);
             return;
         }
-
+        
         for (Producto p : filtrados) {
             try {
                 contenedorProductos.getChildren().add(crearTarjeta(p));
             } catch (IOException ex) {
                 Alertas.mostrarError("No se pudo cargar la tarjeta de producto: " + ex.getMessage());
+                logger.log(Level.SEVERE, ex.getMessage(), ex);
                 return;
             }
         }
@@ -157,13 +162,13 @@ public class CajaController implements UsuarioImplementacion {
         if (ubicacion == null) {
             throw new IOException("No se encuentra el FXML de la tarjeta: " + RUTA_TARJETA);
         }
-
+        
         FXMLLoader loader = new FXMLLoader(ubicacion);
         Node tarjeta = loader.load();
-
+        
         ProductoComponentController controller = loader.getController();
         controller.setProducto(producto, this::anadirAlPedido);
-
+        
         return tarjeta;
     }
 
@@ -173,6 +178,7 @@ public class CajaController implements UsuarioImplementacion {
     private void anadirAlPedido(Producto producto) {
         pedido.agregar(producto);
         actualizarPedido();
+        logger.info("Añadido al pedido, producto: " + producto.getNombre());
     }
 
     // --------------------- Pedido ---------------------
@@ -182,52 +188,61 @@ public class CajaController implements UsuarioImplementacion {
      */
     private void actualizarPedido() {
         contenedorLineasPedido.getChildren().clear();
-
+        
         for (LineaPedido linea : pedido.lineas()) {
             try {
                 contenedorLineasPedido.getChildren().add(crearLineaPedido(linea));
             } catch (IOException ex) {
                 Alertas.mostrarError("No se pudo cargar la línea del pedido: " + ex.getMessage());
+                logger.log(Level.SEVERE, ex.getMessage(), ex);
                 return;
             }
         }
-
+        
         lblNumProductos.setText(pedido.numProductos() + " productos");
         lblTotal.setText(String.format("%.2f €", pedido.totalConIva()));
-
+        
         boolean vacio = pedido.estaVacio();
         lblAyuda.setVisible(vacio);
         lblAyuda.setManaged(vacio);
+        logger.info("Actualizar pedido.");
+        
     }
-
+    
     private Node crearLineaPedido(LineaPedido linea) throws IOException {
         URL ubicacion = getClass().getResource(RUTA_LINEA_PEDIDO);
         if (ubicacion == null) {
             throw new IOException("No se encuentra el FXML de la línea: " + RUTA_LINEA_PEDIDO);
         }
-
+        
         FXMLLoader loader = new FXMLLoader(ubicacion);
         Node nodo = loader.load();
-
+        
         ProductoPedidoComponentController controller = loader.getController();
         controller.setLinea(linea, this::sumarUnidad, this::restarUnidad, this::quitarLinea);
-
+        
         return nodo;
     }
-
+    
     private void sumarUnidad(Producto producto) {
         pedido.agregar(producto);
         actualizarPedido();
+        logger.info("Agrego un producto: " + producto.getNombre());
+        
     }
-
+    
     private void restarUnidad(Producto producto) {
         pedido.restar(producto);
         actualizarPedido();
+        logger.info("Quito un producto: " + producto.getNombre());
+        
     }
-
+    
     private void quitarLinea(Producto producto) {
         pedido.quitar(producto);
         actualizarPedido();
+        logger.info("Quito toda la linea de pedido: " + producto.getNombre());
+        
     }
 
     // --------------------- handlers, javafx ---------------------
@@ -235,11 +250,13 @@ public class CajaController implements UsuarioImplementacion {
     private void onHistorialVentas() {
         try {
             controller.InstanciarEscena.createNewStage("/view/caja/historialView.fxml", "Historial de Ventas", null);
-        } catch (IOException ex) {
+            logger.info("Ingreso en el historial");
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
             System.getLogger(CajaController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
     }
-
+    
     @FXML
     private void onCancelar() {
         if (pedido.estaVacio()) {
@@ -247,25 +264,24 @@ public class CajaController implements UsuarioImplementacion {
         }
         util.Alertas.mostrarConfirmacion("Confirmación", "¿Quieres cancelar el pedido?", this::limpiarPedido);
     }
-
+    
     private void limpiarPedido() {
         pedido.limpiar();
         actualizarPedido();
+        logger.info("Limpio el historial");
     }
-
+    
     @FXML
     private void onCobrar() {
         if (pedido.estaVacio()) {
             return;
         }
-
         try {
             controller.InstanciarEscena.createNewStage("/view/caja/confirmarPagoDialog.fxml", "ConfirmarPago", this::abrirPago);
-
         } catch (IOException ex) {
-            System.getLogger(CajaController.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
         }
-
+        
     }
 
     // dialog metodo de pago
@@ -274,9 +290,10 @@ public class CajaController implements UsuarioImplementacion {
             ConfirmarPagoDialogController controllerDialog = (ConfirmarPagoDialogController) controller;
             controllerDialog.setPedido(pedido);
             controllerDialog.setAlPagar(this::agregarPedido);
-
+            logger.info("Realizar pedido");
+            
         } catch (Exception e) {
-            System.out.println("Error con el dialog perfil: " + e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -287,17 +304,19 @@ public class CajaController implements UsuarioImplementacion {
         }
         pedido.setUsuario_id(usuario.getId());
         pedido.setId(100);
-
+        
         LocalDate fecha = LocalDate.now();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
+        
         pedido.setFecha(fecha.format(formato));
         pedido.setEstado(EstadoPedido.COBRADO);
-
+        
         try {
             pedidoService.realizarPedido(pedido);
+            logger.info("Agregar pedido a la linea de pedido");
+            
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
         actualizarStock(pedido);
         // borrar
@@ -315,13 +334,16 @@ public class CajaController implements UsuarioImplementacion {
             try {
                 productoService.modificarProducto(lp.productoModificadoStock());
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                logger.log(Level.SEVERE, e.getMessage(), e);
             }
         }
+        logger.info("Actualizar pedido");
+        
     }
-
+    
     @Override
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+        logger.setUser(usuario.getUsername());
     }
 }
