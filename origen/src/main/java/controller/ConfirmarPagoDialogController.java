@@ -8,6 +8,7 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import model.MetodoPago;
 import model.VentaPedido;
+import util.AppLogger;
 
 /**
  * FXML Controller class
@@ -24,6 +25,7 @@ public class ConfirmarPagoDialogController {
     private VentaPedido venta;
     private Consumer<VentaPedido> alPagar;
     private MetodoPago metodoPagado;
+    private final AppLogger logger = AppLogger.getInstance();
 
     public ConfirmarPagoDialogController() {
 
@@ -63,7 +65,9 @@ public class ConfirmarPagoDialogController {
 
     @FXML
     private void volver() {
+        logger.info("Cerrar dialog de confirmación de pago");
         cerrar();
+
     }
 
     private void cerrar() {
