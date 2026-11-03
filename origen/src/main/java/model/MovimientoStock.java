@@ -14,7 +14,7 @@ import org.bson.types.ObjectId;
 public class MovimientoStock {
     
     private ObjectId id;
-    private ObjectId productoId;
+    private int productoId;
     private String nombreProducto;
     private String tipo;
     private int cantidad;
@@ -25,7 +25,7 @@ public class MovimientoStock {
         
     }
     
-    public MovimientoStock(ObjectId productoId, String nombreProducto, String tipo, int cantidad, String nota) {
+    public MovimientoStock(int productoId, String nombreProducto, String tipo, int cantidad, String nota) {
         this.productoId = productoId;
         this.nombreProducto = nombreProducto;
         this.tipo = tipo;
@@ -42,11 +42,11 @@ public class MovimientoStock {
         this.id = id;
     }
 
-    public ObjectId getProductoId() {
+    public int getProductoId() {
         return productoId;
     }
 
-    public void setProductoId(ObjectId productoId) {
+    public void setProductoId(int productoId) {
         this.productoId = productoId;
     }
 

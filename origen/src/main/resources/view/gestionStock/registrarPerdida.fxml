@@ -1,22 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="360.0" prefWidth="304.0" styleClass="ventana, ventanaPerdida" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RegistrarPerdidaController">
-   <children>
-      <Label fx:id="titulo" layoutX="34.0" layoutY="35.0" styleClass="tituloVentana" text="REGISTRAR PERDIDA" />
-      <Label layoutX="34.0" layoutY="80.0" text="Producto:" />
-      <Label layoutX="34.0" layoutY="128.0" text="Cantidad:" />
-      <ComboBox fx:id="comboProducto" layoutX="99.0" layoutY="76.0" prefWidth="150.0" />
-      <TextField fx:id="txtCantidad" layoutX="100.0" layoutY="124.0" />
-      <Label layoutX="34.0" layoutY="168.0" text="Nota:" />
-      <TextArea fx:id="txtNota" layoutX="100.0" layoutY="168.0" prefHeight="107.0" prefWidth="150.0" promptText="Escribe un resumen de lo sucedido" wrapText="true" />
-      <Button layoutX="34.0" layoutY="317.0" mnemonicParsing="false" onAction="#guardarPerdida" styleClass="btnPrimario" text="Guardar" />
-      <Button layoutX="124.0" layoutY="317.0" mnemonicParsing="false" onAction="#cancelar" text="Cancelar" />
-   </children>
-</AnchorPane>
+<GridPane hgap="12" vgap="14" styleClass="ventana, ventanaPerdida" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RegistrarPerdidaController">
+    <padding>
+        <Insets top="30" right="30" bottom="26" left="30" />
+    </padding>
+    <columnConstraints>
+        <ColumnConstraints minWidth="70" prefWidth="70" />
+        <ColumnConstraints minWidth="220" prefWidth="220" />
+    </columnConstraints>
+
+    <Label fx:id="titulo" styleClass="tituloVentana" text="REGISTRAR PÉRDIDA" GridPane.columnSpan="2" />
+
+    <Label text="Producto:" GridPane.rowIndex="1" />
+    <ComboBox fx:id="comboProducto" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+    <Label text="Cantidad:" GridPane.rowIndex="2" />
+    <TextField fx:id="txtCantidad" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+    <Label text="Nota:" GridPane.rowIndex="3" GridPane.valignment="TOP">
+        <padding>
+            <Insets top="7" />
+        </padding>
+    </Label>
+    <TextArea fx:id="txtNota" prefRowCount="4" wrapText="true" promptText="Escribe un resumen de lo sucedido" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+    <HBox spacing="10" GridPane.columnSpan="2" GridPane.rowIndex="4">
+        <padding>
+            <Insets top="10" />
+        </padding>
+        <Button text="Guardar" styleClass="btnPrimario" onAction="#guardarPerdida" />
+        <Button text="Cancelar" onAction="#cancelar" />
+    </HBox>
+</GridPane>

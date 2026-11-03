@@ -1,8 +1,5 @@
 package controller;
 
-import controller.AñadirProductoController;
-import controller.InstanciarEscena;
-import controller.RegistrarPerdidaController;
 import dao.ProductoDao;
 import dao.implement.ProductoDaoImp;
 import exceptions.DaoException;
@@ -35,13 +32,14 @@ import javafx.scene.layout.GridPane;
 import model.CategoriaProducto;
 import model.FilaStock;
 import model.Producto;
+import model.Usuario;
 import org.bson.Document;
 
 /**
  *
  * @author Hodei.Torres
  */
-public class GestionStockController implements Initializable {
+public class GestionStockController implements Initializable, UsuarioImplementacion {
 
     @FXML
     private Label cantProduc;
@@ -75,6 +73,8 @@ public class GestionStockController implements Initializable {
     private GridPane gridFiltroStock;
     @FXML
     private ToggleButton soloAlertas;
+
+    private Usuario usuario;
 
     private final ProductoDao productoDao = ProductoDaoImp.getInstance();
 
@@ -245,6 +245,11 @@ public class GestionStockController implements Initializable {
         cantAgotados.setText(String.valueOf(agotados));
         cantStockBajo.setText(String.valueOf(stockBajo));
         cantCaducar.setText(String.valueOf(caducan));
+    }
+
+    @Override
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     @FXML

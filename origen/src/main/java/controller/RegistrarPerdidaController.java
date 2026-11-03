@@ -1,11 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package controller;
 
-import dao.ProductoDao;
-import dao.implement.ProductoDaoImp;
+import dao.GestionStockDao;
+import dao.implement.GestionStockDaoImp;
 import exceptions.DaoException;
 import java.net.URL;
 import java.util.List;
@@ -22,21 +18,25 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
+import model.MovimientoStock;
 import model.Producto;
 
 /**
- * FXML Controller class
  *
  * @author Hodei.Torres
  */
 public class RegistrarPerdidaController implements Initializable {
 
-    @FXML private Label titulo;
-    @FXML private ComboBox<Producto> comboProducto;
-    @FXML private TextField txtCantidad;
-    @FXML private TextArea txtNota;
+    @FXML
+    private Label titulo;
+    @FXML
+    private ComboBox<Producto> comboProducto;
+    @FXML
+    private TextField txtCantidad;
+    @FXML
+    private TextArea txtNota;
 
-    private final ProductoDao productoDao = ProductoDaoImp.getInstance();
+    private final GestionStockDao stockDao = GestionStockDaoImp.getInstance();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -45,60 +45,77 @@ public class RegistrarPerdidaController implements Initializable {
     }
 
     /**
-     * Muestra solo el nombre del producto en la vista del ComboBox,
-     * pero conserva el objeto Producto completo en la selección.
+     * Muestra nombre y stock disponible, pero conserva el Producto completo.
      */
     private void configurarFormatoCombo() {
         comboProducto.setConverter(new StringConverter<Producto>() {
             @Override
             public String toString(Producto p) {
-                return (p != null) ? p.getNombre() : "";
+                if (p == null) {
+                    return "";
+                }
+                return p.getNombre() + " (stock: " + p.getStock_actual() + ")";
             }
 
             @Override
             public Producto fromString(String string) {
-                // No se necesita convertir texto a objeto a menos que sea editable
                 return null;
             }
         });
     }
 
-    /**
-     * Carga los productos desde el DAO. Alternativamente, puedes exponer un método público
-     * setProductos(List<Producto> lista) si prefieres pasarlos directamente desde GestionStockController.
-     */
     public void cargarProductos() {
         try {
-            List<Producto> lista = productoDao.listarProductos();
+            List<Producto> lista = stockDao.listarProductos();
             comboProducto.setItems(FXCollections.observableArrayList(lista));
             if (!lista.isEmpty()) {
                 comboProducto.getSelectionModel().selectFirst();
             }
         } catch (DaoException e) {
-            new Alert(Alert.AlertType.ERROR, "Error al cargar productos: " + e.getMessage()).showAndWait();
+            new Alert(Alert.AlertType.ERROR,
+                    "Error al cargar productos: " + e.getMessage()).showAndWait();
         }
     }
 
     @FXML
     private void guardarPerdida(ActionEvent event) {
-        // Obtener el objeto Producto seleccionado completo
         Producto seleccionado = comboProducto.getValue();
-
         if (seleccionado == null) {
-            new Alert(Alert.AlertType.WARNING, "Selecciona un producto").showAndWait();
+            new Alert(Alert.AlertType.WARNING, "Selecciona un producto.").showAndWait();
+            return;
+        }
+
+        int cantidad;
+        try {
+            cantidad = Integer.parseInt(txtCantidad.getText().trim());
+        } catch (NumberFormatException e) {
+            new Alert(Alert.AlertType.ERROR,
+                    "La cantidad debe ser un número entero válido.").showAndWait();
+            return;
+        }
+
+        if (cantidad <= 0) {
+            new Alert(Alert.AlertType.WARNING,
+                    "La cantidad debe ser mayor que cero.").showAndWait();
+            return;
+        }
+        if (cantidad > seleccionado.getStock_actual()) {
+            new Alert(Alert.AlertType.WARNING,
+                    "Solo hay " + seleccionado.getStock_actual() + " unidades en stock.").showAndWait();
             return;
         }
 
         try {
-            int cantidad = Integer.parseInt(txtCantidad.getText().trim());
-            String nota = txtNota.getText();
+            String nota = txtNota.getText() == null ? "" : txtNota.getText().trim();
+            MovimientoStock mov = new MovimientoStock(
+                    seleccionado.getId(), seleccionado.getNombre(), "PERDIDA", cantidad, nota);
 
-            // Aquí ejecutas la lógica de persistencia o actualización hacia MongoDB / DAO:
-            // Por ejemplo: perdidaDao.registrar(seleccionado.getId(), cantidad, nota);
-
+            stockDao.registrarPerdida(mov, seleccionado);
             cerrarVentana(event);
-        } catch (NumberFormatException e) {
-            new Alert(Alert.AlertType.ERROR, "La cantidad debe ser un número entero válido").showAndWait();
+        } catch (DaoException e) {
+            e.printStackTrace();
+            String causa = (e.getCause() != null) ? "\n" + e.getCause().getMessage() : "";
+            new Alert(Alert.AlertType.ERROR, e.getMessage() + causa).showAndWait();
         }
     }
 
