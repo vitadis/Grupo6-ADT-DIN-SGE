@@ -21,7 +21,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Contacto;
-import model.Proveedor_GestionStock;
+import model.Proveedor;
 
 /**
  * Controlador de la ventana {@code editarProveedor.fxml}.
@@ -51,7 +51,7 @@ public class EditarProveedorController implements Initializable {
     /**
      * Proveedor que se está editando; es {@code null} cuando la ventana se usa para dar de alta uno nuevo.
      */
-    private Proveedor_GestionStock proveedor;
+    private Proveedor proveedor;
     /**
      * Indica si se ha guardado el proveedor antes de cerrar la ventana.
      */
@@ -186,7 +186,7 @@ public class EditarProveedorController implements Initializable {
      *
      * @param p proveedor que se va a editar
      */
-    public void setProveedor(Proveedor_GestionStock p) {
+    public void setProveedor(Proveedor p) {
         this.proveedor = p;
         lblTitulo.setText("EDITAR PROVEEDOR");
 
@@ -218,7 +218,7 @@ public class EditarProveedorController implements Initializable {
     }
 
     /**
-     * Valida los campos, crea un {@link Proveedor_GestionStock} con los datos del formulario y lo da de alta
+     * Valida los campos, crea un {@link Proveedor} con los datos del formulario y lo da de alta
      * o lo actualiza según el modo. Si todo va bien cierra la ventana; si no, muestra el error
      * en {@link #lblError}.
      *
@@ -260,7 +260,7 @@ public class EditarProveedorController implements Initializable {
         Contacto contacto = new Contacto(txtPersona.getText().trim(), txtTelefono.getText().trim(),
                 txtEmail.getText().trim(), txtDireccion.getText().trim());
 
-        Proveedor_GestionStock datos = new Proveedor_GestionStock();
+        Proveedor datos = new Proveedor();
         if (proveedor != null) {
             datos.setId(proveedor.getId());
         }

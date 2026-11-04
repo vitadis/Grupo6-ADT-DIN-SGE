@@ -13,7 +13,7 @@ import dao.ProveedorDao;
 import exceptions.DaoException;
 import java.util.ArrayList;
 import java.util.List;
-import model.Proveedor_GestionStock;
+import model.Proveedor;
 
 /**
  * Implementación de {@link ProveedorDao} con MongoDB.
@@ -58,9 +58,9 @@ public class ProveedorDaoImpl extends AccesoMongoDB implements ProveedorDao {
      * {@inheritDoc}
      */
     @Override
-    public List<Proveedor_GestionStock> obtenerProveedores() {
+    public List<Proveedor> obtenerProveedores() {
         try (MongoClient client = abrirConexion()) {
-            MongoCollection<Proveedor_GestionStock> coleccion = getCollection(client, COLECCION_PROVEEDOR, Proveedor_GestionStock.class);
+            MongoCollection<Proveedor> coleccion = getCollection(client, COLECCION_PROVEEDOR, Proveedor.class);
 
             return coleccion.find().sort(Sorts.ascending("_id")).into(new ArrayList<>());
         } catch (MongoException e) {
@@ -75,11 +75,11 @@ public class ProveedorDaoImpl extends AccesoMongoDB implements ProveedorDao {
      * Asigna como identificador el mayor existente + 1, porque los {@code _id} son enteros.
      */
     @Override
-    public void insertarProveedores(Proveedor_GestionStock proveedor) {
+    public void insertarProveedores(Proveedor proveedor) {
         try (MongoClient client = abrirConexion()) {
-            MongoCollection<Proveedor_GestionStock> coleccion = getCollection(client, COLECCION_PROVEEDOR, Proveedor_GestionStock.class);
+            MongoCollection<Proveedor> coleccion = getCollection(client, COLECCION_PROVEEDOR, Proveedor.class);
 
-            Proveedor_GestionStock ultimo = coleccion.find().sort(Sorts.descending("_id")).first();
+            Proveedor ultimo = coleccion.find().sort(Sorts.descending("_id")).first();
             if (ultimo == null) {
                 proveedor.setId(1);
             } else {
@@ -97,12 +97,12 @@ public class ProveedorDaoImpl extends AccesoMongoDB implements ProveedorDao {
      * Usa {@code replaceOne}, que cambia el documento entero.
      */
     @Override
-    public void actualizarProveedores(Proveedor_GestionStock proveedor) {
+    public void actualizarProveedores(Proveedor proveedor) {
         try (MongoClient client = abrirConexion()) {
 
-            MongoCollection<Proveedor_GestionStock> coleccion = getCollection(client, COLECCION_PROVEEDOR, Proveedor_GestionStock.class);
+            MongoCollection<Proveedor> coleccion = getCollection(client, COLECCION_PROVEEDOR, Proveedor.class);
 
-            Proveedor_GestionStock prov = coleccion.find(Filters.eq("_id", proveedor.getId())).first();
+            Proveedor prov = coleccion.find(Filters.eq("_id", proveedor.getId())).first();
 
             if (prov == null) {
                 throw new IllegalArgumentException("No existe ningún proveedor con el id " + proveedor.getId() + ".");

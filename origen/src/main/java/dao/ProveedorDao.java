@@ -5,7 +5,7 @@
 package dao;
 
 import java.util.List;
-import model.Proveedor_GestionStock;
+import model.Proveedor;
 
 /**
  * Operaciones de acceso a datos de los proveedores.
@@ -23,14 +23,14 @@ public interface ProveedorDao {
      * @return lista de proveedores (vacía si no hay ninguno)
      * @throws exceptions.DaoException si falla el acceso a la base de datos
      */
-    List<Proveedor_GestionStock> obtenerProveedores();
+    List<Proveedor> obtenerProveedores();
     /**
      * Da de alta un proveedor nuevo. El identificador se genera automáticamente.
      *
      * @param proveedor proveedor que se va a guardar; al terminar tiene asignado su identificador
      * @throws exceptions.DaoException si falla el acceso a la base de datos
      */
-    void insertarProveedores(Proveedor_GestionStock proveedor);
+    void insertarProveedores(Proveedor proveedor);
     /**
      * Sustituye los datos de un proveedor existente por los nuevos.
      *
@@ -38,5 +38,5 @@ public interface ProveedorDao {
      * @throws IllegalArgumentException si no existe ningún proveedor con ese identificador
      * @throws exceptions.DaoException si falla el acceso a la base de datos
      */
-    void actualizarProveedores(Proveedor_GestionStock proveedor);
+    void actualizarProveedores(Proveedor proveedor);
 }

@@ -45,7 +45,7 @@ import javafx.scene.layout.VBox;
 import model.Compra;
 import model.LineaCompra;
 import model.Producto;
-import model.Proveedor_GestionStock;
+import model.Proveedor;
 import model.Usuario;
 import util.Alertas;
 
@@ -80,7 +80,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
     /**
      * Proveedores por identificador, para sacar su nombre a partir de un {@code proveedor_id}.
      */
-    private final Map<Integer, Proveedor_GestionStock> proveedores = new HashMap<>();
+    private final Map<Integer, Proveedor> proveedores = new HashMap<>();
     /**
      * Formato en el que se muestran las fechas (dd/MM/yy).
      */
@@ -93,7 +93,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
     /**
      * Proveedor seleccionado en la pestaña Proveedores.
      */
-    private Proveedor_GestionStock proveedorSeleccionado;
+    private Proveedor proveedorSeleccionado;
 
     /**
      * Líneas de la lista sugerida. Va en paralelo con {@link #proveedoresSugeridos} y {@link #checksSugeridos}.
@@ -464,7 +464,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
      *
      * @param proveedor proveedor que se va a editar, o {@code null} para dar de alta uno nuevo
      */
-    private void abrirVentanaProveedor(final Proveedor_GestionStock proveedor) {
+    private void abrirVentanaProveedor(final Proveedor proveedor) {
         try {
             EditarProveedorController c = InstanciarEscena.createNewStage(
                     "/view/compra/editarProveedor.fxml", "Proveedor",
@@ -590,7 +590,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
      */
     private void cargarProveedores() {
         proveedores.clear();
-        for (Proveedor_GestionStock p : proveedorDao.obtenerProveedores()) {
+        for (Proveedor p : proveedorDao.obtenerProveedores()) {
             proveedores.put(p.getId(), p);
         }
     }
@@ -616,7 +616,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
      * @return la fila lista para añadir a {@link #contenedorCompras}
      */
     private HBox crearFilaCompra(Compra c) {
-        Proveedor_GestionStock p = proveedores.get(c.getProveedor_id());
+        Proveedor p = proveedores.get(c.getProveedor_id());
         String nombreProveedor = (p != null) ? p.getNombre() : "Desconocido"; //Operador ternario
 
         Label importe = celda(String.format("%.2f €", c.getTotal()), 110);
@@ -654,11 +654,11 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
         contenedorListaProveedores.getChildren().clear();
 
         HBox primeraFila = null;
-        Proveedor_GestionStock primerProveedor = null;
+        Proveedor primerProveedor = null;
         HBox filaAnterior = null;
-        Proveedor_GestionStock anterior = null;
+        Proveedor anterior = null;
 
-        for (Proveedor_GestionStock p : proveedores.values()) {
+        for (Proveedor p : proveedores.values()) {
             HBox fila = crearFilaProveedor(p);
             contenedorListaProveedores.getChildren().add(fila);
 
@@ -686,7 +686,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
      * @param p proveedor que se va a mostrar
      * @return la fila lista para añadir a {@link #contenedorListaProveedores}
      */
-    private HBox crearFilaProveedor(Proveedor_GestionStock p) {
+    private HBox crearFilaProveedor(Proveedor p) {
         String estado = "Inactivo";
         if (p.isActivo()) {
             estado = "Activo";
@@ -715,7 +715,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
      * @param p proveedor seleccionado
      * @param fila fila del proveedor en la lista
      */
-    private void seleccionarProveedor(Proveedor_GestionStock p, HBox fila) {
+    private void seleccionarProveedor(Proveedor p, HBox fila) {
         if (filaProveedorSeleccionada != null) {
             filaProveedorSeleccionada.getStyleClass().remove("proveedor-fila-seleccionada");
         }
@@ -738,7 +738,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
      *
      * @param p proveedor del que se muestra el historial
      */
-    private void cargarHistorialProveedor(Proveedor_GestionStock p) {
+    private void cargarHistorialProveedor(Proveedor p) {
         List<Compra> compras = comprasDao.obtenerComprasPorProveedor(p.getId());
 
         contenedorHistorialProveedor.getChildren().clear();
@@ -786,7 +786,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
         int cantidad = p.getStock_minimo() - p.getStock_actual();
         String nombreProveedor = "Sin proveedor";
         if (!p.getProveedores_id().isEmpty()) {
-            Proveedor_GestionStock habitual = proveedores.get(p.getProveedores_id().get(0));
+            Proveedor habitual = proveedores.get(p.getProveedores_id().get(0));
             if (habitual != null) {
                 nombreProveedor = habitual.getNombre();
             }

@@ -35,7 +35,7 @@ import javafx.util.StringConverter;
 import model.Compra;
 import model.LineaCompra;
 import model.Producto;
-import model.Proveedor_GestionStock;
+import model.Proveedor;
 
 /**
  * Controlador de la ventana {@code registrarCompra.fxml}.
@@ -92,7 +92,7 @@ public class RegistrarCompraController implements Initializable {
      * Proveedor de la compra (solo proveedores activos).
      */
     @FXML
-    private ComboBox<Proveedor_GestionStock> cbProveedor;
+    private ComboBox<Proveedor> cbProveedor;
     /**
      * Fecha de la compra; por defecto, hoy.
      */
@@ -196,7 +196,7 @@ public class RegistrarCompraController implements Initializable {
         });
 
         try {
-            for (Proveedor_GestionStock p : proveedorDao.obtenerProveedores()) {
+            for (Proveedor p : proveedorDao.obtenerProveedores()) {
                 if (p.isActivo()) {
                     cbProveedor.getItems().add(p);
                 }
@@ -232,7 +232,7 @@ public class RegistrarCompraController implements Initializable {
     public void setLineasSugeridas(int proveedorId, List<LineaCompra> sugeridas) {
         lblTitulo.setText("NUEVA COMPRA DESDE LA LISTA");
 
-        for (Proveedor_GestionStock p : cbProveedor.getItems()) {
+        for (Proveedor p : cbProveedor.getItems()) {
             if (p.getId() == proveedorId) {
                 cbProveedor.setValue(p);
             }
@@ -309,7 +309,7 @@ public class RegistrarCompraController implements Initializable {
     private void onGuardar(ActionEvent event) {
         lblError.setText("");
 
-        Proveedor_GestionStock proveedor = cbProveedor.getValue();
+        Proveedor proveedor = cbProveedor.getValue();
         String factura = txtNumeroFactura.getText().trim();
 
         if (proveedor == null || dpFecha.getValue() == null || factura.isEmpty()) {

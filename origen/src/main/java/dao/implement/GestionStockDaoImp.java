@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import model.MovimientoStock;
 import model.Producto;
-import model.Proveedor_GestionStock;
+import model.Proveedor;
 import org.bson.Document;
 
 /**
@@ -39,10 +39,10 @@ public class GestionStockDaoImp extends AccesoMongoDB implements GestionStockDao
     }
 
     @Override
-    public List<Proveedor_GestionStock> listarActivos() throws DaoException {
+    public List<Proveedor> listarActivos() throws DaoException {
         try (MongoClient client = abrirConexion()) {
-            MongoCollection<Proveedor_GestionStock> col
-                    = getCollection(client, COLECCION_PROVEEDORES, Proveedor_GestionStock.class);
+            MongoCollection<Proveedor> col
+                    = getCollection(client, COLECCION_PROVEEDORES, Proveedor.class);
             return col.find(Filters.eq("activo", true))
                     .sort(Sorts.ascending("nombre"))
                     .into(new ArrayList<>());
