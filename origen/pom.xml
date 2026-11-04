@@ -91,6 +91,48 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Jar ejecutable con todas las dependencias (JavaFX y MongoDB) dentro.
+                 Se genera con: mvn clean package  ->  target/origen-1.0-SNAPSHOT.jar
+                 Se ejecuta con: java -jar target/origen-1.0-SNAPSHOT.jar
+                 El main es com.origen.App, que NO hereda de Application (launcher):
+                 si el main heredase de Application, el jar no arrancaría. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.6.0</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <shadedArtifactAttached>false</shadedArtifactAttached>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.origen.App</mainClass>
+                                </transformer>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+                            </transformers>
+                            <filters>
+                                <filter>
+                                    <!-- Fuera los module-info y las firmas de las librerías:
+                                         dentro de un jar único sobran y pueden dar errores -->
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>module-info.class</exclude>
+                                        <exclude>META-INF/versions/*/module-info.class</exclude>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 </project>

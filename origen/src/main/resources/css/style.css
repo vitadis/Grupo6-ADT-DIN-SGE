@@ -26,10 +26,7 @@
     -fx-border-width: 0 1 0 0;
 }
 
-.sidebar .separator .line {
-    -fx-border-color: -beige-intermedio;
-    -fx-border-width: 1 0 0 0;
-}
+/* La línea de los separadores ya viene de ".separator .line" (4.7) */
 
 /* Elementos del menú (ToggleButton y Button) */
 .nav-item {
@@ -136,9 +133,10 @@
     -fx-padding: 0 8 0 8;
     -fx-min-width: 26;
 }
-.button.pedido-btn-cantidad:hover   {
+.button.pedido-btn-cantidad:hover {
     -fx-background-color: -verde-suave;
 }
+
 .button.pedido-btn-cantidad:pressed {
     -fx-background-color: -beige-intermedio;
 }
@@ -165,20 +163,19 @@
     -fx-font-weight: bold;
     -fx-padding: 4 8 4 8;
 }
-.button.pedido-btn-quitar:hover   {
+.button.pedido-btn-quitar:hover {
     -fx-background-color: -beige-intermedio;
 }
+
 .button.pedido-btn-quitar:pressed {
     -fx-opacity: 0.7;
 }
 
 /* ---------- 3.3 Gestión económica (prefijo: gestion-) ---------- */
-/* Etiqueta de tipo "Gasto" (ni positivo ni aviso) */
+/* Etiqueta de tipo "Gasto" (ni positivo ni aviso). La forma viene de 4.6 */
 .gestion-estado-neutro {
     -fx-background-color: -beige-intermedio;
     -fx-text-fill: -texto-principal;
-    -fx-background-radius: 12;
-    -fx-padding: 2 10 2 10;
 }
 
 /* Tarjeta de aviso en ámbar (gasto superior a la media) */
@@ -188,6 +185,29 @@
     -fx-border-color: -ambar-suave;
     -fx-border-radius: 10;
     -fx-padding: 16;
+}
+
+/* Selector Ingreso / Gasto de "Registrar movimiento" (dos ToggleButton en una píldora) */
+.gestion-tipo {
+    -fx-background-color: -blanco;
+    -fx-background-radius: 20;
+    -fx-border-color: -beige-intermedio;
+    -fx-border-radius: 20;
+    -fx-padding: 3;
+}
+
+.gestion-tipo .toggle-button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 16;
+    -fx-padding: 6 22 6 22;
+    -fx-text-fill: -texto-principal;
+    -fx-cursor: hand;
+}
+
+.gestion-tipo .toggle-button:selected {
+    -fx-background-color: -verde-suave;
+    -fx-text-fill: -verde-oscuro;
+    -fx-font-weight: bold;
 }
 
 /* Gráfico de barras: fondo transparente, sin rejilla vertical y barras beige */
@@ -214,6 +234,7 @@
 }
 
 /* ---------- 3.4 Gestión stock (prefijo: stock-) ---------- */
+/* Está en el apartado 6, después del login */
 
 
 /* ---------- 3.5 Compras y proveedores (prefijo: compras-) ---------- */
@@ -252,13 +273,13 @@
     -fx-border-color: transparent transparent -verde-principal transparent;
 }
 
-.compras-tabpane .tab:selected .tab-label {
-    -fx-text-fill: -verde-oscuro;
-    -fx-font-weight: bold;
-}
-
+.compras-tabpane .tab:selected .tab-label,
 .compras-tabpane .tab:hover .tab-label {
     -fx-text-fill: -verde-oscuro;
+}
+
+.compras-tabpane .tab:selected .tab-label {
+    -fx-font-weight: bold;
 }
 
 .compras-tabpane .tab-content-area {
@@ -298,6 +319,7 @@
     -fx-font-weight: bold;
     -fx-text-fill: -texto-principal;
 }
+
 .avatar {
     -fx-background-color: -verde-oscuro;
     -fx-background-radius: 24;
@@ -359,9 +381,7 @@
     -fx-text-fill: -blanco;
     -fx-font-weight: bold;
 }
-.btn-primario:hover   {
-    -fx-background-color: -verde-oscuro;
-}
+.btn-primario:hover,
 .btn-primario:pressed {
     -fx-background-color: -verde-oscuro;
 }
@@ -373,9 +393,10 @@
     -fx-border-radius: 6;
     -fx-text-fill: -texto-principal;
 }
-.btn-secundario:hover   {
+.btn-secundario:hover {
     -fx-background-color: -beige-intermedio;
 }
+
 .btn-secundario:pressed {
     -fx-background-color: -verde-suave;
 }
@@ -386,9 +407,10 @@
     -fx-text-fill: -blanco;
     -fx-font-weight: bold;
 }
-.btn-peligro:hover   {
+.btn-peligro:hover {
     -fx-opacity: 0.85;
 }
+
 .btn-peligro:pressed {
     -fx-opacity: 0.7;
 }
@@ -462,13 +484,14 @@
     -fx-border-color: -beige-intermedio;
 }
 
-.table-view .column-header-background {
+.table-view .column-header-background,
+.table-view .column-header,
+.table-view .filler {
     -fx-background-color: -beige-intermedio;
 }
 
 .table-view .column-header,
 .table-view .filler {
-    -fx-background-color: -beige-intermedio;
     -fx-border-color: transparent;
 }
 
@@ -496,36 +519,40 @@
 
 
 /* ---------- 4.6 Estados y avisos ---------- */
-/* Para Label u otros nodos de texto/etiquetas */
+/* Para Label u otros nodos de texto/etiquetas: misma forma, cambia el color */
+.estado-ok,
+.estado-aviso,
+.estado-error,
+.gestion-estado-neutro {
+    -fx-background-radius: 12;
+    -fx-padding: 2 10 2 10;
+}
+
 .estado-ok {
     -fx-background-color: -verde-suave;
     -fx-text-fill: -verde-oscuro;
-    -fx-background-radius: 12;
-    -fx-padding: 2 10 2 10;
 }
 
 .estado-aviso {
     -fx-background-color: -ambar-suave;
     -fx-text-fill: -texto-principal;
-    -fx-background-radius: 12;
-    -fx-padding: 2 10 2 10;
 }
 
 .estado-error {
     -fx-background-color: -rojo-moderado;
     -fx-text-fill: -blanco;
-    -fx-background-radius: 12;
-    -fx-padding: 2 10 2 10;
 }
 
 /* Solo color de texto */
 .texto-error {
     -fx-text-fill: -rojo-moderado;
 }
+
 .texto-aviso {
     -fx-text-fill: -ambar-suave;
 }
-.texto-ok    {
+
+.texto-ok {
     -fx-text-fill: -verde-principal;
 }
 
@@ -536,10 +563,7 @@
     -fx-border-width: 1 0 0 0;
 }
 
-.scroll-pane {
-    -fx-background-color: transparent;
-}
-
+.scroll-pane,
 .scroll-pane > .viewport {
     -fx-background-color: transparent;
 }
@@ -646,6 +670,7 @@
     -fx-padding: 6 14 6 8;
     -fx-cursor: hand;
 }
+
 .button.show-button:hover {
     -fx-text-fill: -verde-oscuro;
     -fx-underline: true;
@@ -661,18 +686,20 @@
     -fx-pref-height: 50;
     -fx-cursor: hand;
 }
-.button.login-button:hover   {
-    -fx-background-color: -verde-oscuro;
-}
-.button.login-button:pressed {
-    -fx-background-color: -verde-oscuro;
-    -fx-opacity: 0.9;
-}
-.button.login-button:default {
-    -fx-background-color: -verde-principal;
-}
+.button.login-button:hover,
+.button.login-button:pressed,
 .button.login-button:default:hover {
     -fx-background-color: -verde-oscuro;
+}
+
+.button.login-button:pressed {
+    -fx-opacity: 0.9;
+}
+
+/* Botón por defecto (el de Enter). Va después de :pressed para ganarle;
+   su hover lo da ".button.login-button:default:hover" de arriba, que pesa más */
+.button.login-button:default {
+    -fx-background-color: -verde-principal;
 }
 
 .login-note {
@@ -694,8 +721,13 @@
     -fx-text-alignment: CENTER;
 }
 
-/* CSS apartado gestion de stock*/
+/* ==========================================================
+   6. GESTIÓN DE STOCK (prefijo: stock-)
+   Va después del login, igual que estaba, para no cambiar
+   qué reglas ganan a las generales.
+   ========================================================== */
 
+/* ---------- 6.1 Tarjetas de resumen ---------- */
 .gridStock {
     -fx-hgap: 12;
     -fx-padding: 12;
@@ -717,7 +749,9 @@
     -fx-effect: dropshadow(gaussian, rgba(47,53,46,0.20), 14, 0.1, 0, 4);
 }
 
-.stockTitulo {
+/* Etiqueta pequeña en negrita: título de las tarjetas y de los filtros */
+.stockTitulo,
+.stock-filtro-label {
     -fx-font-size: 12px;
     -fx-font-weight: bold;
     -fx-text-fill: -texto-secundario;
@@ -730,21 +764,12 @@
 }
 
 /* Color de acento por tarjeta */
-.cajaVerde   {
-    -acento: -verde-principal;
-}   /* Productos */
-.cajaOscura  {
-    -acento: -verde-oscuro;
-}      /* Valor de stock */
-.cajaRoja    {
-    -acento: -rojo-moderado;
-}     /* Agotados y Caducan en 7 días */
-.cajaAmbar   {
-    -acento: -ambar-suave;
-}       /* Stock bajo */
+.cajaVerde  { -acento: -verde-principal; }   /* Productos */
+.cajaOscura { -acento: -verde-oscuro; }      /* Valor de stock */
+.cajaRoja   { -acento: -rojo-moderado; }     /* Agotados y Caducan en 7 días */
+.cajaAmbar  { -acento: -ambar-suave; }       /* Stock bajo */
 
-/* Css para las emergentes de Stock*/
-/* ---------- Ventanas emergentes de Stock ---------- */
+/* ---------- 6.2 Ventanas emergentes (styleClass="ventana") ---------- */
 .ventana {
     -acento: -verde-principal;
     -acento-titulo: -verde-oscuro;
@@ -781,7 +806,10 @@
     -fx-faint-focus-color: transparent;
 }
 
-.ventana .text-field:focused {
+/* Borde del color de acento al tener el foco (campos, áreas y combos) */
+.ventana .text-field:focused,
+.ventana .text-area:focused,
+.ventana .combo-box-base:focused {
     -fx-border-color: -acento;
 }
 
@@ -803,10 +831,6 @@
     -fx-background-radius: 8;
 }
 
-.ventana .text-area:focused {
-    -fx-border-color: -acento;
-}
-
 /* ComboBox */
 .ventana .combo-box-base {
     -fx-background-color: -blanco;
@@ -816,10 +840,6 @@
     -fx-border-radius: 8;
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
-}
-
-.ventana .combo-box-base:focused {
-    -fx-border-color: -acento;
 }
 
 .ventana .combo-box-base .arrow-button {
@@ -839,7 +859,7 @@
 
 /* Botones: secundario por defecto (Cancelar) */
 .ventana .button {
-    -fx-background-color: -beige-claro;
+    -fx-background-color: -beige-intermedio;
     -fx-background-insets: 0;
     -fx-background-radius: 8;
     -fx-border-color: -beige-intermedio;
@@ -852,10 +872,7 @@
     -fx-faint-focus-color: transparent;
 }
 
-.ventana .button:hover {
-    -fx-background-color: -beige-intermedio;
-}
-
+.ventana .button:hover,
 .ventana .button:pressed {
     -fx-background-color: derive(-beige-intermedio, -8%);
 }
@@ -900,31 +917,7 @@
     -fx-text-fill: -blanco;
 }
 
-.ventana .button {
-    -fx-background-color: -beige-intermedio;
-    -fx-text-fill: -texto-principal;
-    -fx-background-radius: 8;
-    -fx-padding: 7 18;
-    -fx-font-weight: bold;
-    -fx-cursor: hand;
-}
-
-.ventana .button:hover {
-    -fx-background-color: derive(-beige-intermedio, -8%);
-}
-
-.ventana .btnPrimario {
-    -fx-background-color: -acento;
-    -fx-text-fill: -blanco;
-}
-
-.ventana .btnPrimario:hover {
-    -fx-background-color: derive(-acento, -12%);
-}
-
-/* ---------- 3.4 Gestión stock ---------- */
-
-/* Barra de filtros */
+/* ---------- 6.3 Barra de filtros ---------- */
 .stock-filtros {
     -fx-background-color: -beige-claro;
     -fx-background-radius: 10;
@@ -940,11 +933,7 @@
     -fx-spacing: 8;
 }
 
-.stock-filtro-label {
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -texto-secundario;
-}
+/* .stock-filtro-label va con .stockTitulo (6.1) */
 
 /* Campos en blanco para que destaquen sobre la barra beige */
 .stock-filtros .text-field,
