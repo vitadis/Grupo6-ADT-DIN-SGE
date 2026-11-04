@@ -55,6 +55,7 @@ public class LineaCompra {
      * @param precio_unidad el precio por unidad sin IVA
      * @param iva el tipo de IVA del producto, entre 0 y 1 (0.21 = 21 %)
      * @param subtotal el subtotal de la línea sin IVA (cantidad × precio por unidad)
+     * @throws IllegalArgumentException si algún dato no es válido (ver {@link #validar()})
      */
     public LineaCompra(int producto_id, String nombre, double cantidad, double precio_unidad, double iva, double subtotal) {
         this.producto_id = producto_id;
@@ -63,6 +64,42 @@ public class LineaCompra {
         this.precio_unidad = precio_unidad;
         this.iva = iva;
         this.subtotal = subtotal;
+
+        validar();
+    }
+
+    // reglas del negocio (validaciones)
+    /**
+     * Comprueba que los datos de la línea son válidos: hay producto, la cantidad es mayor que 0,
+     * el precio no es negativo y el IVA está entre 0 y 1.
+     *
+     * @throws IllegalArgumentException con el mensaje del primer dato que no es válido
+     */
+    public void validar() {
+        if (producto_id <= 0) {
+            throw new IllegalArgumentException(
+                    "Selecciona un producto.");
+        }
+
+        if (nombre == null || nombre.isBlank()) {
+            throw new IllegalArgumentException(
+                    "El nombre del producto es obligatorio.");
+        }
+
+        if (!Double.isFinite(cantidad) || cantidad <= 0) {
+            throw new IllegalArgumentException(
+                    "La cantidad debe ser mayor que 0.");
+        }
+
+        if (!Double.isFinite(precio_unidad) || precio_unidad < 0) {
+            throw new IllegalArgumentException(
+                    "El precio no puede ser negativo.");
+        }
+
+        if (!Double.isFinite(iva) || iva < 0 || iva > 1) {
+            throw new IllegalArgumentException(
+                    "El IVA debe estar entre 0 y 1.");
+        }
     }
 
     /**

@@ -45,12 +45,34 @@ public class Contacto {
      * @param telefono el teléfono de contacto
      * @param email el correo electrónico de contacto
      * @param direccion la dirección del proveedor
+     * @throws IllegalArgumentException si algún dato no es válido (ver {@link #validar()})
      */
     public Contacto(String persona, String telefono, String email, String direccion) {
         this.persona = persona;
         this.telefono = telefono;
         this.email = email;
         this.direccion = direccion;
+
+        validar();
+    }
+
+    // reglas del negocio (validaciones)
+    /**
+     * Comprueba que los datos de contacto son válidos. Todos son opcionales, pero si hay
+     * correo tiene que llevar {@code @} y si hay teléfono solo puede tener números, espacios y {@code +}.
+     *
+     * @throws IllegalArgumentException con el mensaje del primer dato que no es válido
+     */
+    public void validar() {
+        if (email != null && !email.isBlank() && !email.contains("@")) {
+            throw new IllegalArgumentException(
+                    "El correo electrónico no es válido.");
+        }
+
+        if (telefono != null && !telefono.isBlank() && !telefono.matches("[0-9 +]+")) {
+            throw new IllegalArgumentException(
+                    "El teléfono solo puede tener números, espacios y '+'.");
+        }
     }
 
     /**

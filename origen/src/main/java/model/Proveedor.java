@@ -5,6 +5,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -16,6 +17,12 @@ import java.util.List;
  * @author anazk
  */
 public class Proveedor {
+
+    /**
+     * Los días laborales permitidos, tal y como se guardan en MongoDB (sin tildes).
+     */
+    private static final List<String> DIAS_VALIDOS = Arrays.asList(
+            "lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo");
 
     /**
      * El identificador del proveedor ({@code _id} en MongoDB).
@@ -69,6 +76,7 @@ public class Proveedor {
      * @param dias_laborales los días de la semana en los que reparte ({@code "lunes"}, {@code "martes"}...)
      * @param iban el IBAN de la cuenta del proveedor
      * @param activo el proveedor está activo
+     * @throws IllegalArgumentException si algún dato no es válido (ver {@link #validar()})
      */
     public Proveedor(int id, String nombre, String nif_cif, Contacto contacto, int plazo_entrega,
             List<String> dias_laborales, String iban, boolean activo) {
@@ -80,6 +88,49 @@ public class Proveedor {
         this.dias_laborales = dias_laborales;
         this.iban = iban;
         this.activo = activo;
+
+        validar();
+    }
+
+    // reglas del negocio (validaciones)
+    /**
+     * Comprueba que los datos del proveedor son válidos: nombre y NIF/CIF obligatorios, plazo de
+     * entrega no negativo y días laborales escritos como se guardan en MongoDB. Si tiene
+     * contacto, también lo valida con {@link Contacto#validar()}.
+     *
+     * @throws IllegalArgumentException con el mensaje del primer dato que no es válido
+     */
+    public void validar() {
+        if (nombre == null || nombre.isBlank()) {
+            throw new IllegalArgumentException(
+                    "El nombre del proveedor es obligatorio.");
+        }
+
+        if (nif_cif == null || nif_cif.isBlank()) {
+            throw new IllegalArgumentException(
+                    "El NIF/CIF es obligatorio.");
+        }
+
+        if (plazo_entrega < 0) {
+            throw new IllegalArgumentException(
+                    "El plazo de entrega no puede ser negativo.");
+        }
+
+        if (dias_laborales == null) {
+            throw new IllegalArgumentException(
+                    "La lista de días laborales no puede ser nula.");
+        }
+
+        for (String dia : dias_laborales) {
+            if (!DIAS_VALIDOS.contains(dia)) {
+                throw new IllegalArgumentException(
+                        "El día laboral '" + dia + "' no es válido.");
+            }
+        }
+
+        if (contacto != null) {
+            contacto.validar();
+        }
     }
 
     /**
