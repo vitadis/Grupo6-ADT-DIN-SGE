@@ -26,9 +26,6 @@
             <Region HBox.hgrow="ALWAYS" />
             <StackPane styleClass="notificaciones" />
             <Label fx:id="lblUsuario" styleClass="texto-secundario" />
-            <StackPane styleClass="avatar">
-                <Label fx:id="lblAvatar" />
-            </StackPane>
         </HBox>
     </top>
 

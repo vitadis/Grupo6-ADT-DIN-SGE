@@ -65,11 +65,6 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
      */
     @FXML
     private Label lblUsuario;
-    /**
-     * Iniciales del usuario en el avatar.
-     */
-    @FXML
-    private Label lblAvatar;
 
     // ------------------------------- Botones de la cabecera -------------------------------
     /**
@@ -274,8 +269,8 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
     }
 
     /**
-     * Recibe el usuario con la sesión iniciada y pone su nombre y sus iniciales en la barra
-     * superior. Lo llama {@link NavController} al cargar la vista.
+     * Recibe el usuario con la sesión iniciada y pone su nombre en la barra superior.
+     * Lo llama {@link NavController} al cargar la vista.
      *
      * @param usuario usuario que ha iniciado sesión
      */
@@ -284,8 +279,6 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
         this.usuario = usuario;
         if (usuario != null && usuario.getUsername() != null) {
             lblUsuario.setText(usuario.getUsername());
-            String nombre = usuario.getUsername();
-            lblAvatar.setText(nombre.substring(0, Math.min(2, nombre.length())).toUpperCase());
         }
     }
 
