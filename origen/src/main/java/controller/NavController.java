@@ -56,9 +56,9 @@ public class NavController {
 
     // map de vistas
     private static final Map<String, String> VISTAS = Map.of(
-            //"Inicio", "/view/inicio/inicioView.fxml",
+            "Inicio", "/view/inicio/inicioView.fxml",
             "Caja y pedidos", "/view/caja/cajaView.fxml",
-            "Gestión económica", "/view/compra/CompraView.fxml",
+            "Gestión económica", "/view/economia/gestionEconomicaView.fxml",
             "Gestión stock", "/view/gestionStock/gestionStock.fxml",
             "Compras y proveedores", "/view/compra/CompraView.fxml"
     //"Análisis e informes", "/view/informes/informesView.fxml",
@@ -69,6 +69,8 @@ public class NavController {
     private final ToggleGroup grupoNav = new ToggleGroup();
     // Vistas cargadas (lo vinculo con el modulo)
     private final Map<String, Node> vistasCargadas = new LinkedHashMap<>();
+    
+    private final Map<String, Object> controladores = new LinkedHashMap<>();
 
     // --------------------- Usuario ---------------------
     private Usuario usuario;
@@ -130,6 +132,7 @@ public class NavController {
         vbNav.getChildren().clear();
         contenido.getChildren().clear();
         vistasCargadas.clear();
+        controladores.clear();
 
         List<String> sinAcceso = InterpretePermisos.apartadosSinAcceso(usuario.getPermisos());
 
@@ -174,6 +177,7 @@ public class NavController {
             Node vista = loader.load();
 
             Object controller = loader.getController();
+            controladores.put(nombre, controller);
             if (controller instanceof UsuarioImplementacion) {
                 ((UsuarioImplementacion) controller).setUsuario(usuario);
             }
@@ -208,7 +212,7 @@ public class NavController {
         mostrarVista(elegido.getText());
         cambiarTitulo(elegido.getText());
     }
-
+    /*
     private void mostrarVista(String nombre) {
         vistasCargadas.forEach((clave, vista) -> {
             boolean activa = clave.equals(nombre);
@@ -216,7 +220,19 @@ public class NavController {
             vista.setManaged(activa);
         });
     }
+    */
+    private void mostrarVista(String nombre) {
+    for (Map.Entry<String, Node> entrada : vistasCargadas.entrySet()) {
+        boolean activa = entrada.getKey().equals(nombre);
+        entrada.getValue().setVisible(activa);
+        entrada.getValue().setManaged(activa);
+    }
 
+    Object controller = controladores.get(nombre);
+    if (controller instanceof ActualizarDatos) {
+        ((ActualizarDatos) controller).actualizarDatos();
+    }
+}
     private List<ToggleButton> botones() {
         return vbNav.getChildren().stream()
                 .map(n -> (ToggleButton) n)

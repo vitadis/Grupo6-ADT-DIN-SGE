@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -24,6 +25,7 @@ import model.Producto;
 import model.Proveedor;
 import model.TipoProducto;
 import static util.Alertas.mostrarError;
+import util.AppLogger;
 
 public class AñadirProductoController implements Initializable {
 
@@ -55,6 +57,9 @@ public class AñadirProductoController implements Initializable {
     private DatePicker dateCaducidad;
 
     private final GestionStockDao stockDao = GestionStockDaoImp.getInstance();
+    
+    private final AppLogger logger = AppLogger.getInstance();
+
 
     private List<Producto> productosExistentes = new ArrayList<>();
     private boolean guardado = false;
@@ -81,6 +86,7 @@ public class AñadirProductoController implements Initializable {
             comboProveedor.setItems(
                     FXCollections.observableArrayList(stockDao.listarActivos()));
         } catch (DaoException e) {
+            logger.log(Level.SEVERE, "Error al cargar productos y proveedores en añadir producto", e);
             mostrarError(e.getMessage());
         }
 
@@ -99,7 +105,6 @@ public class AñadirProductoController implements Initializable {
         }
     }
 
-    // ============================ EVENTOS ====================================
     @FXML
     private void modoCambiado() {
         boolean nuevo = chkNuevo.isSelected();
@@ -131,8 +136,10 @@ public class AñadirProductoController implements Initializable {
             guardado = true;
             cerrar();
         } catch (IllegalArgumentException e) {
+            logger.warning("Validación rechazada al añadir producto: " + e.getMessage());
             mostrarError(e.getMessage());
         } catch (DaoException e) {
+            logger.log(Level.SEVERE, "Error al guardar producto: " + e.getMessage(), e);
             mostrarError(e.getMessage());
         }
     }
@@ -146,7 +153,6 @@ public class AñadirProductoController implements Initializable {
         return guardado;
     }
 
-    // ============================ GUARDADO ===================================
     private void guardarExistente() throws DaoException {
         Producto elegido = comboExistente.getValue();
         if (elegido == null) {
@@ -164,6 +170,7 @@ public class AñadirProductoController implements Initializable {
         }
 
         stockDao.anadirStock(elegido.getId(), cantidad, caducidad.toString());
+        logger.info("Entrada de stock: " + elegido.getNombre() + " (+" + cantidad + ", caduca " + caducidad + ")");
     }
 
     private void guardarNuevo() throws DaoException {
@@ -235,7 +242,6 @@ public class AñadirProductoController implements Initializable {
         return p;
     }
 
-    // ============================ UTILIDADES =================================
     private void cargarCategorias(TipoProducto tipo) {
         comboCategoria.getSelectionModel().clearSelection();
 

@@ -50,21 +50,25 @@ public final class InstanciarEscena extends Application {
     }
    
     public static <T> T createNewStage(String ruta, String nombreVentana, Consumer<T> configurador) throws IOException {
-        FXMLLoader loader = new FXMLLoader(InstanciarEscena.class.getResource(ruta));
-        Parent root = loader.load();
+    FXMLLoader loader = new FXMLLoader(InstanciarEscena.class.getResource(ruta));
+    Parent root = loader.load();
 
-        T controller = loader.getController();
-        if (configurador != null) {
-            configurador.accept(controller);
-        }
-
-        Stage nuevaVentana = new Stage();
-        nuevaVentana.setTitle(nombreVentana);
-        nuevaVentana.initModality(Modality.APPLICATION_MODAL);
-        nuevaVentana.setScene(new Scene(root));
-        nuevaVentana.showAndWait();
-
-        return controller;
+    T controller = loader.getController();
+    if (configurador != null) {
+        configurador.accept(controller);
     }
+
+    Scene scene = new Scene(root);
+    scene.getStylesheets().add(InstanciarEscena.class.getResource("/css/theme.css").toExternalForm());
+    scene.getStylesheets().add(InstanciarEscena.class.getResource("/css/style.css").toExternalForm());
+
+    Stage nuevaVentana = new Stage();
+    nuevaVentana.setTitle(nombreVentana);
+    nuevaVentana.initModality(Modality.APPLICATION_MODAL);
+    nuevaVentana.setScene(scene);
+    nuevaVentana.showAndWait();
+
+    return controller;
+}
     
 }

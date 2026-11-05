@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="600.0" prefWidth="800.0" styleClass="inicio-root" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.InicioController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+    <center>
+        <GridPane vgap="10" BorderPane.alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="44.0" prefHeight="44.0" vgrow="NEVER" />
+                <RowConstraints minHeight="-Infinity" vgrow="NEVER" />
+                <RowConstraints minHeight="100.0" vgrow="ALWAYS" />
+            </rowConstraints>
+            <children>
+
+                <!-- Fila 0: título -->
+                <HBox alignment="CENTER_LEFT" spacing="12.0">
+                    <children>
+                        <Label styleClass="titulo" text="RESUMEN GENERAL" />
+                    </children>
+                </HBox>
+
+                <!-- Fila 1: tarjetas -->
+                <GridPane fx:id="gridInfoStock" styleClass="gridStock" GridPane.rowIndex="1">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="25.0" />
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="25.0" />
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="25.0" />
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="25.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints vgrow="NEVER" />
+                    </rowConstraints>
+                    <children>
+                        <VBox styleClass="stockCajas, cajaVerde">
+                            <children>
+                                <Label styleClass="stockTitulo" text="Ingresos del mes" />
+                                <Label fx:id="cantIngreso" styleClass="stockValor" text="0" />
+                            </children>
+                        </VBox>
+                        <VBox styleClass="stockCajas, cajaOscura" GridPane.columnIndex="1">
+                            <children>
+                                <Label styleClass="stockTitulo" text="Gastos del mes" />
+                                <Label fx:id="gastoMes" styleClass="stockValor" text="0" />
+                            </children>
+                        </VBox>
+                        <VBox styleClass="stockCajas, cajaVerde" GridPane.columnIndex="2">
+                            <children>
+                                <Label styleClass="stockTitulo" text="Beneficio estimado" />
+                                <Label fx:id="beneficioAprox" styleClass="stockValor" text="0" />
+                            </children>
+                        </VBox>
+                        <VBox styleClass="stockCajas, cajaAmbar" GridPane.columnIndex="3">
+                            <children>
+                                <Label styleClass="stockTitulo" text="Productos con bajo stock" />
+                                <Label fx:id="cantStockBajo" styleClass="stockValor" text="0" />
+                            </children>
+                        </VBox>
+                    </children>
+                </GridPane>
+
+                <!-- Fila 2: compras + alertas + accesos directos -->
+                <GridPane hgap="20.0" GridPane.rowIndex="2">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="42.0" />
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="28.0" />
+                        <ColumnConstraints hgrow="ALWAYS" percentWidth="30.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints vgrow="ALWAYS" />
+                    </rowConstraints>
+                    <children>
+
+                        <!-- Izquierda: últimas compras -->
+                        <VBox styleClass="tarjeta, inicio-panel">
+                            <children>
+                                <Label styleClass="inicio-panel-titulo" text="Últimas compras" />
+                                <HBox alignment="CENTER_LEFT" styleClass="compras-tabla-cabecera">
+                                    <children>
+                                        <Label prefWidth="70" text="Fecha" />
+                                        <Label prefWidth="130" text="Proveedor" />
+                                        <Label prefWidth="90" text="Ref. factura" />
+                                        <Label prefWidth="50" text="Líneas" />
+                                        <Label prefWidth="80" text="Importe" />
+                                    </children>
+                                </HBox>
+                                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="inicio-scroll" VBox.vgrow="ALWAYS">
+                                    <content>
+                                        <VBox fx:id="contenedorCompras" styleClass="inicio-lista" />
+                                    </content>
+                                </ScrollPane>
+                                <Label fx:id="lblContador" styleClass="texto-secundario" />
+                            </children>
+                        </VBox>
+
+                        <!-- Centro: alertas de stock -->
+                        <VBox styleClass="tarjeta, inicio-panel" GridPane.columnIndex="1">
+                            <children>
+                                <Label styleClass="inicio-panel-titulo" text="Alertas de stock" />
+                                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="inicio-scroll" VBox.vgrow="ALWAYS">
+                                    <content>
+                                        <VBox fx:id="contenedorAlertas" styleClass="inicio-lista" />
+                                    </content>
+                                </ScrollPane>
+                                <Label fx:id="lblContadorAlertas" styleClass="texto-secundario" />
+                            </children>
+                        </VBox>
+
+                        <!-- Derecha: accesos directos -->
+                        <VBox styleClass="tarjeta, inicio-panel" GridPane.columnIndex="2">
+                            <children>
+                                <Label styleClass="inicio-panel-titulo" text="Accesos directos" />
+                                <GridPane hgap="10.0" vgap="10.0" VBox.vgrow="ALWAYS">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="ALWAYS" percentWidth="50.0" />
+                                        <ColumnConstraints hgrow="ALWAYS" percentWidth="50.0" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="60.0" vgrow="ALWAYS" />
+                                        <RowConstraints minHeight="60.0" vgrow="ALWAYS" />
+                                    </rowConstraints>
+                                    <children>
+                                        <Button fx:id="registrarCompra" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="btn-primario, inicio-acceso" text="Registrar compra" wrapText="true" />
+                                        <Button fx:id="registrarPerdida" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="btn-peligro, inicio-acceso" text="Registrar pérdida" wrapText="true" GridPane.columnIndex="1" />
+                                        <Button fx:id="historialVentas" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="btn-secundario, inicio-acceso" text="Historial ventas" wrapText="true" GridPane.rowIndex="1" />
+                                        <Button fx:id="anadirProducto" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="btn-primario, inicio-acceso" text="Añadir producto" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                    </children>
+                                </GridPane>
+                            </children>
+                        </VBox>
+                    </children>
+                </GridPane>
+            </children>
+        </GridPane>
+    </center>
+</BorderPane>
