@@ -1,7 +1,5 @@
 package controller;
 
-import dao.GestionStockDao;
-import dao.implement.GestionStockDaoImp;
 import exceptions.DaoException;
 import java.net.URL;
 import java.util.List;
@@ -19,8 +17,8 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
-import model.MovimientoStock;
 import model.Producto;
+import services.GestionStockService;
 import util.AppLogger;
 
 /**
@@ -38,7 +36,7 @@ public class RegistrarPerdidaController implements Initializable {
     @FXML
     private TextArea txtNota;
 
-    private final GestionStockDao stockDao = GestionStockDaoImp.getInstance();
+    private final GestionStockService stockService = new GestionStockService();
     private final AppLogger logger = AppLogger.getInstance();
 
     @Override
@@ -69,13 +67,13 @@ public class RegistrarPerdidaController implements Initializable {
 
     public void cargarProductos() {
         try {
-            List<Producto> lista = stockDao.listarProductos();
+            List<Producto> lista = stockService.listarProductos();
             comboProducto.setItems(FXCollections.observableArrayList(lista));
             if (!lista.isEmpty()) {
                 comboProducto.getSelectionModel().selectFirst();
             }
         } catch (DaoException e) {
-             logger.log(Level.SEVERE, "Error al cargar productos en registrar pérdida", e);
+            logger.log(Level.SEVERE, "Error al cargar productos en registrar pérdida", e);
             new Alert(Alert.AlertType.ERROR,
                     "Error al cargar productos: " + e.getMessage()).showAndWait();
         }
@@ -84,10 +82,6 @@ public class RegistrarPerdidaController implements Initializable {
     @FXML
     private void guardarPerdida(ActionEvent event) {
         Producto seleccionado = comboProducto.getValue();
-        if (seleccionado == null) {
-            new Alert(Alert.AlertType.WARNING, "Selecciona un producto.").showAndWait();
-            return;
-        }
 
         int cantidad;
         try {
@@ -98,23 +92,9 @@ public class RegistrarPerdidaController implements Initializable {
             return;
         }
 
-        if (cantidad <= 0) {
-            new Alert(Alert.AlertType.WARNING,
-                    "La cantidad debe ser mayor que cero.").showAndWait();
-            return;
-        }
-        if (cantidad > seleccionado.getStock_actual()) {
-            new Alert(Alert.AlertType.WARNING,
-                    "Solo hay " + seleccionado.getStock_actual() + " unidades en stock.").showAndWait();
-            return;
-        }
-
-       try {
+        try {
             String nota = txtNota.getText() == null ? "" : txtNota.getText().trim();
-            MovimientoStock mov = new MovimientoStock(
-                    seleccionado.getId(), seleccionado.getNombre(), "PERDIDA", cantidad, nota);
-
-            stockDao.registrarPerdida(mov, seleccionado);
+            stockService.registrarPerdida(seleccionado, cantidad, nota);
             logger.info("Pérdida registrada: " + seleccionado.getNombre() + " (-" + cantidad + "). Nota: " + nota);
 
             int restante = seleccionado.getStock_actual() - cantidad;
@@ -126,6 +106,9 @@ public class RegistrarPerdidaController implements Initializable {
             }
 
             cerrarVentana(event);
+        } catch (IllegalArgumentException e) {
+            logger.warning("Validación rechazada al registrar pérdida: " + e.getMessage());
+            new Alert(Alert.AlertType.WARNING, e.getMessage()).showAndWait();
         } catch (DaoException e) {
             e.printStackTrace();
             logger.log(Level.SEVERE, "Error al registrar pérdida: " + e.getMessage(), e);

@@ -1,12 +1,8 @@
 package controller;
 
-import dao.GestionStockDao;
-import dao.implement.GestionStockDaoImp;
 import exceptions.DaoException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import javafx.collections.FXCollections;
@@ -24,9 +20,14 @@ import model.CategoriaProducto;
 import model.Producto;
 import model.Proveedor;
 import model.TipoProducto;
+import services.GestionStockService;
 import static util.Alertas.mostrarError;
 import util.AppLogger;
 
+/**
+ *
+ * @author Hodei.Torres
+ */
 public class AñadirProductoController implements Initializable {
 
     @FXML
@@ -56,12 +57,9 @@ public class AñadirProductoController implements Initializable {
     @FXML
     private DatePicker dateCaducidad;
 
-    private final GestionStockDao stockDao = GestionStockDaoImp.getInstance();
-    
+    private final GestionStockService stockService = new GestionStockService();
     private final AppLogger logger = AppLogger.getInstance();
 
-
-    private List<Producto> productosExistentes = new ArrayList<>();
     private boolean guardado = false;
 
     @Override
@@ -81,10 +79,8 @@ public class AñadirProductoController implements Initializable {
         comboTipo.setItems(FXCollections.observableArrayList(TipoProducto.values()));
 
         try {
-            productosExistentes = stockDao.listarProductos();
-            comboExistente.setItems(FXCollections.observableArrayList(productosExistentes));
-            comboProveedor.setItems(
-                    FXCollections.observableArrayList(stockDao.listarActivos()));
+            comboExistente.setItems(FXCollections.observableArrayList(stockService.listarProductos()));
+            comboProveedor.setItems(FXCollections.observableArrayList(stockService.listarProveedoresActivos()));
         } catch (DaoException e) {
             logger.log(Level.SEVERE, "Error al cargar productos y proveedores en añadir producto", e);
             mostrarError(e.getMessage());
@@ -122,7 +118,9 @@ public class AñadirProductoController implements Initializable {
 
     @FXML
     private void tipoSeleccionado() {
-        cargarCategorias(comboTipo.getValue());
+        comboCategoria.getSelectionModel().clearSelection();
+        comboCategoria.setItems(FXCollections.observableArrayList(
+                stockService.categoriasDeTipo(comboTipo.getValue())));
     }
 
     @FXML
@@ -139,8 +137,10 @@ public class AñadirProductoController implements Initializable {
             logger.warning("Validación rechazada al añadir producto: " + e.getMessage());
             mostrarError(e.getMessage());
         } catch (DaoException e) {
+            e.printStackTrace();
             logger.log(Level.SEVERE, "Error al guardar producto: " + e.getMessage(), e);
-            mostrarError(e.getMessage());
+            String causa = (e.getCause() != null) ? "\n" + e.getCause().getMessage() : "";
+            mostrarError(e.getMessage() + causa);
         }
     }
 
@@ -155,105 +155,25 @@ public class AñadirProductoController implements Initializable {
 
     private void guardarExistente() throws DaoException {
         Producto elegido = comboExistente.getValue();
-        if (elegido == null) {
-            throw new IllegalArgumentException("Selecciona un producto.");
-        }
-
         int cantidad = leerEntero(txtCantidad, "La cantidad");
-        if (cantidad <= 0) {
-            throw new IllegalArgumentException("La cantidad debe ser mayor que cero.");
-        }
-
         LocalDate caducidad = dateCaducidad.getValue();
-        if (caducidad == null) {
-            throw new IllegalArgumentException("Indica la fecha de caducidad.");
-        }
 
-        stockDao.anadirStock(elegido.getId(), cantidad, caducidad.toString());
-        logger.info("Entrada de stock: " + elegido.getNombre() + " (+" + cantidad + ", caduca " + caducidad + ")");
+        stockService.anadirStock(elegido, cantidad, caducidad);
+        logger.info("Entrada de stock: " + elegido.getNombre() + " (+" + cantidad
+                + ", caduca " + caducidad + ")");
     }
 
     private void guardarNuevo() throws DaoException {
-        Producto producto = construirProducto();
-        stockDao.insertarProducto(producto);
-    }
-
-    private Producto construirProducto() {
-        String nombre = txtProducto.getText() == null ? "" : txtProducto.getText().trim();
-        if (nombre.isEmpty()) {
-            throw new IllegalArgumentException("El nombre del producto es obligatorio.");
-        }
-        for (Producto existente : productosExistentes) {
-            if (existente.getNombre().equalsIgnoreCase(nombre)) {
-                throw new IllegalArgumentException(
-                        "Ya existe un producto con ese nombre. Desmarca \"Es un producto nuevo\" para añadirle stock.");
-            }
-        }
-
-        TipoProducto tipo = comboTipo.getValue();
-        if (tipo == null) {
-            throw new IllegalArgumentException("Selecciona un tipo.");
-        }
-
-        CategoriaProducto categoria = comboCategoria.getValue();
-        if (categoria == null) {
-            throw new IllegalArgumentException("Selecciona una categoría.");
-        }
-
-        Proveedor proveedor = comboProveedor.getValue();
-        if (proveedor == null) {
-            throw new IllegalArgumentException("Selecciona un proveedor.");
-        }
-
         double precio = leerDecimal(txtPrecio, "El precio");
-        double ivaPorcentaje = leerDecimal(txtIva, "El IVA");
-        if (ivaPorcentaje < 0 || ivaPorcentaje > 100) {
-            throw new IllegalArgumentException("El IVA debe estar entre 0 y 100.");
-        }
-
+        double iva = leerDecimal(txtIva, "El IVA");
         int stockMinimo = leerEntero(txtStockMinimo, "El stock mínimo");
         int cantidad = leerEntero(txtCantidad, "La cantidad inicial");
 
-        LocalDate caducidad = dateCaducidad.getValue();
-        if (cantidad > 0 && caducidad == null) {
-            throw new IllegalArgumentException(
-                    "Indica la fecha de caducidad del stock inicial.");
-        }
-
-        List<Integer> proveedores = new ArrayList<>();
-        proveedores.add(proveedor.getId());
-
-        // El tipo antes que la categoría (el setter las compara)
-        Producto p = new Producto();
-        p.setNombre(nombre);
-        p.setTipo(tipo);
-        p.setCategoria(categoria);
-        p.setPrecio_venta(precio);
-        p.setIva(ivaPorcentaje / 100.0);
-        p.setStock_minimo(stockMinimo);
-        p.setStock_actual(cantidad);
-        p.setProveedores_id(proveedores);
-        p.setActivo(true);
-
-        if (cantidad > 0) {
-            p.agregarLote(cantidad, caducidad.toString());
-        }
-
-        return p;
-    }
-
-    private void cargarCategorias(TipoProducto tipo) {
-        comboCategoria.getSelectionModel().clearSelection();
-
-        List<CategoriaProducto> filtradas = new ArrayList<>();
-        if (tipo != null) {
-            for (CategoriaProducto c : CategoriaProducto.values()) {
-                if (c.getTipo() == tipo) {
-                    filtradas.add(c);
-                }
-            }
-        }
-        comboCategoria.setItems(FXCollections.observableArrayList(filtradas));
+        Producto p = stockService.crearProducto(txtProducto.getText(), comboTipo.getValue(),
+                comboCategoria.getValue(), comboProveedor.getValue(), precio, iva,
+                stockMinimo, cantidad, dateCaducidad.getValue());
+        logger.info("Producto nuevo creado: " + p.getNombre()
+                + " (categoría " + p.getCategoria() + ", stock inicial " + p.getStock_actual() + ")");
     }
 
     private void mostrar(Node nodo, boolean visible) {

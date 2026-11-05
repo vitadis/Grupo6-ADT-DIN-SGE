@@ -1,28 +1,7 @@
 /* ==========================================================
-   0. VARIABLES Y BASE
+   0. BASE (las variables de color están en theme.css)
    ========================================================== */
 .root {
-    /* Verdes */
-    -verde-principal: #527A52;
-    -verde-oscuro:    #35563B;
-    -verde-suave:     #E5EFE2;
-
-    /* Beiges */
-    -beige-principal:  #EEE7DA;
-    -beige-claro:      #F8F4EB;
-    -beige-intermedio: #E5D8C3;
-
-    /* Neutros */
-    -blanco:           #FFFFFF;
-    -texto-principal:  #2F352E;
-    -texto-secundario: #72776E;
-
-    /* Estados */
-    -rojo-moderado: #B94A48;
-    -ambar-suave:   #D8A441;
-    -ambar-oscuro:  #9A6B12;   /* ámbar legible como texto */
-
-    /* Base */
     -fx-background-color: -beige-principal;
     -fx-text-fill: -texto-principal;
     -fx-font-size: 14px;
@@ -46,8 +25,6 @@
     -fx-border-color: transparent -beige-intermedio transparent transparent;
     -fx-border-width: 0 1 0 0;
 }
-
-/* La línea de los separadores ya viene de ".separator .line" (4.7) */
 
 .nav-item {
     -fx-background-color: transparent;
@@ -122,7 +99,6 @@
     -fx-padding: 16 0 0 0;
 }
 
-/* Accesos directos: el color lo dan btn-primario / btn-peligro / btn-secundario */
 .button.inicio-acceso {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
@@ -196,10 +172,7 @@
     -fx-padding: 0 8 0 8;
     -fx-min-width: 26;
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/dev
 .button.pedido-btn-cantidad:hover {
     -fx-background-color: -verde-suave;
 }
@@ -229,10 +202,7 @@
     -fx-font-weight: bold;
     -fx-padding: 4 8 4 8;
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/dev
 .button.pedido-btn-quitar:hover {
     -fx-background-color: -beige-intermedio;
 }
@@ -243,10 +213,7 @@
 
 
 /* ---------- 3.3 Gestión económica (prefijo: gestion-) ---------- */
-<<<<<<< HEAD
 /* Etiqueta de tipo "Gasto" (ni positivo ni aviso). La forma viene de 4.6 */
-=======
->>>>>>> origin/dev
 .gestion-estado-neutro {
     -fx-background-color: -beige-intermedio;
     -fx-text-fill: -texto-principal;
@@ -260,7 +227,6 @@
     -fx-padding: 16;
 }
 
-<<<<<<< HEAD
 /* Selector Ingreso / Gasto de "Registrar movimiento" (dos ToggleButton en una píldora) */
 .gestion-tipo {
     -fx-background-color: -blanco;
@@ -285,8 +251,6 @@
 }
 
 /* Gráfico de barras: fondo transparente, sin rejilla vertical y barras beige */
-=======
->>>>>>> origin/dev
 .gestion-grafico .chart-plot-background {
     -fx-background-color: transparent;
 }
@@ -311,7 +275,6 @@
 
 
 /* ---------- 3.4 Gestión stock (prefijo: stock-) ---------- */
-/* Está en el apartado 6, después del login */
 
 /* Tarjetas de resumen (también las usa Inicio) */
 .gridStock {
@@ -445,7 +408,6 @@
     -fx-text-fill: -acento-titulo;
 }
 
-/* Campos de texto */
 .ventana .text-field {
     -fx-background-color: -blanco;
     -fx-background-insets: 0;
@@ -459,11 +421,6 @@
     -fx-faint-focus-color: transparent;
 }
 
-.ventana .text-field:focused {
-    -fx-border-color: -acento;
-}
-
-/* TextArea */
 .ventana .text-area {
     -fx-background-color: -blanco;
     -fx-background-insets: 0;
@@ -481,11 +438,6 @@
     -fx-background-radius: 8;
 }
 
-.ventana .text-area:focused {
-    -fx-border-color: -acento;
-}
-
-/* ComboBox y DatePicker (ambos son combo-box-base) */
 .ventana .combo-box-base {
     -fx-background-color: -blanco;
     -fx-background-insets: 0;
@@ -496,6 +448,9 @@
     -fx-faint-focus-color: transparent;
 }
 
+/* Borde del color de acento al tener el foco (después de las reglas base) */
+.ventana .text-field:focused,
+.ventana .text-area:focused,
 .ventana .combo-box-base:focused {
     -fx-border-color: -acento;
 }
@@ -524,7 +479,6 @@
     -fx-padding: 7 10 7 10;
 }
 
-/* CheckBox con el acento de la ventana */
 .ventana .check-box {
     -fx-text-fill: -texto-principal;
     -fx-cursor: hand;
@@ -558,7 +512,7 @@
     -fx-background-color: derive(-beige-intermedio, -8%);
 }
 
-/* Botón primario (Guardar): va después de .button y con sus tres estados */
+/* Botón primario (Guardar) */
 .ventana .btnPrimario {
     -fx-background-color: -acento;
     -fx-border-color: -acento;
@@ -715,7 +669,7 @@
     -fx-font-size: 13px;
 }
 
-/* Declarada después de .compra-fila:hover para que la selección no se pierda al pasar el ratón */
+/* Después de .compra-fila:hover para que la selección no se pierda al pasar el ratón */
 .proveedor-fila-seleccionada,
 .proveedor-fila-seleccionada:hover {
     -fx-background-color: -verde-suave;
@@ -766,10 +720,7 @@
     -fx-text-fill: -blanco;
     -fx-font-weight: bold;
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/dev
 .btn-primario:hover,
 .btn-primario:pressed {
     -fx-background-color: -verde-oscuro;
@@ -781,10 +732,7 @@
     -fx-border-radius: 6;
     -fx-text-fill: -texto-principal;
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/dev
 .btn-secundario:hover {
     -fx-background-color: -beige-intermedio;
 }
@@ -798,10 +746,7 @@
     -fx-text-fill: -blanco;
     -fx-font-weight: bold;
 }
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/dev
 .btn-peligro:hover {
     -fx-opacity: 0.85;
 }
@@ -810,7 +755,7 @@
     -fx-opacity: 0.7;
 }
 
-/* Deshabilitado: va después de todos los botones */
+/* Deshabilitado: después de todos los botones */
 .button:disabled {
     -fx-opacity: 0.5;
     -fx-cursor: default;
@@ -845,13 +790,12 @@
     -fx-border-color: -verde-principal;
 }
 
-/* Campo con error: debe ir después de :focused para ganarle */
+/* Campo con error: después de :focused para ganarle */
 .campo-error,
 .campo-error:focused {
     -fx-border-color: -rojo-moderado;
 }
 
-/* CheckBox: caja blanca con borde; verde con marca blanca al seleccionar */
 .check-box .box {
     -fx-background-color: -blanco;
     -fx-background-insets: 0;
@@ -936,7 +880,6 @@
 
 
 /* ---------- 4.6 Estados y avisos ---------- */
-<<<<<<< HEAD
 /* Para Label u otros nodos de texto/etiquetas: misma forma, cambia el color */
 .estado-ok,
 .estado-aviso,
@@ -946,8 +889,6 @@
     -fx-padding: 2 10 2 10;
 }
 
-=======
->>>>>>> origin/dev
 .estado-ok {
     -fx-background-color: -verde-suave;
     -fx-text-fill: -verde-oscuro;
@@ -1099,25 +1040,9 @@
     -fx-pref-height: 50;
     -fx-cursor: hand;
 }
-<<<<<<< HEAD
+
 .button.login-button:hover,
 .button.login-button:pressed,
-=======
-
-.button.login-button:hover {
-    -fx-background-color: -verde-oscuro;
-}
-
-.button.login-button:pressed {
-    -fx-background-color: -verde-oscuro;
-    -fx-opacity: 0.9;
-}
-
-.button.login-button:default {
-    -fx-background-color: -verde-principal;
-}
-
->>>>>>> origin/dev
 .button.login-button:default:hover {
     -fx-background-color: -verde-oscuro;
 }
@@ -1126,8 +1051,7 @@
     -fx-opacity: 0.9;
 }
 
-/* Botón por defecto (el de Enter). Va después de :pressed para ganarle;
-   su hover lo da ".button.login-button:default:hover" de arriba, que pesa más */
+/* Botón por defecto (el de Enter). Su :default:hover pesa más y gana a esta */
 .button.login-button:default {
     -fx-background-color: -verde-principal;
 }
@@ -1149,267 +1073,4 @@
     -fx-text-fill: -texto-secundario;
     -fx-alignment: CENTER;
     -fx-text-alignment: CENTER;
-<<<<<<< HEAD
 }
-
-/* ==========================================================
-   6. GESTIÓN DE STOCK (prefijo: stock-)
-   Va después del login, igual que estaba, para no cambiar
-   qué reglas ganan a las generales.
-   ========================================================== */
-
-/* ---------- 6.1 Tarjetas de resumen ---------- */
-.gridStock {
-    -fx-hgap: 12;
-    -fx-padding: 12;
-}
-
-.stockCajas {
-    -acento: -verde-principal;                      /* valor por defecto */
-    -fx-background-color: -beige-claro;
-    -fx-background-radius: 10;
-    -fx-border-color: -acento -beige-intermedio -beige-intermedio -beige-intermedio;
-    -fx-border-width: 4 1 1 1;
-    -fx-border-radius: 10;
-    -fx-padding: 14 14 12 14;
-    -fx-spacing: 6;
-    -fx-effect: dropshadow(gaussian, rgba(47,53,46,0.10), 8, 0.1, 0, 2);
-}
-
-.stockCajas:hover {
-    -fx-effect: dropshadow(gaussian, rgba(47,53,46,0.20), 14, 0.1, 0, 4);
-}
-
-/* Etiqueta pequeña en negrita: título de las tarjetas y de los filtros */
-.stockTitulo,
-.stock-filtro-label {
-    -fx-font-size: 12px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -texto-secundario;
-}
-
-.stockValor {
-    -fx-font-size: 26px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -acento;
-}
-
-/* Color de acento por tarjeta */
-.cajaVerde  { -acento: -verde-principal; }   /* Productos */
-.cajaOscura { -acento: -verde-oscuro; }      /* Valor de stock */
-.cajaRoja   { -acento: -rojo-moderado; }     /* Agotados y Caducan en 7 días */
-.cajaAmbar  { -acento: -ambar-suave; }       /* Stock bajo */
-
-/* ---------- 6.2 Ventanas emergentes (styleClass="ventana") ---------- */
-.ventana {
-    -acento: -verde-principal;
-    -acento-titulo: -verde-oscuro;
-    -fx-background-color: -beige-claro;
-    -fx-font-size: 13px;
-}
-
-.ventanaPerdida {
-    -acento: -rojo-moderado;
-    -acento-titulo: -rojo-moderado;
-}
-
-.ventana .label {
-    -fx-text-fill: -texto-principal;
-}
-
-.ventana .tituloVentana {
-    -fx-font-size: 16px;
-    -fx-font-weight: bold;
-    -fx-text-fill: -acento-titulo;
-}
-
-/* Campos de texto */
-.ventana .text-field {
-    -fx-background-color: -blanco;
-    -fx-background-insets: 0;
-    -fx-background-radius: 8;
-    -fx-border-color: -beige-intermedio;
-    -fx-border-radius: 8;
-    -fx-padding: 7 10 7 10;
-    -fx-text-fill: -texto-principal;
-    -fx-prompt-text-fill: -texto-secundario;
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
-}
-
-/* Borde del color de acento al tener el foco (campos, áreas y combos) */
-.ventana .text-field:focused,
-.ventana .text-area:focused,
-.ventana .combo-box-base:focused {
-    -fx-border-color: -acento;
-}
-
-/* TextArea: el borde lo pinta el propio control, el contenido va en blanco */
-.ventana .text-area {
-    -fx-background-color: -blanco;
-    -fx-background-insets: 0;
-    -fx-background-radius: 8;
-    -fx-border-color: -beige-intermedio;
-    -fx-border-radius: 8;
-    -fx-text-fill: -texto-principal;
-    -fx-prompt-text-fill: -texto-secundario;
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
-}
-
-.ventana .text-area .content {
-    -fx-background-color: -blanco;
-    -fx-background-radius: 8;
-}
-
-/* ComboBox */
-.ventana .combo-box-base {
-    -fx-background-color: -blanco;
-    -fx-background-insets: 0;
-    -fx-background-radius: 8;
-    -fx-border-color: -beige-intermedio;
-    -fx-border-radius: 8;
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
-}
-
-.ventana .combo-box-base .arrow-button {
-    -fx-background-color: transparent;
-    -fx-padding: 0 8 0 0;
-}
-
-.ventana .combo-box-base .arrow {
-    -fx-background-color: -texto-secundario;
-}
-
-.ventana .combo-box .list-cell {
-    -fx-text-fill: -texto-principal;
-    -fx-padding: 7 10 7 10;
-    -fx-background-color: transparent;
-}
-
-/* Botones: secundario por defecto (Cancelar) */
-.ventana .button {
-    -fx-background-color: -beige-intermedio;
-    -fx-background-insets: 0;
-    -fx-background-radius: 8;
-    -fx-border-color: -beige-intermedio;
-    -fx-border-radius: 8;
-    -fx-text-fill: -texto-principal;
-    -fx-padding: 7 18 7 18;
-    -fx-font-weight: bold;
-    -fx-cursor: hand;
-    -fx-focus-color: transparent;
-    -fx-faint-focus-color: transparent;
-}
-
-.ventana .button:hover,
-.ventana .button:pressed {
-    -fx-background-color: derive(-beige-intermedio, -8%);
-}
-
-/* Botón primario (Guardar) con el color de acento de la ventana */
-.ventana .btnPrimario {
-    -fx-background-color: -acento;
-    -fx-border-color: -acento;
-    -fx-text-fill: -blanco;
-}
-
-.ventana .btnPrimario:hover {
-    -fx-background-color: derive(-acento, -12%);
-    -fx-border-color: derive(-acento, -12%);
-}
-
-.ventana .btnPrimario:pressed {
-    -fx-background-color: derive(-acento, -20%);
-    -fx-border-color: derive(-acento, -20%);
-}
-
-/* Desplegable de los combos (vive en otra ventana, no usa -acento) */
-.combo-box-popup > .list-view {
-    -fx-background-color: -blanco;
-    -fx-background-insets: 0;
-    -fx-background-radius: 8;
-    -fx-border-color: -beige-intermedio;
-    -fx-border-radius: 8;
-}
-
-.combo-box-popup > .list-view .list-cell {
-    -fx-text-fill: -texto-principal;
-    -fx-padding: 7 10 7 10;
-}
-
-.combo-box-popup > .list-view .list-cell:filled:hover {
-    -fx-background-color: -verde-suave;
-}
-
-.combo-box-popup > .list-view .list-cell:filled:selected {
-    -fx-background-color: -verde-principal;
-    -fx-text-fill: -blanco;
-}
-
-/* ---------- 6.3 Barra de filtros ---------- */
-.stock-filtros {
-    -fx-background-color: -beige-claro;
-    -fx-background-radius: 10;
-    -fx-border-color: -beige-intermedio;
-    -fx-border-radius: 10;
-    -fx-padding: 6 12 6 12;
-    -fx-hgap: 12;
-}
-
-/* Cada grupo "etiqueta + control" */
-.stock-filtro {
-    -fx-alignment: CENTER_LEFT;
-    -fx-spacing: 8;
-}
-
-/* .stock-filtro-label va con .stockTitulo (6.1) */
-
-/* Campos en blanco para que destaquen sobre la barra beige */
-.stock-filtros .text-field,
-.stock-filtros .combo-box-base {
-    -fx-background-color: -blanco;
-}
-
-.stock-filtros .combo-box-base .arrow-button {
-    -fx-background-color: transparent;
-}
-
-.stock-filtros .combo-box-base .arrow {
-    -fx-background-color: -texto-secundario;
-}
-
-/* Buscador */
-.stock-filtros .stock-buscar {
-    -fx-pref-width: 220;
-    -fx-background-radius: 16;
-    -fx-border-radius: 16;
-    -fx-padding: 6 12 6 12;
-}
-
-/* Botón "Solo alertas" (ámbar = avisos) */
-.stock-filtros .stock-btn-alertas {
-    -fx-background-color: -blanco;
-    -fx-background-insets: 0;
-    -fx-background-radius: 6;
-    -fx-border-color: -ambar-suave;
-    -fx-border-radius: 6;
-    -fx-text-fill: -texto-principal;
-}
-
-.stock-filtros .stock-btn-alertas:hover {
-    -fx-background-color: -ambar-suave;
-}
-
-/* Solo se activa si lo conviertes en ToggleButton */
-.stock-filtros .stock-btn-alertas:selected {
-    -fx-background-color: -ambar-suave;
-    -fx-font-weight: bold;
-}
-
-
-
-=======
-}
->>>>>>> origin/dev
