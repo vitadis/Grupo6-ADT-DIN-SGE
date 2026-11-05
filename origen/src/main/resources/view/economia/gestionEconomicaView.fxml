@@ -23,13 +23,9 @@
             <padding>
                 <Insets bottom="0" left="28" right="28" top="14" />
             </padding>
-            <TextField fx:id="txtBuscar" prefWidth="320" promptText="Buscar productos, proveedores o ventas..." />
             <Region HBox.hgrow="ALWAYS" />
             <StackPane styleClass="notificaciones" />
             <Label fx:id="lblUsuario" styleClass="texto-secundario" />
-            <StackPane styleClass="avatar">
-                <Label fx:id="lblAvatar" />
-            </StackPane>
         </HBox>
     </top>
 
@@ -40,14 +36,14 @@
             </padding>
             <HBox alignment="BOTTOM_LEFT">
                 <VBox spacing="4" HBox.hgrow="ALWAYS">
-                    <Label styleClass="texto-secundario" text="Inicio &gt; Gestión económica" />
+                    <Label fx:id="lblRuta" styleClass="texto-secundario" text="Inicio &gt; Gestión económica" />
                     <Label styleClass="titulo" text="Gestión económica" />
                     <Label styleClass="texto-secundario" text="Ingresos, gastos y evolución del negocio" />
                 </VBox>
                 <Region HBox.hgrow="ALWAYS" />
                 <HBox alignment="BOTTOM_RIGHT" spacing="10">
                     <Button fx:id="btnBalanceMensual" styleClass="btn-secundario" text="Balance mensual" />
-                    <Button fx:id="btnRegistrarMovimiento" styleClass="btn-primario" text="Registrar movimiento" />
+                    <Button fx:id="btnRegistrarMovimiento" onAction="#onRegistrarMovimiento" styleClass="btn-primario" text="Registrar movimiento" />
                 </HBox>
             </HBox>
             <HBox spacing="14">
@@ -82,24 +78,24 @@
                 <VBox spacing="4">
                     <Label styleClass="stock-filtro-label" text="Fecha" />
                     <HBox alignment="CENTER_LEFT" spacing="6">
-                        <DatePicker fx:id="dpDesde" prefWidth="125" promptText="Desde" />
+                        <DatePicker fx:id="dpDesde" onAction="#onFiltrar" prefWidth="125" promptText="Desde" />
                         <Label styleClass="texto-secundario" text="–" />
-                        <DatePicker fx:id="dpHasta" prefWidth="125" promptText="Hasta" />
+                        <DatePicker fx:id="dpHasta" onAction="#onFiltrar" prefWidth="125" promptText="Hasta" />
                     </HBox>
                 </VBox>
                 <VBox spacing="4">
                     <Label styleClass="stock-filtro-label" text="Tipo" />
-                    <ComboBox fx:id="cbTipo" prefWidth="140" promptText="Todos" />
+                    <ComboBox fx:id="cbTipo" onAction="#onFiltrar" prefWidth="140" promptText="Todos" />
                 </VBox>
                 <VBox spacing="4">
                     <Label styleClass="stock-filtro-label" text="Categoría" />
-                    <ComboBox fx:id="cbCategoria" prefWidth="160" promptText="Todas" />
+                    <ComboBox fx:id="cbCategoria" onAction="#onFiltrar" prefWidth="160" promptText="Todas" />
                 </VBox>
                 <VBox spacing="4" HBox.hgrow="ALWAYS">
                     <Label styleClass="stock-filtro-label" text="Buscar" />
-                    <TextField fx:id="txtConcepto" promptText="Concepto..." />
+                    <TextField fx:id="txtConcepto" onKeyReleased="#onFiltrar" promptText="Concepto..." />
                 </VBox>
-                <Button fx:id="btnLimpiarFiltros" styleClass="btn-secundario" text="Limpiar filtros" />
+                <Button fx:id="btnLimpiarFiltros" onAction="#onLimpiarFiltros" styleClass="btn-secundario" text="Limpiar filtros" />
             </HBox>
             <HBox spacing="18" VBox.vgrow="ALWAYS">
                 <VBox spacing="8" HBox.hgrow="ALWAYS">

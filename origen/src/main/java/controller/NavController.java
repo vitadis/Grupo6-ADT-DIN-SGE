@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
@@ -211,6 +212,24 @@ public class NavController {
         elegido.setSelected(true);
         mostrarVista(elegido.getText());
         cambiarTitulo(elegido.getText());
+        ponerRuta(elegido.getText());
+    }
+
+    /**
+     * Escribe la ruta («Inicio &gt; apartado») en la vista que se muestra. Busca en ella la
+     * etiqueta con {@code fx:id="lblRuta"}; si la vista no la tiene, no hace nada.
+     *
+     * @param nombre nombre del apartado (el texto del botón del menú)
+     */
+    private void ponerRuta(String nombre) {
+        Node vista = vistasCargadas.get(nombre);
+        if (vista == null) {
+            return;
+        }
+        Node etiqueta = vista.lookup("#lblRuta");
+        if (etiqueta instanceof Label) {
+            ((Label) etiqueta).setText("Inicio > " + nombre);
+        }
     }
     /*
     private void mostrarVista(String nombre) {

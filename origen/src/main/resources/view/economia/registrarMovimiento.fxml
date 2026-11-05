@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox prefHeight="620" prefWidth="460" spacing="14" styleClass="ventana" stylesheets="@../../css/theme.css, @../../css/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.RegistrarMovimientoController">
+    <padding>
+        <Insets bottom="24" left="28" right="28" top="24" />
+    </padding>
+
+    <fx:define>
+        <ToggleGroup fx:id="grupoTipo" />
+    </fx:define>
+
+    <VBox spacing="2">
+        <Label styleClass="tituloVentana" text="REGISTRAR MOVIMIENTO" />
+        <Label styleClass="texto-secundario" text="Anota un ingreso o un gasto del negocio" />
+    </VBox>
+
+    <VBox spacing="6">
+        <Label text="Tipo de movimiento" />
+        <HBox spacing="4" styleClass="gestion-tipo" maxWidth="-Infinity">
+            <ToggleButton fx:id="tgIngreso" onAction="#onRevisarAviso" text="Ingreso" toggleGroup="$grupoTipo" />
+            <ToggleButton fx:id="tgGasto" onAction="#onRevisarAviso" selected="true" text="Gasto" toggleGroup="$grupoTipo" />
+        </HBox>
+    </VBox>
+
+    <VBox spacing="6">
+        <Label text="Concepto *" />
+        <TextField fx:id="txtConcepto" promptText="Suministro eléctrico - septiembre" />
+    </VBox>
+
+    <HBox spacing="12">
+        <VBox spacing="6" HBox.hgrow="ALWAYS">
+            <Label text="Importe (€) *" />
+            <TextField fx:id="txtImporte" onKeyReleased="#onRevisarAviso" promptText="0,00" />
+        </VBox>
+        <VBox spacing="6" HBox.hgrow="ALWAYS">
+            <Label text="Fecha *" />
+            <DatePicker fx:id="dpFecha" maxWidth="Infinity" />
+        </VBox>
+    </HBox>
+
+    <VBox spacing="6">
+        <Label text="Categoría *" />
+        <ComboBox fx:id="cbCategoria" editable="true" maxWidth="Infinity" onAction="#onRevisarAviso" promptText="Elige o escribe una categoría" />
+    </VBox>
+
+    <VBox spacing="6">
+        <Label text="Observaciones (opcional)" />
+        <TextArea fx:id="txtObservaciones" prefRowCount="3" promptText="Factura de la compañía eléctrica..." wrapText="true" />
+    </VBox>
+
+    <VBox fx:id="cajaAviso" managed="false" styleClass="gestion-tarjeta-aviso" visible="false">
+        <Label fx:id="lblAviso" wrapText="true" />
+    </VBox>
+
+    <Label fx:id="lblError" styleClass="texto-error" wrapText="true" />
+
+    <Region VBox.vgrow="ALWAYS" />
+
+    <Label styleClass="texto-secundario" text="* Campos obligatorios" />
+
+    <HBox alignment="CENTER_RIGHT" spacing="10">
+        <Button fx:id="btnCancelar" maxWidth="Infinity" onAction="#onCancelar" text="Cancelar" HBox.hgrow="ALWAYS" />
+        <Button fx:id="btnGuardar" maxWidth="Infinity" onAction="#onGuardar" styleClass="btnPrimario" text="Guardar movimiento" HBox.hgrow="ALWAYS" />
+    </HBox>
+</VBox>

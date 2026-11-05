@@ -29,7 +29,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -94,11 +93,6 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
      */
     private final List<CheckBox> checksSugeridos = new ArrayList<>();
 
-    /**
-     * Campo de búsqueda de la barra superior.
-     */
-    @FXML
-    private TextField txtBuscar;
     /**
      * Nombre del usuario en la barra superior.
      */

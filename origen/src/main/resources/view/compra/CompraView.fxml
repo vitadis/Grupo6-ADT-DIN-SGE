@@ -6,7 +6,6 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
@@ -20,7 +19,6 @@
             <padding>
                 <Insets bottom="0" left="28" right="28" top="14" />
             </padding>
-            <TextField fx:id="txtBuscar" prefWidth="320" promptText="Buscar..." />
             <Region HBox.hgrow="ALWAYS" />
             <StackPane styleClass="notificaciones" />
             <Label fx:id="lblUsuario" styleClass="texto-secundario" />
