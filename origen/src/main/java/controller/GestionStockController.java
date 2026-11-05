@@ -11,6 +11,7 @@ import java.util.LinkedHashSet;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.logging.Level;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -34,12 +35,13 @@ import model.FilaStock;
 import model.Producto;
 import model.Usuario;
 import org.bson.Document;
+import util.AppLogger;
 
 /**
  *
  * @author Hodei.Torres
  */
-public class GestionStockController implements Initializable, UsuarioImplementacion {
+public class GestionStockController implements Initializable, UsuarioImplementacion, ActualizarDatos {
 
     @FXML
     private Label cantProduc;
@@ -77,11 +79,12 @@ public class GestionStockController implements Initializable, UsuarioImplementac
     private Usuario usuario;
 
     private final ProductoDao productoDao = ProductoDaoImp.getInstance();
+    
+    private final AppLogger logger = AppLogger.getInstance();
 
     // Productos tal cual vienen del DAO (se usan para el resumen)
     private final ObservableList<Producto> productos = FXCollections.observableArrayList();
 
-    // Filas que muestra la tabla (una por producto)
     private final ObservableList<FilaStock> filas = FXCollections.observableArrayList();
     private final FilteredList<FilaStock> filasFiltradas = new FilteredList<FilaStock>(filas, new Predicate<FilaStock>() {
         @Override
@@ -90,13 +93,17 @@ public class GestionStockController implements Initializable, UsuarioImplementac
         }
     });
 
-    // Un único listener para los cuatro filtros
     private final ChangeListener<Object> alCambiarFiltro = new ChangeListener<Object>() {
         @Override
         public void changed(ObservableValue<? extends Object> obs, Object antes, Object ahora) {
             aplicarFiltros();
         }
     };
+    
+    @Override
+    public void actualizarDatos() {
+        cargarProductos();
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -120,7 +127,6 @@ public class GestionStockController implements Initializable, UsuarioImplementac
         colValor.setCellValueFactory(new PropertyValueFactory<FilaStock, String>("valor"));
         colEstado.setCellValueFactory(new PropertyValueFactory<FilaStock, String>("estado"));
 
-        // Opciones de los combos
         categoriaDisplay.getItems().add("Todas");
         Set<String> etiquetas = new LinkedHashSet<String>();
         for (CategoriaProducto c : CategoriaProducto.values()) {
@@ -158,6 +164,7 @@ public class GestionStockController implements Initializable, UsuarioImplementac
             actualizarResumen();
         } catch (DaoException e) {
             new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
+            logger.log(Level.SEVERE, "Error al cargar productos", e);
         }
     }
 
@@ -258,6 +265,8 @@ public class GestionStockController implements Initializable, UsuarioImplementac
             RegistrarPerdidaController c = InstanciarEscena.createNewStage("/view/gestionStock/registrarPerdida.fxml", "Registrar Perdida", null);
         } catch (Exception e) {
             e.printStackTrace();
+            logger.log(Level.SEVERE, "No se pudo abrir la ventana de registrar pérdida", e);
+
         }
         cargarProductos();
     }
@@ -268,6 +277,7 @@ public class GestionStockController implements Initializable, UsuarioImplementac
             AñadirProductoController c = InstanciarEscena.createNewStage("/view/gestionStock/añadirProducto.fxml", "Añadir Producto", null);
         } catch (Exception e) {
             e.printStackTrace();
+            logger.log(Level.SEVERE, "No se pudo abrir la ventana de añadir producto", e);
         }
         cargarProductos();
     }

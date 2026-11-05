@@ -6,6 +6,7 @@ import exceptions.DaoException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,6 +21,7 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import model.MovimientoStock;
 import model.Producto;
+import util.AppLogger;
 
 /**
  *
@@ -37,6 +39,7 @@ public class RegistrarPerdidaController implements Initializable {
     private TextArea txtNota;
 
     private final GestionStockDao stockDao = GestionStockDaoImp.getInstance();
+    private final AppLogger logger = AppLogger.getInstance();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -72,6 +75,7 @@ public class RegistrarPerdidaController implements Initializable {
                 comboProducto.getSelectionModel().selectFirst();
             }
         } catch (DaoException e) {
+             logger.log(Level.SEVERE, "Error al cargar productos en registrar pérdida", e);
             new Alert(Alert.AlertType.ERROR,
                     "Error al cargar productos: " + e.getMessage()).showAndWait();
         }
@@ -105,15 +109,26 @@ public class RegistrarPerdidaController implements Initializable {
             return;
         }
 
-        try {
+       try {
             String nota = txtNota.getText() == null ? "" : txtNota.getText().trim();
             MovimientoStock mov = new MovimientoStock(
                     seleccionado.getId(), seleccionado.getNombre(), "PERDIDA", cantidad, nota);
 
             stockDao.registrarPerdida(mov, seleccionado);
+            logger.info("Pérdida registrada: " + seleccionado.getNombre() + " (-" + cantidad + "). Nota: " + nota);
+
+            int restante = seleccionado.getStock_actual() - cantidad;
+            if (restante == 0) {
+                logger.warning("Producto agotado: " + seleccionado.getNombre());
+            } else if (restante <= seleccionado.getStock_minimo()) {
+                logger.warning("Stock bajo: " + seleccionado.getNombre()
+                        + " (existencia " + restante + ", mínimo " + seleccionado.getStock_minimo() + ")");
+            }
+
             cerrarVentana(event);
         } catch (DaoException e) {
             e.printStackTrace();
+            logger.log(Level.SEVERE, "Error al registrar pérdida: " + e.getMessage(), e);
             String causa = (e.getCause() != null) ? "\n" + e.getCause().getMessage() : "";
             new Alert(Alert.AlertType.ERROR, e.getMessage() + causa).showAndWait();
         }

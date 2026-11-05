@@ -46,7 +46,7 @@ public class AppLogger extends Logger {
 
     // ESCRITURA
     @Override
-    public void log(LogRecord record) {
+    public synchronized void log(LogRecord record) {
         if (!isLoggable(record.getLevel())) {
             return;
         }
