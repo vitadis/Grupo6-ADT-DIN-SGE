@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane stylesheets="@../compra/styles.css" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AdministracionController">
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="16">
+            <padding>
+                <Insets bottom="0" left="28" right="28" top="14" />
+            </padding>
+            <children>
+                <Region HBox.hgrow="ALWAYS" />
+                <StackPane styleClass="notificaciones" />
+                <StackPane styleClass="avatar" />
+            </children>
+        </HBox>
+    </top>
+    <center>
+        <VBox spacing="14">
+            <padding>
+                <Insets bottom="24" left="28" right="28" top="10" />
+            </padding>
+            <children>
+                <HBox alignment="BOTTOM_LEFT" spacing="16">
+                    <children>
+                        <VBox spacing="4" HBox.hgrow="ALWAYS">
+                            <children>
+                                <Label fx:id="lblRuta" styleClass="texto-secundario" text="Administración &gt; Usuarios y empleados" />
+                                <Label fx:id="lblTitulo" styleClass="titulo" text="Usuarios y empleados" />
+                                <Label styleClass="subtitulo" text="Empleados y usuarios, roles, permisos y configuración del sistema" wrapText="true" />
+                            </children>
+                        </VBox>
+                        <Button fx:id="btnAccionPrincipal" onAction="#onAccionPrincipal" styleClass="btn-primario" text="Alta usuario" />
+                    </children>
+                </HBox>
+
+                <TabPane fx:id="tabPaneAdmin" styleClass="compras-tabpane" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+                    <tabs>
+
+                        <Tab fx:id="tabUsuarios" text="Usuarios y empleados">
+                            <content>
+                                <HBox>
+                                    <padding>
+                                        <Insets top="12" />
+                                    </padding>
+                                    <children>
+                                        <TableView fx:id="tablaUsuarios" HBox.hgrow="ALWAYS">
+                                            <columns>
+                                                <TableColumn fx:id="colId" minWidth="60.0" prefWidth="60.0" text="Id" />
+                                                <TableColumn fx:id="colUsername" minWidth="140.0" prefWidth="160.0" text="Username" />
+                                                <TableColumn fx:id="colRol" minWidth="120.0" prefWidth="120.0" text="Rol" />
+                                                <TableColumn fx:id="colPermisos" minWidth="160.0" prefWidth="240.0" text="Permisos" />
+                                            </columns>
+                                        </TableView>
+                                    </children>
+                                </HBox>
+                            </content>
+                        </Tab>
+
+                        <Tab fx:id="tabPermisos" text="Permisos">
+                            <content>
+                                <VBox spacing="8">
+                                    <padding>
+                                        <Insets top="12" />
+                                    </padding>
+                                    <children>
+                                        <VBox styleClass="tarjeta" VBox.vgrow="ALWAYS">
+                                            <children>
+                                                <HBox alignment="CENTER_LEFT" styleClass="compras-tabla-cabecera">
+                                                    <children>
+                                                        <Label styleClass="texto-secundario" text="Todos los permisos" />
+                                                    </children>
+                                                </HBox>
+                                                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" VBox.vgrow="ALWAYS">
+                                                    <content>
+                                                        <VBox fx:id="contenedorPermisos" spacing="4" styleClass="compras-lista-filas" />
+                                                    </content>
+                                                </ScrollPane>
+                                            </children>
+                                        </VBox>
+                                        <Label fx:id="lblContadorPermisos" styleClass="texto-secundario" />
+                                    </children>
+                                </VBox>
+                            </content>
+                        </Tab>
+
+                        <Tab fx:id="tabLogger" text="Logger">
+                            <content>
+                                <VBox spacing="8">
+                                    <padding>
+                                        <Insets top="12" />
+                                    </padding>
+                                    <children>
+                                        <VBox styleClass="tarjeta" VBox.vgrow="ALWAYS">
+                                            <children>
+                                                <ListView fx:id="listaLogger" VBox.vgrow="ALWAYS" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </Tab>
+
+                        <Tab fx:id="tabConfiguracion" text="Configuración del sistema">
+                            <content>
+                                <VBox spacing="8">
+                                    <padding>
+                                        <Insets top="12" />
+                                    </padding>
+                                    <children>
+                                        <VBox spacing="10" styleClass="tarjeta" VBox.vgrow="ALWAYS">
+                                            <children>
+                                                <Button onAction="#onCerrarSesion" text="Cerrar sesión" />
+                                            </children>
+                                        </VBox>
+                                    </children>
+                                </VBox>
+                            </content>
+                        </Tab>
+
+                    </tabs>
+                </TabPane>
+            </children>
+        </VBox>
+    </center>
+</BorderPane>

@@ -25,7 +25,7 @@ import model.RegistroLog;
 public class AppLogger extends Logger {
 
     // atributos
-    private String user = "NO IDENTIFICADO";
+    private String user = "None";
     // archivo y carpeta
     private static final File ARCHIVO = new File("logs/app.log");
 

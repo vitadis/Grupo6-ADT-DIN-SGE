@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="350.0" prefWidth="520.0" spacing="10.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.DialogUsuarioController">
+
+    <padding>
+        <Insets bottom="20.0" left="24.0" right="24.0" top="20.0" />
+    </padding>
+
+    <children>
+
+        <ScrollPane fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS">
+            <content>
+                <VBox spacing="14.0">
+                    <padding>
+                        <Insets bottom="4.0" left="4.0" right="12.0" top="4.0" />
+                    </padding>
+                    <children>
+
+                        <Label styleClass="titulo" text="Usuario" />
+
+                        <GridPane hgap="12.0" vgap="8.0">
+                            <columnConstraints>
+                                <ColumnConstraints halignment="RIGHT" minWidth="90.0" />
+                                <ColumnConstraints hgrow="ALWAYS" />
+                            </columnConstraints>
+                            <children>
+                                <Label styleClass="texto-secundario" text="Id:" GridPane.rowIndex="0" />
+                                <TextField fx:id="tfId" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                                <Label styleClass="texto-secundario" text="Username:" GridPane.rowIndex="1" />
+                                <TextField fx:id="tfUsername" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                                <Label styleClass="texto-secundario" text="Password:" GridPane.rowIndex="2" />
+                                <PasswordField fx:id="pfPassword" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                                <Label styleClass="texto-secundario" text="Rol:" GridPane.rowIndex="3" />
+                                <TextField fx:id="tfRol" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                                <Label styleClass="texto-secundario" text="Permisos:" GridPane.rowIndex="4" />
+                                <MenuButton fx:id="mbPermisos" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+                                <Label styleClass="texto-secundario" text="Activo:" GridPane.rowIndex="5" />
+                                <CheckBox fx:id="chkActivo" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+                                <Label styleClass="texto-secundario" text="Creado en:" GridPane.rowIndex="6" />
+                                <TextField fx:id="tfCreadoEn" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                            </children>
+                     <rowConstraints>
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                        <RowConstraints />
+                     </rowConstraints>
+                        </GridPane>
+
+                        <VBox fx:id="panelEmpleado" spacing="8.0">
+                            <children>
+                                <Label styleClass="texto-secundario" text="Empleado" />
+
+                                <GridPane hgap="12.0" vgap="8.0">
+                                    <columnConstraints>
+                                        <ColumnConstraints halignment="RIGHT" minWidth="90.0" />
+                                        <ColumnConstraints hgrow="ALWAYS" />
+                                    </columnConstraints>
+                                    <children>
+                                        <Label styleClass="texto-secundario" text="Nombre:" GridPane.rowIndex="0" />
+                                        <TextField fx:id="tfEmpleadoNombre" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                                        <Label styleClass="texto-secundario" text="Apellido:" GridPane.rowIndex="1" />
+                                        <TextField fx:id="tfEmpleadoApellido" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                                        <Label styleClass="texto-secundario" text="DNI:" GridPane.rowIndex="2" />
+                                        <TextField fx:id="tfEmpleadoDni" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                                        <Label styleClass="texto-secundario" text="Puesto:" GridPane.rowIndex="3" />
+                                        <TextField fx:id="tfEmpleadoPuesto" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                                        <Label styleClass="texto-secundario" text="Email:" GridPane.rowIndex="4" />
+                                        <TextField fx:id="tfEmpleadoEmail" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+                                        <Label styleClass="texto-secundario" text="Teléfono:" GridPane.rowIndex="5" />
+                                        <TextField fx:id="tfEmpleadoTelefono" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+                                        <Label styleClass="texto-secundario" text="Fecha alta:" GridPane.rowIndex="6" />
+                                        <TextField fx:id="tfEmpleadoFechaAlta" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                    </children>
+                           <rowConstraints>
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                           </rowConstraints>
+                                </GridPane>
+                            </children>
+                        </VBox>
+
+                        <Label fx:id="lblSinEmpleado" managed="false" styleClass="texto-secundario" text="Este usuario no tiene un empleado asociado." visible="false" />
+
+                    </children>
+                </VBox>
+            </content>
+        </ScrollPane>
+
+        <Label fx:id="lblMensaje" managed="false" visible="false" wrapText="true" />
+
+        <HBox alignment="CENTER_RIGHT" spacing="10.0">
+            <children>
+                <Button fx:id="btnModificar" onAction="#onModificar" styleClass="btn-primario" text="Modificar" />
+
+                <Button fx:id="btnEliminar" onAction="#onEliminar" text="Eliminar" />
+
+                <Button fx:id="btnAlta" managed="false" onAction="#onAlta" styleClass="btn-primario" text="Alta" visible="false" />
+
+                <Button fx:id="btnCancelar" managed="false" onAction="#onCancelar" text="Cancelar" visible="false" />
+            </children>
+        </HBox>
+
+    </children>
+</VBox>
