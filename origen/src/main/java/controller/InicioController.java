@@ -30,6 +30,8 @@ import javafx.scene.layout.VBox;
 import model.Compra;
 import model.Producto;
 import model.Proveedor;
+import model.VentaPedido;
+import services.PedidoService;
 import util.Alertas;
 import util.AppLogger;
 
@@ -60,6 +62,11 @@ public class InicioController implements Initializable, ActualizarDatos {
     private final GestionStockDao stockDao = GestionStockDaoImp.getInstance();
     private final ProveedorDao proveedorDao = ProveedorDaoImpl.getInstance();
     private final AppLogger logger = AppLogger.getInstance();
+    private final PedidoService pedidoService = new PedidoService();
+    
+    
+    private double gastosMes = 0;
+
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -72,6 +79,7 @@ public class InicioController implements Initializable, ActualizarDatos {
         cargarDatos();
     }
 
+    /*Abre la ventana correspondiente a cada boton*/
     private void configurarBotones() {
         registrarPerdida.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -91,8 +99,15 @@ public class InicioController implements Initializable, ActualizarDatos {
                 abrir("/view/compra/registrarCompra.fxml", "Registrar compra");
             }
         });
+        historialVentas.setOnAction(new EventHandler<ActionEvent>(){
+            @Override
+            public void handle(ActionEvent event) {
+                abrir("/view/caja/historialView.fxml", "Historial de Ventas");
+            }
+        });
+        
     }
-
+    /* Abre la vista que le mandes por parametro*/
     private void abrir(String ruta, String titulo) {
         try {
             InstanciarEscena.createNewStage(ruta, titulo, null);
@@ -109,12 +124,11 @@ public class InicioController implements Initializable, ActualizarDatos {
         try {
             cargarAlertas();
             cargarCompras();
+            cargarIngresos();
         } catch (DaoException e) {
             logger.log(Level.SEVERE, "Error al cargar los datos de Inicio", e);
             Alertas.mostrarError(e.getMessage());
         }
-        cantIngreso.setText("-");
-        beneficioAprox.setText("-");
     }
 
     private void cargarAlertas() throws DaoException {
@@ -145,6 +159,26 @@ public class InicioController implements Initializable, ActualizarDatos {
 
         cantStockBajo.setText(String.valueOf(agotados + bajos));
         lblContadorAlertas.setText(agotados + " agotados · " + bajos + " con stock bajo");
+    }
+    
+    private void cargarIngresos() throws DaoException {
+        LocalDate hoy = LocalDate.now();
+        double ingresos = 0;
+        
+        for (VentaPedido v : pedidoService.listaPedidos()) {
+            String fechaTexto = v.getFecha();
+            if (fechaTexto == null || fechaTexto.length() < 10) {
+                continue;
+            }
+            LocalDate fecha = LocalDate.parse(fechaTexto.substring(0, 10));
+
+            if (fecha.getYear() == hoy.getYear() && fecha.getMonth() == hoy.getMonth()) {
+                ingresos += v.getTotal();
+            }
+        }
+        
+        cantIngreso.setText(String.format("%.2f €", ingresos));
+        beneficioAprox.setText(String.format("%.2f €", ingresos - gastosMes));
     }
 
     private HBox crearFilaAlerta(Producto p, boolean agotado) {
