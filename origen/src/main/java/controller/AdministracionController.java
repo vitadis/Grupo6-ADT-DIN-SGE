@@ -5,8 +5,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -95,22 +93,22 @@ public class AdministracionController {
     @FXML
     private Label lblContadorPermisos;
 
-    // ---- Logger ----
+    // ---- List Logger ----
     @FXML
     private ListView<RegistroLog> listaLogger;
-
+    
     private final AdministracionService servicio = AdministracionService.getInstance();
     private final ObservableList<Usuario> listaUsuarios = FXCollections.observableArrayList();
-
+    private final AppLogger logger = AppLogger.getInstance();
     // Usuario que ha iniciado sesión (quien administra) y usuario de la fila elegida en la tabla
-    private Usuario usuarioSesion;
+
     private Usuario usuarioSeleccionado;
 
     // Debe llamarse desde donde se navega a esta pantalla, pasando al usuario logueado
     public void setUsuarioSesion(Usuario usuarioSesion) {
-        this.usuarioSesion = usuarioSesion;
+        logger.setUser(usuarioSesion.getUsername());
     }
-
+    
     @FXML
     private void initialize() {
         configurarTabla();
@@ -130,7 +128,7 @@ public class AdministracionController {
             }
         });
         actualizarCabecera(tabPaneAdmin.getSelectionModel().getSelectedItem());
-
+        
         cargarUsuarios();
     }
 
@@ -138,13 +136,13 @@ public class AdministracionController {
     private void configurarTabla() {
         tablaUsuarios.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
         tablaUsuarios.setItems(listaUsuarios);
-
+        
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
-
+        
         colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
-
+        
         colRol.setCellValueFactory(new PropertyValueFactory<>("rol"));
-
+        
         colPermisos.setCellValueFactory(new PropertyValueFactory<>("permisos"));
 
         // Permisos en comboBox desplegable
@@ -153,11 +151,11 @@ public class AdministracionController {
             public TableCell<Usuario, List<String>> call(TableColumn<Usuario, List<String>> columna) {
                 return new TableCell<Usuario, List<String>>() {
                     private final ComboBox<String> comboPermisos = new ComboBox<String>();
-
+                    
                     {
                         comboPermisos.setMaxWidth(Double.MAX_VALUE);
                     }
-
+                    
                     @Override
                     protected void updateItem(List<String> permisos, boolean vacio) {
                         super.updateItem(permisos, vacio);
@@ -173,7 +171,7 @@ public class AdministracionController {
                 };
             }
         });
-
+        
         configurarClickFila();
     }
 
@@ -195,12 +193,13 @@ public class AdministracionController {
             }
         });
     }
-
+    
     private void cargarUsuarios() {
         try {
             listaUsuarios.setAll(servicio.listarUsuarios());
         } catch (RuntimeException e) {
             Alertas.mostrarError(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -213,7 +212,7 @@ public class AdministracionController {
             }
         });
     }
-
+    
     private void cargarPermisos() {
         try {
             contenedorPermisos.getChildren().clear();
@@ -222,6 +221,7 @@ public class AdministracionController {
             }
         } catch (RuntimeException e) {
             Alertas.mostrarError(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -233,7 +233,7 @@ public class AdministracionController {
     // Click derecho sobre el historial -> "Copiar" (copia las líneas seleccionadas)
     private void configurarMenuLogger() {
         listaLogger.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-
+        
         final MenuItem copiar = new MenuItem("Copiar");
         copiar.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -250,7 +250,7 @@ public class AdministracionController {
                 Clipboard.getSystemClipboard().setContent(contenido);
             }
         });
-
+        
         ContextMenu menu = new ContextMenu(copiar);
         menu.setOnShowing(new EventHandler<WindowEvent>() {
             @Override
@@ -267,7 +267,7 @@ public class AdministracionController {
             return;
         }
         lblRuta.setText("Administración > " + tab.getText());
-
+        
         boolean hayAccion = true;
         if (tab == tabUsuarios) {
             lblTitulo.setText("Usuarios y empleados");
@@ -301,9 +301,10 @@ public class AdministracionController {
             InstanciarEscena.createNewStage("/view/admin/usuarioView.fxml", "Alta de usuario", this::dialogAlta);
         } catch (IOException e) {
             Alertas.mostrarError("No se pudo abrir el dialog de alta.");
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
-
+    
     private void dialogAlta(Object controller) {
         try {
             DialogUsuarioController dialog = (DialogUsuarioController) controller;
@@ -315,19 +316,21 @@ public class AdministracionController {
             dialog.setModoAlta();
         } catch (Exception e) {
             Alertas.mostrarError("Error con el dialog de alta: " + e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
-
+    
     @FXML
     private void onCerrarSesion(ActionEvent event) {
         Alertas.mostrarConfirmacion("Confirmación", "¿Seguro que quieres cerrar sesión?", () -> {
             try {
                 Button btnCS = (Button) event.getSource();
                 Stage stage = (Stage) btnCS.getScene().getWindow();
-
+                
                 InstanciarEscena.cambiarVista(stage, "/view/loginView.fxml", "Inicio Sesión");
             } catch (IOException ex) {
                 Alertas.mostrarError("No se pudo cerrar sesión: " + ex.getMessage());
+                logger.log(Level.SEVERE, ex.getMessage(), ex);
             }
         });
     }
@@ -337,11 +340,12 @@ public class AdministracionController {
         if (usuarioSeleccionado == null) {
             return;
         }
-
+        
         try {
             InstanciarEscena.createNewStage("/view/admin/usuarioView.fxml", "Información de usuario", this::dialogUsuario);
         } catch (IOException e) {
             Alertas.mostrarError("No se pudo abrir el dialog de usuario.");
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -356,11 +360,12 @@ public class AdministracionController {
 
             // El usuario de la fila cumple las reglas del modelo
             usuarioSeleccionado.validar();
-
+            
             dialog.setPermisosDisponibles(servicio.listarPermisos());
             dialog.setUsuario(usuarioSeleccionado);
         } catch (Exception e) {
             Alertas.mostrarError("Error con el dialog de usuario: " + e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -371,15 +376,16 @@ public class AdministracionController {
             empleado.setFecha_alta(LocalDate.now());
             empleado.validar();
             nuevo.setUsername(generarUsername(empleado));
-
+            
             servicio.altaUsuario(nuevo);
             cargarUsuarios();
             dialog.cerrar();
         } catch (RuntimeException e) {
             Alertas.mostrarError(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
-
+    
     private void accionModificar(DialogUsuarioController dialog, Usuario usuario) {
         try {
             // El usuario puede no tener empleado asociado
@@ -387,31 +393,33 @@ public class AdministracionController {
                 usuario.getEmpleado().validar();
             }
             servicio.modificarUsuario(usuario);
-
+            
             cargarUsuarios();
             dialog.cerrar();
         } catch (RuntimeException e) {
             Alertas.mostrarError(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
-
+    
     private void accionEliminar(DialogUsuarioController dialog, Usuario usuario) {
         Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
         confirmacion.setTitle("Eliminar usuario");
         confirmacion.setHeaderText("¿Eliminar a '" + usuario.getUsername() + "'?");
         confirmacion.setContentText("Esta acción no se puede deshacer.");
-
+        
         Optional<ButtonType> respuesta = confirmacion.showAndWait();
         if (!respuesta.isPresent() || respuesta.get() != ButtonType.OK) {
             return;
         }
-
+        
         try {
             servicio.eliminarUsuario(usuario);
             cargarUsuarios();
             dialog.cerrar();
         } catch (RuntimeException e) {
             Alertas.mostrarError(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
