@@ -51,7 +51,7 @@ public class NavController {
         ICONOS.put("Gestión económica", "/img/icon_euro.png");
         ICONOS.put("Gestión stock", "/img/icon_box.png");
         ICONOS.put("Compras y proveedores", "/img/icon_proveedores.png");
-        ICONOS.put("Análisis e informes", "/img/icon_analisis.png");
+        //ICONOS.put("Análisis e informes", "/img/icon_analisis.png");
         ICONOS.put("Administración", "/img/icon_administracion.png");
     }
 
@@ -61,16 +61,16 @@ public class NavController {
             "Caja y pedidos", "/view/caja/cajaView.fxml",
             "Gestión económica", "/view/economia/gestionEconomicaView.fxml",
             "Gestión stock", "/view/gestionStock/gestionStock.fxml",
-            "Compras y proveedores", "/view/compra/CompraView.fxml"
-    //"Análisis e informes", "/view/informes/informesView.fxml",
-    //"Administración", "/view/admin/adminView.fxml"
+            "Compras y proveedores", "/view/compra/CompraView.fxml",
+            //"Análisis e informes", "/view/informes/informesView.fxml",
+            "Administración", "/view/admin/administracionView.fxml"
     );
 
     // ToogleGrup para el nava
     private final ToggleGroup grupoNav = new ToggleGroup();
     // Vistas cargadas (lo vinculo con el modulo)
     private final Map<String, Node> vistasCargadas = new LinkedHashMap<>();
-    
+
     private final Map<String, Object> controladores = new LinkedHashMap<>();
 
     // --------------------- Usuario ---------------------
@@ -216,8 +216,9 @@ public class NavController {
     }
 
     /**
-     * Escribe la ruta («Inicio &gt; apartado») en la vista que se muestra. Busca en ella la
-     * etiqueta con {@code fx:id="lblRuta"}; si la vista no la tiene, no hace nada.
+     * Escribe la ruta («Inicio &gt; apartado») en la vista que se muestra.
+     * Busca en ella la etiqueta con {@code fx:id="lblRuta"}; si la vista no la
+     * tiene, no hace nada.
      *
      * @param nombre nombre del apartado (el texto del botón del menú)
      */
@@ -231,6 +232,7 @@ public class NavController {
             ((Label) etiqueta).setText("Inicio > " + nombre);
         }
     }
+
     /*
     private void mostrarVista(String nombre) {
         vistasCargadas.forEach((clave, vista) -> {
@@ -239,19 +241,20 @@ public class NavController {
             vista.setManaged(activa);
         });
     }
-    */
+     */
     private void mostrarVista(String nombre) {
-    for (Map.Entry<String, Node> entrada : vistasCargadas.entrySet()) {
-        boolean activa = entrada.getKey().equals(nombre);
-        entrada.getValue().setVisible(activa);
-        entrada.getValue().setManaged(activa);
+        for (Map.Entry<String, Node> entrada : vistasCargadas.entrySet()) {
+            boolean activa = entrada.getKey().equals(nombre);
+            entrada.getValue().setVisible(activa);
+            entrada.getValue().setManaged(activa);
+        }
+
+        Object controller = controladores.get(nombre);
+        if (controller instanceof ActualizarDatos) {
+            ((ActualizarDatos) controller).actualizarDatos();
+        }
     }
 
-    Object controller = controladores.get(nombre);
-    if (controller instanceof ActualizarDatos) {
-        ((ActualizarDatos) controller).actualizarDatos();
-    }
-}
     private List<ToggleButton> botones() {
         return vbNav.getChildren().stream()
                 .map(n -> (ToggleButton) n)

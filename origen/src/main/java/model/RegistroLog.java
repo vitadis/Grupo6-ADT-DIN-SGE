@@ -48,9 +48,9 @@ public class RegistroLog implements Serializable {
 
     @Override
     public String toString() {
-        String texto = fecha + "[" + user + "]" + " [" + nivel + "] " + mensaje;
+        String texto = "[" + nivel + "]\t" + fecha + "\tUserName: " + user + "\tMessage: " + mensaje;
         if (excepcion != null) {
-            texto += " | Excepción: " + excepcion;
+            texto += "\t\t | Excepción: " + excepcion;
         }
         return texto;
     }
