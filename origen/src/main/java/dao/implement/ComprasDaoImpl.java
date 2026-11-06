@@ -58,7 +58,8 @@ public class ComprasDaoImpl extends AccesoMongoDB implements ComprasDao{
      */
     @Override
     public List<Compra> obtenerCompras() {
-         try (MongoClient client = abrirConexion()) {
+         try {
+             MongoClient client = getClient();
             MongoCollection<Compra> coleccion = getCollection(client, COLECCION_COMPRAS, Compra.class);
 
             return coleccion.find().sort(Sorts.ascending("_id")).into(new ArrayList<>());
@@ -75,7 +76,8 @@ public class ComprasDaoImpl extends AccesoMongoDB implements ComprasDao{
      */
     @Override
     public List<Compra> obtenerComprasPorProveedor(int idProveedor) {
-         try (MongoClient client = abrirConexion()) {
+         try {
+             MongoClient client = getClient();
             MongoCollection<Compra> coleccion = getCollection(client, COLECCION_COMPRAS, Compra.class);
 
             return coleccion.find(Filters.eq("proveedor_id", idProveedor)).sort(Sorts.ascending("_id")).into(new ArrayList<>());
@@ -93,7 +95,8 @@ public class ComprasDaoImpl extends AccesoMongoDB implements ComprasDao{
      */
     @Override
     public void insertarCompra(Compra compra) {
-        try (MongoClient client = abrirConexion()) {
+        try {
+            MongoClient client = getClient();
             MongoCollection<Compra> coleccion = getCollection(client, COLECCION_COMPRAS, Compra.class);
 
             if (coleccion.countDocuments(Filters.eq("numero_factura", compra.getNumero_factura())) > 0) {

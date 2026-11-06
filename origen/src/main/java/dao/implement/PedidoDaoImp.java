@@ -28,7 +28,7 @@ public class PedidoDaoImp extends AccesoMongoDB implements PedidoDao {
     private PedidoDaoImp() {
     }
 
-    public static PedidoDaoImp getInstance() {
+    public static synchronized PedidoDaoImp getInstance() {
         if (instance == null) {
             instance = new PedidoDaoImp();
         }
@@ -37,7 +37,8 @@ public class PedidoDaoImp extends AccesoMongoDB implements PedidoDao {
 
     @Override
     public List<VentaPedido> consultar() {
-        try (MongoClient client = abrirConexion()) {
+        try {
+            MongoClient client = getClient();
             MongoCollection<VentaPedido> coleccion = getCollection(client, COLECCION, VentaPedido.class);
 
             return coleccion.find()
@@ -59,7 +60,8 @@ public class PedidoDaoImp extends AccesoMongoDB implements PedidoDao {
         }
         pedido.validar()^*/
 
-        try (MongoClient client = abrirConexion()) {
+        try {
+            MongoClient client = getClient();
             MongoCollection<VentaPedido> coleccion
                     = getCollection(client, COLECCION, VentaPedido.class);
 

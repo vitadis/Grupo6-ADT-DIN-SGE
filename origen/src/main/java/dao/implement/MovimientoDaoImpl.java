@@ -18,8 +18,8 @@ import model.Movimiento;
  * Implementación de {@link MovimientoDao} con MongoDB.
  *
  * Trabaja con la colección {@code movimientos}. Es un singleton: se obtiene con
- * {@link #getInstance()}. Cada operación abre su conexión y la cierra al terminar
- * (try-with-resources).
+ * {@link #getInstance()}. Cada operación abre su conexión y la cierra al
+ * terminar (try-with-resources).
  *
  * @author anazk
  */
@@ -36,7 +36,8 @@ public class MovimientoDaoImpl extends AccesoMongoDB implements MovimientoDao {
     private static MovimientoDao instance = null;
 
     /**
-     * Constructor privado para que solo se pueda crear desde {@link #getInstance()}.
+     * Constructor privado para que solo se pueda crear desde
+     * {@link #getInstance()}.
      */
     private MovimientoDaoImpl() {
         super();
@@ -59,7 +60,8 @@ public class MovimientoDaoImpl extends AccesoMongoDB implements MovimientoDao {
      */
     @Override
     public List<Movimiento> obtenerMovimientos() {
-        try (MongoClient client = abrirConexion()) {
+        try {
+            MongoClient client = getClient();
             MongoCollection<Movimiento> coleccion = getCollection(client, COLECCION_MOVIMIENTOS, Movimiento.class);
 
             return coleccion.find().sort(Sorts.ascending("_id")).into(new ArrayList<>());
@@ -71,12 +73,13 @@ public class MovimientoDaoImpl extends AccesoMongoDB implements MovimientoDao {
     }
 
     /**
-     * {@inheritDoc}
-     * Asigna como identificador el mayor existente + 1, porque los {@code _id} son enteros.
+     * {@inheritDoc} Asigna como identificador el mayor existente + 1, porque
+     * los {@code _id} son enteros.
      */
     @Override
     public void insertarMovimiento(Movimiento movimiento) {
-        try (MongoClient client = abrirConexion()) {
+        try {
+            MongoClient client = getClient();
             MongoCollection<Movimiento> coleccion = getCollection(client, COLECCION_MOVIMIENTOS, Movimiento.class);
 
             // Los _id son enteros y el driver no los genera: siguiente = mayor + 1
