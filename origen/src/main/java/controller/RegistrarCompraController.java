@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -31,6 +32,7 @@ import model.LineaCompra;
 import model.Producto;
 import model.Proveedor;
 import services.ComprasService;
+import util.AppLogger;
 
 /**
  * Controlador de la ventana {@code registrarCompra.fxml}.
@@ -43,6 +45,11 @@ import services.ComprasService;
  * @author anazk
  */
 public class RegistrarCompraController implements Initializable {
+
+    /**
+     * Logger de la aplicación (escribe en {@code logs/app.log}).
+     */
+    private final AppLogger logger = AppLogger.getInstance();
 
     /**
      * Service para cargar proveedores y productos y guardar la compra.
@@ -187,6 +194,7 @@ public class RegistrarCompraController implements Initializable {
             cbProducto.getItems().addAll(comprasService.listarProductosActivos());
         } catch (DaoException e) {
             lblError.setText(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
 
         pintarLineas();
@@ -312,9 +320,11 @@ public class RegistrarCompraController implements Initializable {
         try {
             comprasService.registrarCompra(compra);
             guardado = true;
+            logger.info("Compra registrada: " + compra.getNumero_factura() + " (" + compra.getTotal() + " €)");
             cerrar(event);
         } catch (DaoException e) {
             lblError.setText(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
         } catch (IllegalArgumentException e) {
             lblError.setText(e.getMessage());
         }

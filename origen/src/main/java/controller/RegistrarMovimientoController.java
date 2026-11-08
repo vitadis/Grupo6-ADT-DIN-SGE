@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -27,6 +28,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Movimiento;
 import services.MovimientoService;
+import util.AppLogger;
 
 /**
  * Controlador de la ventana {@code registrarMovimiento.fxml}.
@@ -38,6 +40,11 @@ import services.MovimientoService;
  * @author anazk
  */
 public class RegistrarMovimientoController implements Initializable {
+
+    /**
+     * Logger de la aplicación (escribe en {@code logs/app.log}).
+     */
+    private final AppLogger logger = AppLogger.getInstance();
 
     /**
      * Categorías que se ofrecen siempre en el desplegable. También se puede escribir otra.
@@ -258,11 +265,13 @@ public class RegistrarMovimientoController implements Initializable {
         try {
             movimientoService.registrarMovimiento(m);
             guardado = true;
+            logger.info("Movimiento registrado: " + m.getConcepto() + " (" + m.getImporte() + " €)");
             cerrar(event);
         } catch (IllegalArgumentException e) {
             lblError.setText(e.getMessage());
         } catch (DaoException e) {
             lblError.setText(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 

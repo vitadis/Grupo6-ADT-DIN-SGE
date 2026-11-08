@@ -15,6 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import java.util.function.Consumer;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -42,6 +43,7 @@ import model.Proveedor;
 import services.ComprasService;
 import model.Usuario;
 import util.Alertas;
+import util.AppLogger;
 
 /**
  * Controlador de la pantalla «Compras y proveedores» ({@code CompraView.fxml}).
@@ -56,7 +58,12 @@ import util.Alertas;
  *
  * @author anazk
  */
-public class ComprasController implements Initializable, UsuarioImplementacion {
+public class ComprasController implements Initializable, UsuarioImplementacion, ActualizarDatos {
+
+    /**
+     * Logger de la aplicación (escribe en {@code logs/app.log}).
+     */
+    private final AppLogger logger = AppLogger.getInstance();
 
     /**
      * Service de compras, proveedores y productos.
@@ -164,11 +171,6 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
     @FXML
     private Button btnCrearCompra;
     /**
-     * Migas de pan de la cabecera.
-     */
-    @FXML
-    private Label lblRuta;
-    /**
      * Contenedor de los botones de acción de la cabecera.
      */
     @FXML
@@ -261,8 +263,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
     }
 
     /**
-     * Configura las pestañas y carga los proveedores, las compras, la lista de proveedores
-     * y la lista sugerida. Si falla la base de datos, muestra un error.
+     * Configura las pestañas y carga los datos con {@link #actualizarDatos()}.
      *
      * @param url ubicación del FXML (no se usa)
      * @param rb recursos de idioma (no se usa)
@@ -270,6 +271,17 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         configurarPestanas();
+        actualizarDatos();
+    }
+
+    /**
+     * Vuelve a cargar los proveedores, las compras, la lista de proveedores y la lista
+     * sugerida. Lo llama {@link NavController} cada vez que se entra en «Compras y
+     * proveedores», para que se vean los cambios hechos en otras pantallas (por ejemplo, el
+     * stock que baja al vender en la caja). Si falla la base de datos, muestra un error.
+     */
+    @Override
+    public void actualizarDatos() {
         try {
             cargarProveedores();
             cargarCompras();
@@ -277,6 +289,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
             generarListaSugerida();
         } catch (DaoException e) {
             Alertas.mostrarError(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -288,35 +301,47 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
     @Override
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+        if (usuario != null) {
+            logger.setUser(usuario.getUsername());
+        }
     }
 
     /**
-     * Escucha los cambios de pestaña para adaptar los botones de la cabecera.
+     * Escucha los cambios de pestaña para actualizar la cabecera.
      */
     private void configurarPestanas() {
         tabPaneCompras.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
             @Override
             public void changed(ObservableValue<? extends Tab> observable, Tab anterior, Tab nueva) {
-                actualizarBotonesAccion(nueva);
+                actualizarCabecera(nueva);
             }
         });
-        actualizarBotonesAccion(tabPaneCompras.getSelectionModel().getSelectedItem());
+        actualizarCabecera(tabPaneCompras.getSelectionModel().getSelectedItem());
     }
 
     /**
-     * Adapta los botones de la cabecera a la pestaña: en Proveedores el botón principal
-     * pasa a «Nuevo proveedor» y «Generar lista» solo se ve en Compras.
+     * Cabecera dinámica: adapta el título, el subtítulo y los botones a la pestaña elegida
+     * (igual que {@code AdministracionController}). En Proveedores el botón principal pasa a
+     * «Nuevo proveedor» y «Generar lista» solo se ve en Compras.
      *
      * @param pestana pestaña seleccionada
      */
-    private void actualizarBotonesAccion(Tab pestana) {
+    private void actualizarCabecera(Tab pestana) {
+        if (pestana == null) {
+            return;
+        }
+
         boolean enCompras = (pestana == tabCompras);
         btnGenerarLista.setVisible(enCompras);
         btnGenerarLista.setManaged(enCompras);
 
         if (pestana == tabProveedores) {
+            lblTitulo.setText("Proveedores");
+            lblSubtitulo.setText("Datos de contacto e historial de compras de cada proveedor");
             btnAccionPrincipal.setText("Nuevo proveedor");
         } else {
+            lblTitulo.setText("Compras");
+            lblSubtitulo.setText("Compras registradas y lista de compra sugerida");
             btnAccionPrincipal.setText("Registrar compra");
         }
     }
@@ -332,6 +357,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
             generarListaSugerida();
         } catch (DaoException e) {
             Alertas.mostrarError(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -419,8 +445,10 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
             }
         } catch (IOException e) {
             Alertas.mostrarError("No se pudo abrir la ventana del proveedor.");
+            logger.log(Level.SEVERE, e.getMessage(), e);
         } catch (DaoException e) {
             Alertas.mostrarError(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -454,8 +482,10 @@ public class ComprasController implements Initializable, UsuarioImplementacion {
             }
         } catch (IOException e) {
             Alertas.mostrarError("No se pudo abrir la ventana de la compra.");
+            logger.log(Level.SEVERE, e.getMessage(), e);
         } catch (DaoException e) {
             Alertas.mostrarError(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
