@@ -27,6 +27,7 @@ import model.EstadoPedido;
 import model.LineaPedido;
 import model.MetodoPago;
 import model.VentaPedido;
+import services.CajaService;
 import services.PedidoService;
 import util.AppLogger;
 
@@ -37,7 +38,7 @@ import util.AppLogger;
  */
 public class HistorialController implements Initializable {
 
-    private final PedidoService pedidoService = new PedidoService();
+    private CajaService cajaService;
     private final AppLogger logger = AppLogger.getInstance();
 
     @FXML
@@ -84,7 +85,7 @@ public class HistorialController implements Initializable {
 
     private void cargarTabla() {
         try {
-            List<VentaPedido> pedidos = pedidoService.listaPedidos();
+            List<VentaPedido> pedidos = cajaService.listaPedidos();
             ObservableList<VentaPedido> listaPedidos = FXCollections.observableArrayList(pedidos);
             // definir el valor 
             tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -137,5 +138,10 @@ public class HistorialController implements Initializable {
             logger.log(Level.SEVERE, e.getMessage(), e);
             util.Alertas.mostrarError(e.getMessage());
         }
+    }
+    
+    // set service
+    public void setCajaService(CajaService servicio){
+        this.cajaService = servicio;
     }
 }

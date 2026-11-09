@@ -1,5 +1,7 @@
 package controller;
 
+import dao.implement.PedidoDaoImp;
+import dao.implement.ProductoDaoImp;
 import exceptions.DaoException;
 import java.io.IOException;
 import java.net.URL;
@@ -20,14 +22,13 @@ import model.LineaPedido;
 import model.Producto;
 import model.VentaPedido;
 import model.Usuario;
-import services.ProductoService;
+import services.CajaService;
 import util.Alertas;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Toggle;
 import javafx.scene.layout.VBox;
 import model.EstadoPedido;
-import services.PedidoService;
 import util.AppLogger;
 
 /**
@@ -49,8 +50,7 @@ public class CajaController implements UsuarioImplementacion {
     @FXML
     private RadioButton rbTodo;
     
-    private final ProductoService productoService = new ProductoService();
-    private final PedidoService pedidoService = new PedidoService();
+    private final CajaService cajaService = new CajaService(ProductoDaoImp.getInstance(),PedidoDaoImp.getInstance());
     private List<Producto> productosVenta = new ArrayList<>();
     private final VentaPedido pedido = new VentaPedido();
     private final AppLogger logger = AppLogger.getInstance();
@@ -96,7 +96,7 @@ public class CajaController implements UsuarioImplementacion {
     private void cargarCategorias() {
         contenedorCategorias.getChildren().removeIf(nodo -> nodo != rbTodo);
         
-        for (CategoriaProducto categoria : productoService.categoriasDeVenta(productosVenta)) {
+        for (CategoriaProducto categoria : cajaService.categoriasDeVenta(productosVenta)) {
             RadioButton rb = new RadioButton(categoria.toString());
             rb.setToggleGroup(categoriasGroup);
             rb.setUserData(categoria);
@@ -120,7 +120,7 @@ public class CajaController implements UsuarioImplementacion {
     // --------------------- Productos ---------------------
     private void cargarProductos() {
         try {
-            productosVenta = productoService.listarProductosVenta();
+            productosVenta = cajaService.listarProductosVenta();
             cargarCategorias();
             mostrarProductos();
         } catch (DaoException e) {
@@ -135,7 +135,7 @@ public class CajaController implements UsuarioImplementacion {
     private void mostrarProductos() {
         contenedorProductos.getChildren().clear();
         
-        List<Producto> filtrados = productoService.filtrarPorCategoria(
+        List<Producto> filtrados = cajaService.filtrarPorCategoria(
                 productosVenta, getCategoriaSeleccionada());
         
         if (filtrados.isEmpty()) {
@@ -249,7 +249,11 @@ public class CajaController implements UsuarioImplementacion {
     @FXML
     private void onHistorialVentas() {
         try {
-            controller.InstanciarEscena.createNewStage("/view/caja/historialView.fxml", "Historial de Ventas", null);
+            controller.InstanciarEscena.createNewStage("/view/caja/historialView.fxml", "Historial de Ventas", (c)->{
+            HistorialController controlador = (HistorialController) c;
+            controlador.setCajaService(cajaService);
+            }
+            );
             logger.info("Ingreso en el historial");
         } catch (Exception ex) {
             logger.log(Level.SEVERE, ex.getMessage(), ex);
@@ -312,7 +316,7 @@ public class CajaController implements UsuarioImplementacion {
         pedido.setEstado(EstadoPedido.COBRADO);
         
         try {
-            pedidoService.realizarPedido(pedido);
+            cajaService.realizarPedido(pedido);
             logger.info("Agregar pedido a la linea de pedido");
             
         } catch (Exception e) {
@@ -332,7 +336,7 @@ public class CajaController implements UsuarioImplementacion {
         }
         for (LineaPedido lp : pedido.getDetalle()) {
             try {
-                productoService.modificarProducto(lp.productoModificadoStock());
+                cajaService.modificarProducto(lp.productoModificadoStock());
             } catch (Exception e) {
                 logger.log(Level.SEVERE, e.getMessage(), e);
             }
