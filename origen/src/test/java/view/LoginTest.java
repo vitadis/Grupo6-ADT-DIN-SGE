@@ -1,4 +1,4 @@
-package controller;
+package view;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -22,16 +22,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.testfx.api.FxAssert.verifyThat;
 
 /**
- * TEST CLASS LoginControllerTest
+ * TEST CLASS LoginTest
  *
  * @author Joel
  */
-public class LoginControllerTest extends ApplicationTest {
+public class LoginTest extends ApplicationTest {
 
     /**
      * Iniciamos el stage
      *
      * @param stage
+     * @throws java.io.IOException
      */
     @Override
     public void start(Stage stage) throws IOException {
