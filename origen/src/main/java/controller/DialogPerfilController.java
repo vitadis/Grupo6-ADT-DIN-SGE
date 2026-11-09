@@ -21,13 +21,13 @@ import javafx.stage.Stage;
 
 import model.Empleado;
 import model.Usuario;
-import services.UsuarioService;
+import services.NavService;
 import util.AppLogger;
 
 public class DialogPerfilController implements Initializable {
     
     private Usuario usuario;
-    private UsuarioService usuarioService;
+    private NavService usuarioService;
     
     @FXML
     private Label lblNombreUsuario;
@@ -54,9 +54,8 @@ public class DialogPerfilController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         lblMensaje.setText("");
-        usuarioService = new UsuarioService(UsuarioDaoImp.getInstance());
     }
-
+    
     // Recibir el usuario
     public void setusuario(Usuario user) {
         
@@ -70,6 +69,10 @@ public class DialogPerfilController implements Initializable {
         usuario = user;
         logger.setUser(user.getUsername());
         cargarDatosUsuario();
+    }
+    // Recibir el service
+    public void setUsuarioService(NavService servicio){
+        this.usuarioService = servicio;
     }
 
     // Cargar los datos del usuario
