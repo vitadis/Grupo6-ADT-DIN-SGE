@@ -40,6 +40,7 @@ public class LoginTest extends ApplicationTest {
                 getClass().getResource("/view/loginView.fxml"));
         Parent root = loader.load();
         stage.setScene(new Scene(root));
+        stage.setMaximized(true);
         stage.show();
     }
 

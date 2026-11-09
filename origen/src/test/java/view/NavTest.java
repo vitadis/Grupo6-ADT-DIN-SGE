@@ -82,6 +82,7 @@ public class NavTest extends ApplicationTest {
         Parent root = loader.load();
         controller = loader.getController();
         stage.setScene(new Scene(root));
+        stage.setMaximized(true);
         stage.show();
     }
 
