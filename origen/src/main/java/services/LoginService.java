@@ -12,11 +12,11 @@ import model.Usuario;
  *
  * @author Joel
  */
-public class UsuarioService {
+public class LoginService {
 
     private final UsuarioDao usuarioDao;
 
-    public UsuarioService(UsuarioDao usuarioDao) {
+    public LoginService(UsuarioDao usuarioDao) {
         this.usuarioDao = usuarioDao;
     }
 
@@ -39,25 +39,6 @@ public class UsuarioService {
             );
         }
         return usuario;
-    }
-
-    // modificarPerfil
-    public void modificarPerfil(Usuario user) {
-
-        if (user == null) {
-            throw new IllegalArgumentException(
-                    "El usuario no puede ser nulo.");
-        }
-
-        user.validar();
-
-        Empleado empleado = user.getEmpleado();
-
-        if (empleado != null) {
-            empleado.validar();
-        }
-        // consulta con el dao
-        usuarioDao.modificarUsuario(user);
     }
 
 }
