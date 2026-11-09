@@ -63,7 +63,7 @@ public class HistorialController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        cargarTabla();
+        
     }
 
     // Linea de la lista
@@ -142,5 +142,6 @@ public class HistorialController implements Initializable {
     // set service
     public void setCajaService(CajaService servicio){
         this.cajaService = servicio;
+        cargarTabla();
     }
 }
