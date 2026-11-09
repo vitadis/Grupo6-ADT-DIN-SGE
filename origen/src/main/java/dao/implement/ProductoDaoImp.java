@@ -24,7 +24,7 @@ public class ProductoDaoImp extends AccesoMongoDB implements dao.ProductoDao {
     private ProductoDaoImp() {
     }
 
-    public static ProductoDaoImp getInstance() {
+    public static synchronized ProductoDaoImp getInstance() {
         if (instance == null) {
             instance = new ProductoDaoImp();
         }
@@ -33,7 +33,8 @@ public class ProductoDaoImp extends AccesoMongoDB implements dao.ProductoDao {
 
     @Override
     public List<Producto> listarProductos() {
-        try (MongoClient client = abrirConexion()) {
+        try {
+            MongoClient client = getClient();
             MongoCollection<Producto> coleccion = getCollection(client, COLECCION, Producto.class);
 
             return coleccion.find().sort(Sorts.ascending("_id")).into(new ArrayList<>());
@@ -45,19 +46,10 @@ public class ProductoDaoImp extends AccesoMongoDB implements dao.ProductoDao {
     }
 
     @Override
-    public Producto obtenerProducto(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void altaProducto(Producto producto) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
     public void modificarProducto(Producto producto) {
 
-        try (MongoClient client = abrirConexion()) {
+        try {
+            MongoClient client = getClient();
 
             MongoCollection<Producto> coleccion = getCollection(client, COLECCION, Producto.class);
 
@@ -74,9 +66,5 @@ public class ProductoDaoImp extends AccesoMongoDB implements dao.ProductoDao {
                     "Error al modificar producto.", e);
         }
     }
-    
-    @Override
-    public void eliminarProducto(Producto producto) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+
 }

@@ -3,6 +3,7 @@ package controller;
 import java.io.IOException;
 import java.util.function.Consumer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -39,36 +40,44 @@ public final class InstanciarEscena extends Application {
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/loginView.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        
+
         Image icon = new Image(getClass().getResourceAsStream("/img/icon_app.jpg"));
         stage.getIcons().add(icon);
-        
+
         stage.setTitle("Iniciar sesión");
         stage.setScene(scene);
         stage.setMaximized(true);
+
+        // Cerramos la conexión a la base de datos y cerramos el programa por completo
+        stage.setOnCloseRequest(event -> {
+            dao.implement.AccesoMongoDB.cerrarConexion();
+            Platform.exit();
+            System.exit(0);
+        });
+
         stage.show();
     }
-   
-    public static <T> T createNewStage(String ruta, String nombreVentana, Consumer<T> configurador) throws IOException {
-    FXMLLoader loader = new FXMLLoader(InstanciarEscena.class.getResource(ruta));
-    Parent root = loader.load();
 
-    T controller = loader.getController();
-    if (configurador != null) {
-        configurador.accept(controller);
+    public static <T> T createNewStage(String ruta, String nombreVentana, Consumer<T> configurador) throws IOException {
+        FXMLLoader loader = new FXMLLoader(InstanciarEscena.class.getResource(ruta));
+        Parent root = loader.load();
+
+        T controller = loader.getController();
+        if (configurador != null) {
+            configurador.accept(controller);
+        }
+
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(InstanciarEscena.class.getResource("/css/theme.css").toExternalForm());
+        scene.getStylesheets().add(InstanciarEscena.class.getResource("/css/style.css").toExternalForm());
+
+        Stage nuevaVentana = new Stage();
+        nuevaVentana.setTitle(nombreVentana);
+        nuevaVentana.initModality(Modality.APPLICATION_MODAL);
+        nuevaVentana.setScene(scene);
+        nuevaVentana.showAndWait();
+
+        return controller;
     }
 
-    Scene scene = new Scene(root);
-    scene.getStylesheets().add(InstanciarEscena.class.getResource("/css/theme.css").toExternalForm());
-    scene.getStylesheets().add(InstanciarEscena.class.getResource("/css/style.css").toExternalForm());
-
-    Stage nuevaVentana = new Stage();
-    nuevaVentana.setTitle(nombreVentana);
-    nuevaVentana.initModality(Modality.APPLICATION_MODAL);
-    nuevaVentana.setScene(scene);
-    nuevaVentana.showAndWait();
-
-    return controller;
-}
-    
 }

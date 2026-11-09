@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,6 +22,7 @@ import javafx.stage.Stage;
 import model.Contacto;
 import model.Proveedor;
 import services.ComprasService;
+import util.AppLogger;
 
 /**
  * Controlador de la ventana {@code editarProveedor.fxml}.
@@ -37,6 +39,11 @@ import services.ComprasService;
  * @author anazk
  */
 public class EditarProveedorController implements Initializable {
+
+    /**
+     * Logger de la aplicación (escribe en {@code logs/app.log}).
+     */
+    private final AppLogger logger = AppLogger.getInstance();
 
     /**
      * Nombres de los días tal y como se guardan en MongoDB (sin tildes), en el mismo orden que {@link #checksDias}.
@@ -268,9 +275,11 @@ public class EditarProveedorController implements Initializable {
             // valida con Proveedor.validar() y Contacto.validar() y guarda
             comprasService.guardarProveedor(datos);
             guardado = true;
+            logger.info("Proveedor guardado: " + datos.getNombre());
             cerrar(event);
         } catch (DaoException e) {
             lblError.setText(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
         } catch (IllegalArgumentException e) {
             lblError.setText(e.getMessage());
         }

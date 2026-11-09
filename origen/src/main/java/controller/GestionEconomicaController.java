@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 import javafx.event.ActionEvent;
@@ -50,6 +51,7 @@ import services.ComprasService;
 import services.MovimientoService;
 import services.PedidoService;
 import util.Alertas;
+import util.AppLogger;
 
 /**
  * Controlador de la pantalla «Gestión económica»
@@ -57,21 +59,14 @@ import util.Alertas;
  *
  * @author anazk
  */
-public class GestionEconomicaController implements Initializable, UsuarioImplementacion {
+public class GestionEconomicaController implements Initializable, UsuarioImplementacion, ActualizarDatos {
 
-    // ------------------------------- Barra superior -------------------------------
     /**
-     * Nombre y rol del usuario.
+     * Logger de la aplicación (escribe en {@code logs/app.log}).
      */
-    @FXML
-    private Label lblUsuario;
+    private final AppLogger logger = AppLogger.getInstance();
 
     // ------------------------------- Botones de la cabecera -------------------------------
-    /**
-     * Abre el balance mensual.
-     */
-    @FXML
-    private Button btnBalanceMensual;
     /**
      * Abre la ventana para registrar un movimiento.
      */
@@ -261,24 +256,20 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
     public void initialize(URL url, ResourceBundle rb) {
         cbTipo.getItems().addAll("Todos", "Ingreso", "Gasto");
 
-        cargarDatos();
-        cargarGrafico();
-        cargarResumen(YearMonth.now());
-        cargarTransacciones();
-        pintarTabla(todas);
+        actualizarDatos();
     }
 
     /**
-     * Recibe el usuario con la sesión iniciada y pone su nombre en la barra superior.
-     * Lo llama {@link NavController} al cargar la vista.
+     * Recibe el usuario con la sesión iniciada; se usa como {@code usuario_id} de los
+     * movimientos que se registran. Lo llama {@link NavController} al cargar la vista.
      *
      * @param usuario usuario que ha iniciado sesión
      */
     @Override
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
-        if (usuario != null && usuario.getUsername() != null) {
-            lblUsuario.setText(usuario.getUsername());
+        if (usuario != null) {
+            logger.setUser(usuario.getUsername());
         }
     }
 
@@ -306,18 +297,22 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
                     });
 
             if (c.isGuardado()) {
-                recargar();
+                actualizarDatos();
             }
         } catch (IOException e) {
             Alertas.mostrarError("No se pudo abrir la ventana de registrar movimiento.");
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
     /**
      * Vuelve a leer los datos y repinta las tarjetas, el gráfico y la tabla, respetando los
-     * filtros que estén puestos.
+     * filtros que estén puestos. Lo llama {@link NavController} cada vez que se entra en
+     * «Gestión económica» (así se ven las compras y ventas hechas en otras pantallas) y
+     * también se usa después de registrar un movimiento.
      */
-    private void recargar() {
+    @Override
+    public void actualizarDatos() {
         cargarDatos();
         cargarGrafico();
         cargarResumen(YearMonth.now());
@@ -334,18 +329,21 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
             compras = comprasService.listarCompras();
         } catch (DaoException e) {
             Alertas.mostrarError("No se pudieron leer las compras: " + e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
 
         try {
             pedidos = pedidoService.listaPedidos();
         } catch (DaoException e) {
             Alertas.mostrarError("No se pudieron leer las ventas: " + e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
 
         try {
             movimientos = movimientoService.listarMovimientos();
         } catch (DaoException e) {
             Alertas.mostrarError("No se pudieron leer los movimientos: " + e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -439,6 +437,7 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
                 nombresProveedor.put(p.getId(), p.getNombre());
             }
         } catch (DaoException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
         for (Compra c : compras) {
             String proveedor = nombresProveedor.get(c.getProveedor_id());
@@ -474,12 +473,17 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
                 return b.getFecha().compareTo(a.getFecha());
             }
         });
+        // al recargar se vuelve a poner la categoría que estaba elegida
+        String elegida = cbCategoria.getValue();
         cbCategoria.getItems().clear();
         cbCategoria.getItems().add("Todas");
         for (Transaccion t : todas) {
             if (!cbCategoria.getItems().contains(t.getCategoria())) {
                 cbCategoria.getItems().add(t.getCategoria());
             }
+        }
+        if (elegida != null && cbCategoria.getItems().contains(elegida)) {
+            cbCategoria.setValue(elegida);
         }
     }
 

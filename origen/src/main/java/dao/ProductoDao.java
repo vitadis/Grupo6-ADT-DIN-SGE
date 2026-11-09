@@ -15,11 +15,6 @@ public interface ProductoDao {
 
     public List<Producto> listarProductos();
 
-    public Producto obtenerProducto(int id);
-
-    public void altaProducto(Producto producto);
-
     public void modificarProducto(Producto producto);
 
-    public void eliminarProducto(Producto producto);
 }

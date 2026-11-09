@@ -25,7 +25,6 @@
             </padding>
             <Region HBox.hgrow="ALWAYS" />
             <StackPane styleClass="notificaciones" />
-            <Label fx:id="lblUsuario" styleClass="texto-secundario" />
         </HBox>
     </top>
 
@@ -36,13 +35,11 @@
             </padding>
             <HBox alignment="BOTTOM_LEFT">
                 <VBox spacing="4" HBox.hgrow="ALWAYS">
-                    <Label fx:id="lblRuta" styleClass="texto-secundario" text="Inicio &gt; Gestión económica" />
                     <Label styleClass="titulo" text="Gestión económica" />
                     <Label styleClass="texto-secundario" text="Ingresos, gastos y evolución del negocio" />
                 </VBox>
                 <Region HBox.hgrow="ALWAYS" />
                 <HBox alignment="BOTTOM_RIGHT" spacing="10">
-                    <Button fx:id="btnBalanceMensual" styleClass="btn-secundario" text="Balance mensual" />
                     <Button fx:id="btnRegistrarMovimiento" onAction="#onRegistrarMovimiento" styleClass="btn-primario" text="Registrar movimiento" />
                 </HBox>
             </HBox>

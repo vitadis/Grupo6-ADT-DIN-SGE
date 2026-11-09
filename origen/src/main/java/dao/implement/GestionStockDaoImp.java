@@ -40,7 +40,8 @@ public class GestionStockDaoImp extends AccesoMongoDB implements GestionStockDao
 
     @Override
     public List<Proveedor> listarActivos() throws DaoException {
-        try (MongoClient client = abrirConexion()) {
+        try {
+            MongoClient client = getClient();
             MongoCollection<Proveedor> col
                     = getCollection(client, COLECCION_PROVEEDORES, Proveedor.class);
             return col.find(Filters.eq("activo", true))
@@ -53,7 +54,8 @@ public class GestionStockDaoImp extends AccesoMongoDB implements GestionStockDao
 
     @Override
     public List<Producto> listarProductos() throws DaoException {
-        try (MongoClient client = abrirConexion()) {
+        try {
+            MongoClient client = getClient();
             MongoCollection<Producto> col
                     = getCollection(client, COLECCION_PRODUCTOS, Producto.class);
             return col.find(Filters.eq("activo", true))
@@ -71,7 +73,8 @@ public class GestionStockDaoImp extends AccesoMongoDB implements GestionStockDao
                     new NullPointerException("producto nulo"));
         }
 
-        try (MongoClient client = abrirConexion()) {
+        try {
+            MongoClient client = getClient();
             // El máximo id se lee como Document para no depender de los setters del POJO
             MongoCollection<Document> colDocs
                     = getCollection(client, COLECCION_PRODUCTOS, Document.class);
@@ -99,7 +102,8 @@ public class GestionStockDaoImp extends AccesoMongoDB implements GestionStockDao
                     new IllegalArgumentException("Cantidad inválida: " + cantidad));
         }
 
-        try (MongoClient client = abrirConexion()) {
+        try {
+            MongoClient client = getClient();
             MongoCollection<Document> col
                     = getCollection(client, COLECCION_PRODUCTOS, Document.class);
 
@@ -145,7 +149,8 @@ public class GestionStockDaoImp extends AccesoMongoDB implements GestionStockDao
                             + ") menor que la cantidad a descontar (" + movimiento.getCantidad() + ")"));
         }
 
-        try (MongoClient client = abrirConexion()) {
+        try {
+            MongoClient client = getClient();
             MongoCollection<MovimientoStock> colMovimientos
                     = getCollection(client, COLECCION_MOVIMIENTOS, MovimientoStock.class);
             colMovimientos.insertOne(movimiento);

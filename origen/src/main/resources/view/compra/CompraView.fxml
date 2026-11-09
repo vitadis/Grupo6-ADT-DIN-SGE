@@ -36,7 +36,6 @@
 
             <HBox alignment="BOTTOM_LEFT">
                 <VBox spacing="4" HBox.hgrow="ALWAYS">
-                    <Label fx:id="lblRuta" styleClass="texto-secundario" text="Inicio &gt; Compras y proveedores &gt; Compras" />
                     <Label fx:id="lblTitulo" styleClass="titulo" text="Compras y proveedores" />
                     <Label fx:id="lblSubtitulo" styleClass="subtitulo" text="Control de compras, proveedores y precios" />
                 </VBox>

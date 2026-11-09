@@ -18,8 +18,9 @@ import model.Proveedor;
 /**
  * Implementación de {@link ProveedorDao} con MongoDB.
  *
- * Trabaja con la colección {@code proveedores}. Es un singleton: se obtiene con {@link #getInstance()}.
- * Cada operación abre su conexión y la cierra al terminar (try-with-resources).
+ * Trabaja con la colección {@code proveedores}. Es un singleton: se obtiene con
+ * {@link #getInstance()}. Cada operación abre su conexión y la cierra al
+ * terminar (try-with-resources).
  *
  * @author anazk
  */
@@ -36,7 +37,8 @@ public class ProveedorDaoImpl extends AccesoMongoDB implements ProveedorDao {
     private static ProveedorDao instance = null;
 
     /**
-     * Constructor privado para que solo se pueda crear desde {@link #getInstance()}.
+     * Constructor privado para que solo se pueda crear desde
+     * {@link #getInstance()}.
      */
     private ProveedorDaoImpl() {
         super();
@@ -59,7 +61,8 @@ public class ProveedorDaoImpl extends AccesoMongoDB implements ProveedorDao {
      */
     @Override
     public List<Proveedor> obtenerProveedores() {
-        try (MongoClient client = abrirConexion()) {
+        try {
+            MongoClient client = getClient();
             MongoCollection<Proveedor> coleccion = getCollection(client, COLECCION_PROVEEDOR, Proveedor.class);
 
             return coleccion.find().sort(Sorts.ascending("_id")).into(new ArrayList<>());
@@ -71,12 +74,13 @@ public class ProveedorDaoImpl extends AccesoMongoDB implements ProveedorDao {
     }
 
     /**
-     * {@inheritDoc}
-     * Asigna como identificador el mayor existente + 1, porque los {@code _id} son enteros.
+     * {@inheritDoc} Asigna como identificador el mayor existente + 1, porque
+     * los {@code _id} son enteros.
      */
     @Override
     public void insertarProveedores(Proveedor proveedor) {
-        try (MongoClient client = abrirConexion()) {
+        try {
+            MongoClient client = getClient();
             MongoCollection<Proveedor> coleccion = getCollection(client, COLECCION_PROVEEDOR, Proveedor.class);
 
             Proveedor ultimo = coleccion.find().sort(Sorts.descending("_id")).first();
@@ -93,12 +97,12 @@ public class ProveedorDaoImpl extends AccesoMongoDB implements ProveedorDao {
     }
 
     /**
-     * {@inheritDoc}
-     * Usa {@code replaceOne}, que cambia el documento entero.
+     * {@inheritDoc} Usa {@code replaceOne}, que cambia el documento entero.
      */
     @Override
     public void actualizarProveedores(Proveedor proveedor) {
-        try (MongoClient client = abrirConexion()) {
+        try {
+            MongoClient client = getClient();
 
             MongoCollection<Proveedor> coleccion = getCollection(client, COLECCION_PROVEEDOR, Proveedor.class);
 
