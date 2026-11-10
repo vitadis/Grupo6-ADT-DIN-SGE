@@ -1,5 +1,6 @@
 package controller;
 
+import dao.implement.UsuarioDaoImp;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -22,6 +23,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Usuario;
+import services.NavService;
 import util.Alertas;
 import util.AppLogger;
 import util.InterpretePermisos;
@@ -100,7 +102,10 @@ public class NavController {
     private void dialogPerfil(Object controller) {
         try {
             DialogPerfilController controllerDialog = (DialogPerfilController) controller;
+            // recibo los service y usuarios
             controllerDialog.setusuario(usuario);
+            controllerDialog.setUsuarioService(new NavService(UsuarioDaoImp.getInstance()));
+            
         } catch (Exception e) {
             Alertas.mostrarError("Error con el dialog perfil: ");
             logger.log(Level.SEVERE, e.getMessage(), e);

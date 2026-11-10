@@ -15,7 +15,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Usuario;
-import services.UsuarioService;
+import services.LoginService;
 import  util.AppLogger;
 
 /**
@@ -38,7 +38,7 @@ public class LoginController implements Initializable {
     // --------------------- Atributos ---------------------
     private Usuario usuario;
     private final AppLogger logger= AppLogger.getInstance();
-    private UsuarioService loginService;
+    private LoginService loginService;
 
     // --------------------- Inicialización ---------------------
     @Override
@@ -47,7 +47,7 @@ public class LoginController implements Initializable {
                 .bindBidirectional(txtContrasena.textProperty());
 
         UsuarioDao usuarioDao = UsuarioDaoImp.getInstance();
-        loginService = new UsuarioService(usuarioDao);
+        loginService = new LoginService(usuarioDao);
     }
 
     // --------------------- Usuario ---------------------

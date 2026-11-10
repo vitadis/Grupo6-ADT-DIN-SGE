@@ -27,7 +27,7 @@ import model.EstadoPedido;
 import model.LineaPedido;
 import model.MetodoPago;
 import model.VentaPedido;
-import services.PedidoService;
+import services.CajaService;
 import util.AppLogger;
 
 /**
@@ -37,7 +37,7 @@ import util.AppLogger;
  */
 public class HistorialController implements Initializable {
 
-    private final PedidoService pedidoService = new PedidoService();
+    private CajaService cajaService;
     private final AppLogger logger = AppLogger.getInstance();
 
     @FXML
@@ -63,7 +63,7 @@ public class HistorialController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        cargarTabla();
+        
     }
 
     // Linea de la lista
@@ -84,7 +84,7 @@ public class HistorialController implements Initializable {
 
     private void cargarTabla() {
         try {
-            List<VentaPedido> pedidos = pedidoService.listaPedidos();
+            List<VentaPedido> pedidos = cajaService.listaPedidos();
             ObservableList<VentaPedido> listaPedidos = FXCollections.observableArrayList(pedidos);
             // definir el valor 
             tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -137,5 +137,11 @@ public class HistorialController implements Initializable {
             logger.log(Level.SEVERE, e.getMessage(), e);
             util.Alertas.mostrarError(e.getMessage());
         }
+    }
+    
+    // set service
+    public void setCajaService(CajaService servicio){
+        this.cajaService = servicio;
+        cargarTabla();
     }
 }
