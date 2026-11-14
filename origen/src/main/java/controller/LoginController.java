@@ -1,10 +1,11 @@
 package controller;
 
-import java.io.IOException;
+import dao.implement.UsuarioDaoImp;
+import exceptions.DaoException;
 import java.net.URL;
-import java.util.LinkedList;
-import java.util.List;
+import dao.UsuarioDao;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,6 +15,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Usuario;
+import services.LoginService;
+import  util.AppLogger;
 
 /**
  * FXML Controller class
@@ -21,7 +24,7 @@ import model.Usuario;
  * @author Joel
  */
 public class LoginController implements Initializable {
-
+    
     // --------------------- Variables FXML ---------------------
     @FXML
     private TextField txtUsuario;
@@ -34,11 +37,17 @@ public class LoginController implements Initializable {
 
     // --------------------- Atributos ---------------------
     private Usuario usuario;
+    private final AppLogger logger= AppLogger.getInstance();
+    private LoginService loginService;
 
     // --------------------- Inicialización ---------------------
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        txtContrasenaVisible.textProperty().bindBidirectional(txtContrasena.textProperty());
+        txtContrasenaVisible.textProperty()
+                .bindBidirectional(txtContrasena.textProperty());
+
+        UsuarioDao usuarioDao = UsuarioDaoImp.getInstance();
+        loginService = new LoginService(usuarioDao);
     }
 
     // --------------------- Usuario ---------------------
@@ -66,21 +75,28 @@ public class LoginController implements Initializable {
 
     @FXML
     private void validar(ActionEvent event) {
-        String nombre = txtUsuario.getText().trim();
-        String contrasena = txtContrasena.getText();
+        try {
+            usuario = loginService.iniciarSesion(
+                    txtUsuario.getText(),
+                    txtContrasena.getText()
+            );
 
-        if (nombre.isEmpty() || contrasena.isEmpty()) {
-            lblMensajeError.setText("Completa todos los campos obligatorios.");
-            return;
-        }
-
-        // TODO: validar con el nosql
-        if ("usuario".equals(nombre) && "1234".equals(contrasena)) {
             lblMensajeError.setText("");
-            crearUsuarioPrueba();
             abrirNav();
-        } else {
-            lblMensajeError.setText("Usuario o contraseña incorrectos.");
+            
+            // logger
+            logger.setUser(usuario.getUsername());
+            logger.info("Inicio sesión");
+
+        } catch (IllegalArgumentException e) {
+            lblMensajeError.setText(e.getMessage());
+            logger.info(e.getMessage());
+
+        } catch (DaoException e) {
+            lblMensajeError.setText(
+                    "No se ha podido iniciar sesión."
+            );
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -90,22 +106,9 @@ public class LoginController implements Initializable {
             Stage stage = (Stage) txtUsuario.getScene().getWindow();
             NavController navController = InstanciarEscena.cambiarVista(stage, "/view/navView.fxml", "Inicio");
             navController.setUsuario(usuario);
-        } catch (IOException e) {
+        } catch (Exception e) {
             lblMensajeError.setText("No se ha podido cargar la pantalla principal.");
-            e.printStackTrace();
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
-    }
-
-    private void crearUsuarioPrueba() {
-        usuario = new Usuario();
-        usuario.setId("1");
-
-        List<String> permisos = new LinkedList<>();
-        permisos.add("total");
-        permisos.add("");
-        permisos.add("");
-        permisos.add("");
-        permisos.add("");
-        usuario.setPermisos(permisos);
     }
 }

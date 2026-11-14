@@ -1,11 +1,14 @@
 package controller;
 
 import java.io.IOException;
+import java.util.function.Consumer;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public final class InstanciarEscena extends Application {
@@ -14,15 +17,16 @@ public final class InstanciarEscena extends Application {
         FXMLLoader loader = new FXMLLoader(InstanciarEscena.class.getResource(ruta));
         Parent root = loader.load();
         if (stage.getScene() == null) {
-            stage.setScene(new Scene(root));   // primera vez
+            stage.setScene(new Scene(root));
         } else {
-            stage.getScene().setRoot(root);    // cambios posteriores: no toca el tamaño de la ventana
+            stage.getScene().setRoot(root);
         }
 
         if (!stage.isShowing()) {
             stage.show();
         }
         stage.setMaximized(true);
+        stage.setTitle(titulo);
         return loader.getController();
     }
 
@@ -32,30 +36,48 @@ public final class InstanciarEscena extends Application {
         return stage;
     }
 
-    public static void mostrarError(String mensaje) {
-        mostrarMensaje(Alert.AlertType.ERROR, "Error", mensaje);
-    }
-
-    public static void mostrarInfo(String mensaje) {
-        mostrarMensaje(Alert.AlertType.INFORMATION, "Información", mensaje);
-    }
-
-    private static void mostrarMensaje(Alert.AlertType tipo, String titulo, String mensaje) {
-        Alert alerta = new Alert(tipo);
-        alerta.setTitle(titulo);
-        alerta.setHeaderText(null);
-        alerta.setContentText(mensaje);
-        alerta.showAndWait();
-    }
-
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/loginView.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
+
+        Image icon = new Image(getClass().getResourceAsStream("/img/icon_app.jpg"));
+        stage.getIcons().add(icon);
+
         stage.setTitle("Iniciar sesión");
         stage.setScene(scene);
         stage.setMaximized(true);
+
+        // Cerramos la conexión a la base de datos y cerramos el programa por completo
+        stage.setOnCloseRequest(event -> {
+            dao.implement.AccesoMongoDB.cerrarConexion();
+            Platform.exit();
+            System.exit(0);
+        });
+
         stage.show();
     }
-    
+
+    public static <T> T createNewStage(String ruta, String nombreVentana, Consumer<T> configurador) throws IOException {
+        FXMLLoader loader = new FXMLLoader(InstanciarEscena.class.getResource(ruta));
+        Parent root = loader.load();
+
+        T controller = loader.getController();
+        if (configurador != null) {
+            configurador.accept(controller);
+        }
+
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(InstanciarEscena.class.getResource("/css/theme.css").toExternalForm());
+        scene.getStylesheets().add(InstanciarEscena.class.getResource("/css/style.css").toExternalForm());
+
+        Stage nuevaVentana = new Stage();
+        nuevaVentana.setTitle(nombreVentana);
+        nuevaVentana.initModality(Modality.APPLICATION_MODAL);
+        nuevaVentana.setScene(scene);
+        nuevaVentana.showAndWait();
+
+        return controller;
+    }
+
 }

@@ -1,12 +1,16 @@
 module com.origen {
     requires javafx.controls;
     requires javafx.fxml;
+    requires org.mongodb.bson;
+    requires org.mongodb.driver.sync.client;
+    requires org.mongodb.driver.core;
     requires java.base;
-    //requires com.gluonhq.charm.glisten;
+    requires java.logging;
 
     opens controller to javafx.fxml, javafx.graphics;
-    exports controller;
     opens com.origen to javafx.fxml;
-    
+    opens model to org.mongodb.bson,  javafx.base;
+  
+    exports controller;
     exports com.origen;
 }

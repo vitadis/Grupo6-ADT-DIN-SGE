@@ -4,10 +4,17 @@
  */
 package dao;
 
+import java.util.List;
+import model.Producto;
+
 /**
  *
- * @author Lidia
+ * @author Joel
  */
-public class ejemplo {
-    
+public interface ProductoDao {
+
+    public List<Producto> listarProductos();
+
+    public void modificarProducto(Producto producto);
+
 }

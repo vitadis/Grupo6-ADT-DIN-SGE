@@ -1,22 +1,31 @@
 package controller;
 
+import dao.implement.UsuarioDaoImp;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Usuario;
+import services.NavService;
+import util.Alertas;
+import util.AppLogger;
 import util.InterpretePermisos;
 
 /**
@@ -30,164 +39,207 @@ public class NavController {
     @FXML
     private StackPane contenido;
     @FXML
-    private VBox vbContenido;
+    private VBox vbNav;
 
     // --------------------- Atributos ---------------------
+    // map de los iconos de los modulos
+    private static final Map<String, String> ICONOS = new LinkedHashMap<>();
+    private final AppLogger logger = AppLogger.getInstance();
+
+    static {
+        ICONOS.put("Inicio", "/img/icon_home.png");
+        ICONOS.put("Caja y pedidos", "/img/icon_caja.png");
+        ICONOS.put("Gestión económica", "/img/icon_euro.png");
+        ICONOS.put("Gestión stock", "/img/icon_box.png");
+        ICONOS.put("Compras y proveedores", "/img/icon_proveedores.png");
+        //ICONOS.put("Análisis e informes", "/img/icon_analisis.png");
+        ICONOS.put("Administración", "/img/icon_administracion.png");
+    }
+
+    // map de vistas
     private static final Map<String, String> VISTAS = Map.of(
-            //"Inicio", "/view/inicio/inicioView.fxml",
-            "Caja y pedidos", "/view/caja/cajaView.fxml"
-    //"Gestión económica", "/view/gestion/gestionView.fxml",
-    //"Gestión stock", "/view/stock/stockView.fxml",
-    //"Compras y proveedores", "/view/compras/comprasView.fxml",
-    //"Análisis e informes", "/view/informes/informesView.fxml",
-    //"Administración", "/view/admin/adminView.fxml"
+            "Inicio", "/view/inicio/inicioView.fxml",
+            "Caja y pedidos", "/view/caja/cajaView.fxml",
+            "Gestión económica", "/view/economia/gestionEconomicaView.fxml",
+            "Gestión stock", "/view/gestionStock/gestionStock.fxml",
+            "Compras y proveedores", "/view/compra/CompraView.fxml",
+            //"Análisis e informes", "/view/informes/informesView.fxml",
+            "Administración", "/view/admin/administracionView.fxml"
     );
 
+    // ToogleGrup para el nava
+    private final ToggleGroup grupoNav = new ToggleGroup();
+    // Vistas cargadas (lo vinculo con el modulo)
     private final Map<String, Node> vistasCargadas = new LinkedHashMap<>();
 
-    private Usuario usuario;
+    private final Map<String, Object> controladores = new LinkedHashMap<>();
 
     // --------------------- Usuario ---------------------
+    private Usuario usuario;
+
     public Usuario getUsuario() {
         return usuario;
     }
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
-        cargarVistas();
+        construirNavegacion();
+        logger.setUser(usuario.getUsername());
+    }
+
+    @FXML
+    public void initialize(URL url, ResourceBundle rb) {
+        //construirNavegacion();
     }
 
     // --------------------- Métodos FXML ---------------------
     @FXML
-    private void irInicio(ActionEvent event) {
-        navegar((ToggleButton) event.getSource());
+    private void abrirPerfil(ActionEvent event) throws IOException {
+        InstanciarEscena.createNewStage("/view/perfilView.fxml", "Perfil de usuario", this::dialogPerfil);
     }
 
-    @FXML
-    private void irCaja(ActionEvent event) {
-        navegar((ToggleButton) event.getSource());
-    }
-
-    @FXML
-    private void irEconomia(ActionEvent event) {
-        navegar((ToggleButton) event.getSource());
-    }
-
-    @FXML
-    private void irStock(ActionEvent event) {
-        navegar((ToggleButton) event.getSource());
-    }
-
-    @FXML
-    private void irCompras(ActionEvent event) {
-        navegar((ToggleButton) event.getSource());
-    }
-
-    @FXML
-    private void irAnalisis(ActionEvent event) {
-        navegar((ToggleButton) event.getSource());
-    }
-
-    @FXML
-    private void irAdmin(ActionEvent event) {
-        navegar((ToggleButton) event.getSource());
-    }
-
-    @FXML
-    private void abrirPerfil(ActionEvent event) {
+    // metodo
+    private void dialogPerfil(Object controller) {
+        try {
+            DialogPerfilController controllerDialog = (DialogPerfilController) controller;
+            // recibo los service y usuarios
+            controllerDialog.setusuario(usuario);
+            controllerDialog.setUsuarioService(new NavService(UsuarioDaoImp.getInstance()));
+            
+        } catch (Exception e) {
+            Alertas.mostrarError("Error con el dialog perfil: ");
+            logger.log(Level.SEVERE, e.getMessage(), e);
+        }
 
     }
 
     @FXML
     private void cerrarSesion(ActionEvent event) {
-        try {
-            Button btnCS = (Button) event.getSource();
-            Stage stage = (Stage) btnCS.getScene().getWindow();
+        Alertas.mostrarConfirmacion("Confirmación", "¿Seguro que quieres cerrar sesión?", () -> {
+            try {
+                Button btnCS = (Button) event.getSource();
+                Stage stage = (Stage) btnCS.getScene().getWindow();
 
-            Alert alerta = new Alert(Alert.AlertType.CONFIRMATION);
-            alerta.initOwner(stage);
-            alerta.setTitle("Cerrar sesión");
-            alerta.setHeaderText(null);
-            alerta.setContentText("¿Seguro que quieres cerrar sesión?");
-
-            if (alerta.showAndWait().filter(r -> r == ButtonType.OK).isPresent()) {
                 InstanciarEscena.cambiarVista(stage, "/view/loginView.fxml", "Inicio Sesión");
+            } catch (IOException ex) {
+                Alertas.mostrarError("No se pudo cerrar sesión: " + ex.getMessage());
+                logger.log(Level.SEVERE, ex.getMessage(), ex);
             }
-        } catch (IOException ex) {
-            InstanciarEscena.mostrarError("No se pudo cerrar sesión: " + ex.getMessage());
-        }
+        });
     }
 
     // --------------------- Métodos auxiliares ---------------------
-    private void cargarVistas() {
-        List<String> permisos = usuario.getPermisos();
+    /**
+     * Crea un ToggleButton (y carga su vista) solo para los módulos a los que
+     * el usuario tiene acceso.
+     */
+    private void construirNavegacion() {
+        vbNav.getChildren().clear();
+        contenido.getChildren().clear();
+        vistasCargadas.clear();
+        controladores.clear();
 
-        List<String> sinAcceso = InterpretePermisos.apartadosSinAcceso(permisos);
-        if (!sinAcceso.isEmpty()) {
-            vbContenido.getChildren().removeIf(nodo
-                    -> nodo instanceof ToggleButton
-                    && sinAcceso.contains(((ToggleButton) nodo).getText()));
-        }
+        List<String> sinAcceso = InterpretePermisos.apartadosSinAcceso(usuario.getPermisos());
 
-        botones().forEach(boton -> {
-            String ruta = VISTAS.get(boton.getText());
-            if (ruta == null) {
-                return;
+        ICONOS.forEach((nombre, icono) -> {
+            if (sinAcceso.contains(nombre)) {
+                return; // sin acceso no se crea el botón
             }
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource(ruta));
-                Node vista = loader.load();
 
-                Object controller = loader.getController();
-                if (controller instanceof UsuarioImplementacion) {
-                    ((UsuarioImplementacion) controller).setUsuario(usuario);
-                }
+            vbNav.getChildren().add(crearBoton(nombre, icono));
 
-                vista.setVisible(false);
-                vista.setManaged(false);
-                contenido.getChildren().add(vista);
-                vistasCargadas.put(boton.getText(), vista);
-            } catch (IOException e) {
-                InstanciarEscena.mostrarError("No se pudo cargar " + ruta + ": " + e.getMessage());
+            String ruta = VISTAS.get(nombre);
+            if (ruta != null) {
+                cargarVista(nombre, ruta);
             }
         });
 
         seleccionarVistaInicial();
     }
 
+    private ToggleButton crearBoton(String nombre, String rutaIcono) {
+        ToggleButton boton = new ToggleButton(nombre);
+        boton.setMaxWidth(Double.MAX_VALUE);
+        boton.getStyleClass().add("nav-item");
+        boton.setToggleGroup(grupoNav);
+
+        InputStream recurso = getClass().getResourceAsStream(rutaIcono);
+        if (recurso != null) {
+            ImageView icono = new ImageView(new Image(recurso));
+            icono.setFitWidth(24);
+            icono.setFitHeight(24);
+            icono.setPreserveRatio(true);
+            boton.setGraphic(icono);
+        }
+
+        boton.setOnAction(e -> navegar(boton));
+        return boton;
+    }
+
+    private void cargarVista(String nombre, String ruta) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(ruta));
+            Node vista = loader.load();
+
+            Object controller = loader.getController();
+            controladores.put(nombre, controller);
+            if (controller instanceof UsuarioImplementacion) {
+                ((UsuarioImplementacion) controller).setUsuario(usuario);
+            }
+
+            vista.setVisible(false);
+            vista.setManaged(false);
+            contenido.getChildren().add(vista);
+            vistasCargadas.put(nombre, vista);
+        } catch (IOException e) {
+            Alertas.mostrarError("No se pudo cargar " + ruta + ": " + e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
+
+        }
+    }
+
     private void seleccionarVistaInicial() {
-        if (vistasCargadas.isEmpty()) {
-            InstanciarEscena.mostrarError("El usuario no tiene acceso a ningún apartado.");
+        if (vbNav.getChildren().isEmpty()) {
+            Alertas.mostrarError("El usuario no tiene acceso a ningún apartado.");
             return;
         }
 
-        String nombre = vistasCargadas.containsKey("Inicio")
-                ? "Inicio"
-                : vistasCargadas.keySet().iterator().next();
-
-        botones().stream()
-                .filter(b -> b.getText().equals(nombre))
+        ToggleButton inicial = botones().stream()
+                .filter(b -> vistasCargadas.containsKey(b.getText()))
                 .findFirst()
-                .ifPresent(b -> navegar(b));
+                .orElse(botones().get(0));
+
+        navegar(inicial);
     }
 
     private void navegar(ToggleButton elegido) {
-        botones().forEach(tb -> tb.setSelected(tb == elegido));
+        elegido.setSelected(true);
         mostrarVista(elegido.getText());
+        cambiarTitulo(elegido.getText());
     }
 
     private void mostrarVista(String nombre) {
-        vistasCargadas.forEach((clave, vista) -> {
-            boolean activa = clave.equals(nombre);
-            vista.setVisible(activa);
-            vista.setManaged(activa);
-        });
+        for (Map.Entry<String, Node> entrada : vistasCargadas.entrySet()) {
+            boolean activa = entrada.getKey().equals(nombre);
+            entrada.getValue().setVisible(activa);
+            entrada.getValue().setManaged(activa);
+        }
+
+        Object controller = controladores.get(nombre);
+        if (controller instanceof ActualizarDatos) {
+            ((ActualizarDatos) controller).actualizarDatos();
+        }
     }
 
     private List<ToggleButton> botones() {
-        return vbContenido.getChildren().stream()
-                .filter(n -> n instanceof ToggleButton)
+        return vbNav.getChildren().stream()
                 .map(n -> (ToggleButton) n)
                 .collect(Collectors.toList());
+    }
+
+    private void cambiarTitulo(String titulo) {
+        if (contenido.getScene() != null && contenido.getScene().getWindow() instanceof Stage) {
+            ((Stage) contenido.getScene().getWindow()).setTitle(titulo);
+        }
     }
 }

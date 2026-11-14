@@ -1,13 +1,5 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-/**
- *
- * @author Joel
- */
 import java.time.LocalDate;
 
 public class Empleado {
@@ -18,57 +10,71 @@ public class Empleado {
     private String telefono;
     private String email;
     private String puesto;
-    private String fecha_alta;
+    private LocalDate fecha_alta;
 
     public Empleado() {
     }
 
     public Empleado(String nombre, String apellido, String dni,
             String telefono, String email, String puesto,
-            String fecha_alta) {
+            LocalDate fecha_alta) {
 
-        setNombre(nombre);
-        setApellido(apellido);
-        setDni(dni);
-        setTelefono(telefono);
-        setEmail(email);
-        setPuesto(puesto);
-        setFecha_alta(fecha_alta);
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.dni = dni;
+        this.telefono = telefono;
+        this.email = email;
+        this.puesto = puesto;
+        this.fecha_alta = fecha_alta;
 
         validar();
     }
 
     public void validar() {
-        validarTexto(nombre, "nombre");
-        validarTexto(apellido, "apellido");
-        validarTexto(dni, "DNI");
-        validarTexto(telefono, "teléfono");
-        validarTexto(puesto, "puesto");
+        validarTexto(nombre, "El nombre");
+        validarTexto(apellido, "El apellido");
+        validarTexto(dni, "El DNI");
+        validarTexto(telefono, "El teléfono");
+        validarTexto(email, "El email");
+        validarTexto(puesto, "El puesto");
+        validarFecha(fecha_alta);
 
-        if (email == null
-                || !email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")) {
+        if (!dni.matches("^[0-9]{8}[A-Za-z]$")) {
             throw new IllegalArgumentException(
-                    "El email no tiene un formato válido."
-            );
+                    "El DNI debe contener 8 números y una letra.");
         }
 
-        try {
-            LocalDate.parse(fecha_alta);
-        } catch (Exception e) {
+        if (!telefono.matches("^[0-9+() -]{9,20}$")) {
             throw new IllegalArgumentException(
-                    "La fecha de alta debe tener formato yyyy-MM-dd."
-            );
+                    "El formato del teléfono no es válido.");
+        }
+
+        if (!email.matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$")) {
+            throw new IllegalArgumentException(
+                    "El formato del email no es válido.");
         }
     }
 
     private void validarTexto(String valor, String campo) {
         if (valor == null || valor.isBlank()) {
             throw new IllegalArgumentException(
-                    "El campo " + campo + " es obligatorio."
-            );
+                    campo + " es obligatorio.");
+        }
+
+        if (!valor.equals(valor.trim())) {
+            throw new IllegalArgumentException(
+                    campo + " no puede comenzar ni terminar con espacios.");
         }
     }
 
+    private void validarFecha(LocalDate fecha) {
+        if (fecha == null) {
+            throw new IllegalArgumentException(
+                    "La fecha de alta es obligatoria.");
+        }
+    }
+
+    // Getters y setters
     public String getNombre() {
         return nombre;
     }
@@ -117,11 +123,11 @@ public class Empleado {
         this.puesto = puesto;
     }
 
-    public String getFecha_alta() {
+    public LocalDate getFecha_alta() {
         return fecha_alta;
     }
 
-    public void setFecha_alta(String fecha_alta) {
+    public void setFecha_alta(LocalDate fecha_alta) {
         this.fecha_alta = fecha_alta;
     }
 }

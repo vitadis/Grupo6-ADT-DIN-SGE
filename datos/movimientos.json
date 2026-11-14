@@ -1,0 +1,444 @@
+[
+  {
+    "_id": 1,
+    "fecha": "2026-05-01",
+    "concepto": "Alquiler del local",
+    "categoria": "Alquiler",
+    "tipo": "gasto",
+    "importe": 1450.0,
+    "observaciones": "Transferencia al propietario",
+    "usuario_id": 1
+  },
+  {
+    "_id": 2,
+    "fecha": "2026-05-03",
+    "concepto": "Nóminas de abril",
+    "categoria": "Personal",
+    "tipo": "gasto",
+    "importe": 3640.0,
+    "usuario_id": 1
+  },
+  {
+    "_id": 3,
+    "fecha": "2026-05-05",
+    "concepto": "Suministro eléctrico - abril",
+    "categoria": "Suministros",
+    "tipo": "gasto",
+    "importe": 262.4,
+    "observaciones": "Factura de la compañía eléctrica",
+    "usuario_id": 1
+  },
+  {
+    "_id": 4,
+    "fecha": "2026-05-08",
+    "concepto": "Agua - abril",
+    "categoria": "Suministros",
+    "tipo": "gasto",
+    "importe": 58.2,
+    "usuario_id": 1
+  },
+  {
+    "_id": 5,
+    "fecha": "2026-05-10",
+    "concepto": "Internet y teléfono",
+    "categoria": "Suministros",
+    "tipo": "gasto",
+    "importe": 54.9,
+    "usuario_id": 1
+  },
+  {
+    "_id": 6,
+    "fecha": "2026-05-15",
+    "concepto": "Gestoría",
+    "categoria": "Servicios",
+    "tipo": "gasto",
+    "importe": 121.0,
+    "usuario_id": 1
+  },
+  {
+    "_id": 7,
+    "fecha": "2026-06-01",
+    "concepto": "Alquiler del local",
+    "categoria": "Alquiler",
+    "tipo": "gasto",
+    "importe": 1450.0,
+    "observaciones": "Transferencia al propietario",
+    "usuario_id": 1
+  },
+  {
+    "_id": 8,
+    "fecha": "2026-06-03",
+    "concepto": "Nóminas de mayo",
+    "categoria": "Personal",
+    "tipo": "gasto",
+    "importe": 3640.0,
+    "usuario_id": 1
+  },
+  {
+    "_id": 9,
+    "fecha": "2026-06-05",
+    "concepto": "Suministro eléctrico - mayo",
+    "categoria": "Suministros",
+    "tipo": "gasto",
+    "importe": 271.85,
+    "observaciones": "Factura de la compañía eléctrica",
+    "usuario_id": 1
+  },
+  {
+    "_id": 10,
+    "fecha": "2026-06-08",
+    "concepto": "Agua - mayo",
+    "categoria": "Suministros",
+    "tipo": "gasto",
+    "importe": 61.7,
+    "usuario_id": 1
+  },
+  {
+    "_id": 11,
+    "fecha": "2026-06-10",
+    "concepto": "Internet y teléfono",
+    "categoria": "Suministros",
+    "tipo": "gasto",
+    "importe": 54.9,
+    "usuario_id": 1
+  },
+  {
+    "_id": 12,
+    "fecha": "2026-06-12",
+    "concepto": "Revisión de la cafetera",
+    "categoria": "Mantenimiento",
+    "tipo": "gasto",
+    "importe": 185.0,
+    "observaciones": "Cambio de juntas y descalcificación",
+    "usuario_id": 1
+  },
+  {
+    "_id": 13,
+    "fecha": "2026-06-15",
+    "concepto": "Gestoría",
+    "categoria": "Servicios",
+    "tipo": "gasto",
+    "importe": 121.0,
+    "usuario_id": 1
+  },
+  {
+    "_id": 14,
+    "fecha": "2026-06-20",
+    "concepto": "Alquiler del local para evento privado",
+    "categoria": "Eventos",
+    "tipo": "ingreso",
+    "importe": 600.0,
+    "observaciones": "Cumpleaños, 40 personas",
+    "usuario_id": 1
+  },
+  {
+    "_id": 15,
+    "fecha": "2026-07-01",
+    "concepto": "Alquiler del local",
+    "categoria": "Alquiler",
+    "tipo": "gasto",
+    "importe": 1450.0,
+    "observaciones": "Transferencia al propietario",
+    "usuario_id": 1
+  },
+  {
+    "_id": 16,
+    "fecha": "2026-07-01",
+    "concepto": "Seguro del local (trimestral)",
+    "categoria": "Seguros",
+    "tipo": "gasto",
+    "importe": 412.5,
+    "usuario_id": 1
+  },
+  {
+    "_id": 17,
+    "fecha": "2026-07-03",
+    "concepto": "Nóminas de junio",
+    "categoria": "Personal",
+    "tipo": "gasto",
+    "importe": 3890.0,
+    "observaciones": "Incluye refuerzo de verano",
+    "usuario_id": 1
+  },
+  {
+    "_id": 18,
+    "fecha": "2026-07-05",
+    "concepto": "Suministro eléctrico - junio",
+    "categoria": "Suministros",
+    "tipo": "gasto",
+    "importe": 298.6,
+    "observaciones": "Factura de la compañía eléctrica",
+    "usuario_id": 1
+  },
+  {
+    "_id": 19,
+    "fecha": "2026-07-08",
+    "concepto": "Agua - junio",
+    "categoria": "Suministros",
+    "tipo": "gasto",
+    "importe": 72.4,
+    "usuario_id": 1
+  },
+  {
+    "_id": 20,
+    "fecha": "2026-07-10",
+    "concepto": "Internet y teléfono",
+    "categoria": "Suministros",
+    "tipo": "gasto",
+    "importe": 54.9,
+    "usuario_id": 1
+  },
+  {
+    "_id": 21,
+    "fecha": "2026-07-15",
+    "concepto": "Gestoría",
+    "categoria": "Servicios",
+    "tipo": "gasto",
+    "importe": 121.0,
+    "usuario_id": 1
+  },
+  {
+    "_id": 22,
+    "fecha": "2026-07-20",
+    "concepto": "Reparación cámara frigorífica",
+    "categoria": "Mantenimiento",
+    "tipo": "gasto",
+    "importe": 540.0,
+    "observaciones": "Avería del compresor",
+    "usuario_id": 1
+  },
+  {
+    "_id": 23,
+    "fecha": "2026-08-01",
+    "concepto": "Alquiler del local",
+    "categoria": "Alquiler",
+    "tipo": "gasto",
+    "importe": 1450.0,
+    "observaciones": "Transferencia al propietario",
+    "usuario_id": 1
+  },
+  {
+    "_id": 24,
+    "fecha": "2026-08-03",
+    "concepto": "Nóminas de julio",
+    "categoria": "Personal",
+    "tipo": "gasto",
+    "importe": 3890.0,
+    "observaciones": "Incluye refuerzo de verano",
+    "usuario_id": 1
+  },
+  {
+    "_id": 25,
+    "fecha": "2026-08-05",
+    "concepto": "Suministro eléctrico - julio",
+    "categoria": "Suministros",
+    "tipo": "gasto",
+    "importe": 305.1,
+    "observaciones": "Factura de la compañía eléctrica",
+    "usuario_id": 1
+  },
+  {
+    "_id": 26,
+    "fecha": "2026-08-08",
+    "concepto": "Agua - julio",
+    "categoria": "Suministros",
+    "tipo": "gasto",
+    "importe": 75.9,
+    "usuario_id": 1
+  },
+  {
+    "_id": 27,
+    "fecha": "2026-08-10",
+    "concepto": "Internet y teléfono",
+    "categoria": "Suministros",
+    "tipo": "gasto",
+    "importe": 54.9,
+    "usuario_id": 1
+  },
+  {
+    "_id": 28,
+    "fecha": "2026-08-14",
+    "concepto": "Catering fiestas del barrio",
+    "categoria": "Eventos",
+    "tipo": "ingreso",
+    "importe": 1250.0,
+    "usuario_id": 1
+  },
+  {
+    "_id": 29,
+    "fecha": "2026-08-15",
+    "concepto": "Gestoría",
+    "categoria": "Servicios",
+    "tipo": "gasto",
+    "importe": 121.0,
+    "usuario_id": 1
+  },
+  {
+    "_id": 30,
+    "fecha": "2026-09-01",
+    "concepto": "Alquiler del local",
+    "categoria": "Alquiler",
+    "tipo": "gasto",
+    "importe": 1450.0,
+    "observaciones": "Transferencia al propietario",
+    "usuario_id": 1
+  },
+  {
+    "_id": 31,
+    "fecha": "2026-09-03",
+    "concepto": "Nóminas de agosto",
+    "categoria": "Personal",
+    "tipo": "gasto",
+    "importe": 3890.0,
+    "usuario_id": 1
+  },
+  {
+    "_id": 32,
+    "fecha": "2026-09-05",
+    "concepto": "Suministro eléctrico - agosto",
+    "categoria": "Suministros",
+    "tipo": "gasto",
+    "importe": 274.3,
+    "observaciones": "Factura de la compañía eléctrica",
+    "usuario_id": 1
+  },
+  {
+    "_id": 33,
+    "fecha": "2026-09-08",
+    "concepto": "Agua - agosto",
+    "categoria": "Suministros",
+    "tipo": "gasto",
+    "importe": 63.1,
+    "usuario_id": 1
+  },
+  {
+    "_id": 34,
+    "fecha": "2026-09-10",
+    "concepto": "Internet y teléfono",
+    "categoria": "Suministros",
+    "tipo": "gasto",
+    "importe": 54.9,
+    "usuario_id": 1
+  },
+  {
+    "_id": 35,
+    "fecha": "2026-09-10",
+    "concepto": "Subvención comercio local",
+    "categoria": "Subvenciones",
+    "tipo": "ingreso",
+    "importe": 800.0,
+    "observaciones": "Ayuntamiento",
+    "usuario_id": 1
+  },
+  {
+    "_id": 36,
+    "fecha": "2026-09-15",
+    "concepto": "Gestoría",
+    "categoria": "Servicios",
+    "tipo": "gasto",
+    "importe": 121.0,
+    "usuario_id": 1
+  },
+  {
+    "_id": 37,
+    "fecha": "2026-09-30",
+    "concepto": "IVA tercer trimestre",
+    "categoria": "Impuestos",
+    "tipo": "gasto",
+    "importe": 1876.4,
+    "usuario_id": 1
+  },
+  {
+    "_id": 38,
+    "fecha": "2026-10-01",
+    "concepto": "Alquiler del local",
+    "categoria": "Alquiler",
+    "tipo": "gasto",
+    "importe": 1450.0,
+    "observaciones": "Transferencia al propietario",
+    "usuario_id": 1
+  },
+  {
+    "_id": 39,
+    "fecha": "2026-10-01",
+    "concepto": "Seguro del local (trimestral)",
+    "categoria": "Seguros",
+    "tipo": "gasto",
+    "importe": 412.5,
+    "usuario_id": 1
+  },
+  {
+    "_id": 40,
+    "fecha": "2026-10-03",
+    "concepto": "Nóminas de septiembre",
+    "categoria": "Personal",
+    "tipo": "gasto",
+    "importe": 3890.0,
+    "usuario_id": 1
+  },
+  {
+    "_id": 41,
+    "fecha": "2026-10-05",
+    "concepto": "Suministro eléctrico - septiembre",
+    "categoria": "Suministros",
+    "tipo": "gasto",
+    "importe": 318.75,
+    "observaciones": "Factura de la compañía eléctrica",
+    "usuario_id": 1
+  },
+  {
+    "_id": 42,
+    "fecha": "2026-10-08",
+    "concepto": "Agua - septiembre",
+    "categoria": "Suministros",
+    "tipo": "gasto",
+    "importe": 59.8,
+    "usuario_id": 1
+  },
+  {
+    "_id": 43,
+    "fecha": "2026-10-10",
+    "concepto": "Internet y teléfono",
+    "categoria": "Suministros",
+    "tipo": "gasto",
+    "importe": 54.9,
+    "usuario_id": 1
+  },
+  {
+    "_id": 44,
+    "fecha": "2026-10-15",
+    "concepto": "Gestoría",
+    "categoria": "Servicios",
+    "tipo": "gasto",
+    "importe": 121.0,
+    "usuario_id": 1
+  },
+  {
+    "_id": 45,
+    "fecha": "2026-10-18",
+    "concepto": "Alquiler del local para evento privado",
+    "categoria": "Eventos",
+    "tipo": "ingreso",
+    "importe": 450.0,
+    "usuario_id": 1
+  },
+  {
+    "_id": 46,
+    "fecha": "2026-11-01",
+    "concepto": "Alquiler del local",
+    "categoria": "Alquiler",
+    "tipo": "gasto",
+    "importe": 1450.0,
+    "observaciones": "Transferencia al propietario",
+    "usuario_id": 1
+  },
+  {
+    "_id": 47,
+    "fecha": "2026-11-03",
+    "concepto": "Nóminas de octubre",
+    "categoria": "Personal",
+    "tipo": "gasto",
+    "importe": 3640.0,
+    "usuario_id": 1
+  }
+]

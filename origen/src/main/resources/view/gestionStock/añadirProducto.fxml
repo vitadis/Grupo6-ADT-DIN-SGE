@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+
+<GridPane hgap="12" vgap="12" styleClass="ventana" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.AñadirProductoController">
+   
+   <padding>
+      <Insets top="30" right="30" bottom="26" left="30" />
+   </padding>
+   <columnConstraints>
+      <ColumnConstraints minWidth="110" prefWidth="110" />
+      <ColumnConstraints minWidth="180" prefWidth="180" />
+   </columnConstraints>
+
+   <Label styleClass="tituloVentana" text="AÑADIR PRODUCTO" GridPane.columnSpan="2" />
+
+   <CheckBox fx:id="chkNuevo" text="Es un producto nuevo" onAction="#modoCambiado"
+             GridPane.columnSpan="2" GridPane.rowIndex="1" />
+
+   <!-- Fila 2: el combo y el campo de texto comparten celda; solo uno es visible -->
+   <Label text="Producto:" GridPane.rowIndex="2" />
+   <ComboBox fx:id="comboExistente" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+   <TextField fx:id="txtProducto" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+   <!-- Solo para producto nuevo -->
+   <GridPane fx:id="panelNuevo" hgap="12" vgap="12" GridPane.columnSpan="2" GridPane.rowIndex="3">
+      <columnConstraints>
+         <ColumnConstraints minWidth="110" prefWidth="110" />
+         <ColumnConstraints minWidth="180" prefWidth="180" />
+      </columnConstraints>
+
+      <Label text="Tipo:" GridPane.rowIndex="0" />
+      <ComboBox fx:id="comboTipo" maxWidth="Infinity" onAction="#tipoSeleccionado"
+                GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+      <Label text="Categoría:" GridPane.rowIndex="1" />
+      <ComboBox fx:id="comboCategoria" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+      <Label text="Proveedor:" GridPane.rowIndex="2" />
+      <ComboBox fx:id="comboProveedor" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+      <Label text="Precio venta (€):" GridPane.rowIndex="3" />
+      <TextField fx:id="txtPrecio" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+      <Label text="IVA (%):" GridPane.rowIndex="4" />
+      <TextField fx:id="txtIva" text="21" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+      <Label text="Stock mínimo:" GridPane.rowIndex="5" />
+      <TextField fx:id="txtStockMinimo" text="0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+   </GridPane>
+
+   <!-- Comunes a los dos casos -->
+   <Label fx:id="lblCantidad" text="Cantidad a añadir:" GridPane.rowIndex="4" />
+   <TextField fx:id="txtCantidad" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+   <Label text="Caducidad:" GridPane.rowIndex="5" />
+   <DatePicker fx:id="dateCaducidad" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+   <HBox spacing="10" GridPane.columnSpan="2" GridPane.rowIndex="6">
+      <padding>
+         <Insets top="10" />
+      </padding>
+      <Button text="Guardar" styleClass="btnPrimario" onAction="#guardar" />
+      <Button text="Cancelar" onAction="#cancelar" />
+   </HBox>
+</GridPane>

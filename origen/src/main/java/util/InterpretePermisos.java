@@ -49,7 +49,7 @@ public class InterpretePermisos {
      * </ol>
      *
      * <p>
-     * Ejemplo: con {@code ["caja", "gestion.ingresosGastos", "inicio"]} el
+     * Ejemplo: con {@code ["caja", "gestion:ingresosGastos", "inicio"]} el
      * resultado es {@code [Gestión stock, Compras y proveedores,
      * Análisis e informes, Administración]}.</p>
      *
@@ -65,7 +65,7 @@ public class InterpretePermisos {
 
         NAV.forEach((apartado, base) -> {
             boolean tieneAcceso = permisos.stream()
-                    .anyMatch(p -> p.equals(base) || p.startsWith(base + "."));
+                    .anyMatch(p -> p.equals(base) || p.startsWith(base + ":"));
             if (!tieneAcceso) {
                 sinAcceso.add(apartado);
             }
