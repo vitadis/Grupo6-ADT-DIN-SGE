@@ -1,25 +1,36 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package services;
 
 import dao.UsuarioDao;
-import model.Empleado;
 import model.Usuario;
 
 /**
+ * Servicio de negocio encargado de la validación de credenciales e inicio de sesión.
  *
  * @author Joel
  */
 public class LoginService {
 
+    // ---- Dependencias ----
     private final UsuarioDao usuarioDao;
 
+    /**
+     * Inicializa el servicio de autenticación con el DAO de usuarios.
+     *
+     * @param usuarioDao acceso a datos de usuarios
+     */
     public LoginService(UsuarioDao usuarioDao) {
         this.usuarioDao = usuarioDao;
     }
 
+    // ---- Autenticación ----
+
+    /**
+     * Valida que las credenciales no estén vacías y comprueba si corresponden a un usuario registrado.
+     *
+     * @param nombre     nombre de usuario introducido
+     * @param contrasena contraseña introducida
+     * @return usuario autenticado correspondiente a las credenciales
+     */
     public Usuario iniciarSesion(String nombre, String contrasena) {
         if (nombre == null || nombre.isBlank()
                 || contrasena == null || contrasena.isEmpty()) {
@@ -40,5 +51,4 @@ public class LoginService {
         }
         return usuario;
     }
-
 }

@@ -1,15 +1,14 @@
 package controller;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.CustomMenuItem;
@@ -23,24 +22,24 @@ import model.Empleado;
 import model.Usuario;
 
 /**
- * Dialog de usuario/empleado: solo muestra y recoge los datos.
+ * FXML Controller class para el diálogo de alta, consulta y edición de
+ * usuarios.
  *
  * @author Joel
  */
 public class DialogUsuarioController {
 
-    // Usuario del dialog
+    // ---- Estado y callbacks ----
     private Usuario usuarioGestionado;
-    // Permisos que ofrece el dialog
     private List<String> permisosCatalogo = new ArrayList<String>();
     private final Set<String> permisosSeleccionados = new LinkedHashSet<String>();
     private final List<String> permisosDisponibles = new ArrayList<String>();
 
-    // Un Consumer<Usuario> por botón
     private Consumer<Usuario> alCrear;
     private Consumer<Usuario> alModificar;
     private Consumer<Usuario> alEliminar;
 
+    // ---- Datos de usuario ----
     @FXML
     private TextField tfId;
     @FXML
@@ -56,6 +55,7 @@ public class DialogUsuarioController {
     @FXML
     private TextField tfCreadoEn;
 
+    // ---- Datos de empleado ----
     @FXML
     private VBox panelEmpleado;
     @FXML
@@ -75,7 +75,7 @@ public class DialogUsuarioController {
     @FXML
     private Label lblSinEmpleado;
 
-    // Modificar/Eliminar en edición; Alta/Cancelar en alta
+    // ---- Botones ----
     @FXML
     private Button btnModificar;
     @FXML
@@ -85,11 +85,22 @@ public class DialogUsuarioController {
     @FXML
     private Button btnCancelar;
 
+    /**
+     * Inicializa el diálogo ocultando por defecto los botones de modo alta.
+     */
     @FXML
     private void initialize() {
         mostrarBotones(false);
     }
 
+    /**
+     * Asigna los callbacks ejecutados al crear, modificar o eliminar un
+     * usuario.
+     *
+     * @param alCrear acción al dar de alta
+     * @param alModificar acción al guardar cambios
+     * @param alEliminar acción al eliminar
+     */
     public void setAcciones(Consumer<Usuario> alCrear,
             Consumer<Usuario> alModificar,
             Consumer<Usuario> alEliminar) {
@@ -98,7 +109,12 @@ public class DialogUsuarioController {
         this.alEliminar = alEliminar;
     }
 
-    // Llamar antes de setUsuario / setModoAlta
+    /**
+     * Define el catálogo de permisos disponibles que se mostrarán en el
+     * selector.
+     *
+     * @param permisos lista de permisos disponibles
+     */
     public void setPermisosDisponibles(List<String> permisos) {
         this.permisosCatalogo = permisos != null ? permisos : new ArrayList<String>();
     }
@@ -110,16 +126,21 @@ public class DialogUsuarioController {
         ponerVisible(btnCancelar, modoAlta);
     }
 
-    private void ponerVisible(Button boton, boolean visible) {
-        boton.setVisible(visible);
-        boton.setManaged(visible);
+    private void ponerVisible(Node nodo, boolean visible) {
+        if (nodo != null) {
+            nodo.setVisible(visible);
+            nodo.setManaged(visible);
+        }
     }
 
-    // Modo edición: el usuario ya viene verificado por el controller
+    /**
+     * Carga en el formulario los datos de un usuario existente en modo edición.
+     *
+     * @param usuario usuario a consultar o editar
+     */
     public void setUsuario(Usuario usuario) {
         this.usuarioGestionado = usuario;
 
-        // En edición no se tocan el username ni la identidad del empleado
         tfUsername.setEditable(false);
         tfUsername.setPromptText("");
         tfEmpleadoNombre.setEditable(false);
@@ -137,18 +158,19 @@ public class DialogUsuarioController {
         cargarEmpleado(usuario.getEmpleado());
     }
 
-    // Modo alta: mismo dialog, campos vacíos, usuario y empleado a la vez
+    /**
+     * Prepara el formulario con campos vacíos y editables para dar de alta un
+     * nuevo usuario.
+     */
     public void setModoAlta() {
         this.usuarioGestionado = null;
         mostrarBotones(true);
 
-        // Id y fecha de creación los pone el sistema
         tfId.clear();
         tfId.setDisable(true);
         tfCreadoEn.clear();
         tfCreadoEn.setDisable(true);
 
-        // El username se genera en el controller
         tfUsername.clear();
         tfUsername.setDisable(true);
         tfUsername.setPromptText("Se genera automáticamente");
@@ -177,32 +199,18 @@ public class DialogUsuarioController {
         tfEmpleadoTelefono.clear();
         tfEmpleadoTelefono.setEditable(true);
         tfEmpleadoFechaAlta.clear();
-        tfEmpleadoFechaAlta.setDisable(true); // la fecha de alta la pone el controller
+        tfEmpleadoFechaAlta.setDisable(true);
     }
 
-    // Vuelca el formulario en el usuario de la tabla
-    private void aplicarCambios() {
-        usuarioGestionado.setPassword_hash(pfPassword.getText());
-        usuarioGestionado.setRol(tfRol.getText().trim());
-        usuarioGestionado.setActivo(chkActivo.isSelected());
-        usuarioGestionado.setPermisos(permisosElegidos());
-
-        // El usuario puede no tener empleado asociado
-        Empleado empleado = usuarioGestionado.getEmpleado();
-        if (empleado != null) {
-            empleado.setPuesto(tfEmpleadoPuesto.getText().trim());
-            empleado.setEmail(tfEmpleadoEmail.getText().trim());
-            empleado.setTelefono(tfEmpleadoTelefono.getText().trim());
-        }
-    }
-
+    /**
+     * Cierra la ventana modal actual.
+     */
     public void cerrar() {
         ((Stage) tfId.getScene().getWindow()).close();
     }
 
-    // Permisos: MenuButton con un CheckBox por permiso (selección múltiple)
+    // ---- Permisos ----
     private void cargarPermisos(Usuario usuario) {
-        // Los que ya tiene el usuario quedan marcados
         permisosSeleccionados.clear();
         if (usuario.getPermisos() != null) {
             permisosSeleccionados.addAll(usuario.getPermisos());
@@ -244,7 +252,6 @@ public class DialogUsuarioController {
         mbPermisos.setText(permisosSeleccionados.size() + " permisos seleccionados");
     }
 
-    // Permisos marcados, respetando el orden de la lista
     private List<String> permisosElegidos() {
         List<String> elegidos = new ArrayList<String>();
         for (String permiso : permisosDisponibles) {
@@ -255,7 +262,7 @@ public class DialogUsuarioController {
         return elegidos;
     }
 
-    // Empleado
+    // ---- Empleado ----
     private void cargarEmpleado(Empleado empleado) {
         boolean hayEmpleado = empleado != null;
 
@@ -277,7 +284,6 @@ public class DialogUsuarioController {
         tfEmpleadoFechaAlta.setText(String.valueOf(empleado.getFecha_alta()));
     }
 
-    // Usuario y empleado nuevos con los datos del formulario
     private Usuario leerAltaFormulario() {
         Empleado empleado = new Empleado();
         empleado.setNombre(tfEmpleadoNombre.getText().trim());
@@ -296,24 +302,32 @@ public class DialogUsuarioController {
         return nuevo;
     }
 
-    // Compara el formulario con el usuario (el username no se edita)
-    private boolean hayCambios() {
-        Empleado empleado = usuarioGestionado.getEmpleado();
+    private Usuario construirUsuarioEditado() {
+        Usuario editado = new Usuario();
+        editado.setId(usuarioGestionado.getId());
+        editado.setUsername(usuarioGestionado.getUsername());
+        editado.setCreado_en(usuarioGestionado.getCreado_en());
+        editado.setPassword_hash(pfPassword.getText());
+        editado.setRol(tfRol.getText().trim());
+        editado.setActivo(chkActivo.isSelected());
+        editado.setPermisos(permisosElegidos());
 
-        boolean cambiosUsuario = !Objects.equals(pfPassword.getText(), usuarioGestionado.getPassword_hash())
-                || !Objects.equals(tfRol.getText().trim(), usuarioGestionado.getRol())
-                || chkActivo.isSelected() != usuarioGestionado.isActivo()
-                || !new HashSet<String>(permisosElegidos()).equals(new HashSet<String>(usuarioGestionado.getPermisos()));
-
-        boolean cambiosEmpleado = empleado != null
-                && (!Objects.equals(tfEmpleadoPuesto.getText().trim(), empleado.getPuesto())
-                || !Objects.equals(tfEmpleadoEmail.getText().trim(), empleado.getEmail())
-                || !Objects.equals(tfEmpleadoTelefono.getText().trim(), empleado.getTelefono()));
-
-        return cambiosUsuario || cambiosEmpleado;
+        Empleado empOriginal = usuarioGestionado.getEmpleado();
+        if (empOriginal != null) {
+            Empleado empEditado = new Empleado();
+            empEditado.setNombre(empOriginal.getNombre());
+            empEditado.setApellido(empOriginal.getApellido());
+            empEditado.setDni(empOriginal.getDni());
+            empEditado.setFecha_alta(empOriginal.getFecha_alta());
+            empEditado.setPuesto(tfEmpleadoPuesto.getText().trim());
+            empEditado.setEmail(tfEmpleadoEmail.getText().trim());
+            empEditado.setTelefono(tfEmpleadoTelefono.getText().trim());
+            editado.setEmpleado(empEditado);
+        }
+        return editado;
     }
 
-    // Botones: cada uno avisa con su Consumer<Usuario> (Cancelar solo cierra)
+    // ---- Métodos FXML ----
     @FXML
     private void onAlta(ActionEvent event) {
         if (alCrear != null) {
@@ -323,15 +337,8 @@ public class DialogUsuarioController {
 
     @FXML
     private void onModificar(ActionEvent event) {
-        // Sin cambios no hay nada que modificar
-        if (!hayCambios()) {
-            cerrar();
-            return;
-        }
-
-        aplicarCambios();
         if (alModificar != null) {
-            alModificar.accept(usuarioGestionado);
+            alModificar.accept(construirUsuarioEditado());
         }
     }
 
@@ -345,5 +352,25 @@ public class DialogUsuarioController {
     @FXML
     private void onCancelar(ActionEvent event) {
         cerrar();
+    }
+
+    // set solo lectura
+    public void setSoloLectura() {
+        ponerVisible(btnModificar, false);
+        ponerVisible(btnEliminar, false);
+        ponerVisible(btnAlta, false);
+        ponerVisible(btnCancelar, false);
+
+        ponerVisible(tfId, false);
+        ponerVisible(tfCreadoEn, false);
+        ponerVisible(chkActivo, false);
+        ponerVisible(lblSinEmpleado, false);
+
+        pfPassword.setEditable(false);
+        tfRol.setEditable(false);
+        tfEmpleadoPuesto.setEditable(false);
+        tfEmpleadoEmail.setEditable(false);
+        tfEmpleadoTelefono.setEditable(false);
+        mbPermisos.setDisable(true);
     }
 }
