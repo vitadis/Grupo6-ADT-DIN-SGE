@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package controller;
 
 import exceptions.DaoException;
@@ -31,15 +27,17 @@ import services.CajaService;
 import util.AppLogger;
 
 /**
- * FXML Controller class
+ * FXML Controller class para la visualización del historial de ventas.
  *
  * @author Joel
  */
 public class HistorialController implements Initializable {
 
+    // ---- Servicios y estado ----
     private CajaService cajaService;
     private final AppLogger logger = AppLogger.getInstance();
 
+    // ---- Tabla de pedidos ----
     @FXML
     private TableView<VentaPedido> tvPedido;
     @FXML
@@ -52,26 +50,40 @@ public class HistorialController implements Initializable {
     private TableColumn<VentaPedido, EstadoPedido> tcEstado;
     @FXML
     private TableColumn<VentaPedido, MetodoPago> tcMetodoPago;
-    // la columna trabaja con la lista ya mapeada a texto
     @FXML
     private TableColumn<VentaPedido, List<String>> tcDetalle;
     @FXML
     private TableColumn<VentaPedido, Double> tcTotal;
 
     /**
-     * Initializes the controller class.
+     * Inicializa el controlador de la vista de historial.
+     *
+     * @param url ubicación utilizada para resolver rutas relativas
+     * @param rb recursos utilizados para localizar el objeto raíz
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
     }
 
-    // Linea de la lista
+    // ---- Mapeo de detalle ----
+    /**
+     * Formatea una línea de pedido mostrando el nombre del producto y su
+     * cantidad.
+     *
+     * @param linea línea de pedido a formatear
+     * @return texto con el nombre y cantidad del producto
+     */
     private String getString(LineaPedido linea) {
         return linea.getNombre() + " x" + linea.getCantidad();
     }
 
-    // mapeo detalle
+    /**
+     * Transforma la lista de líneas de un pedido en una lista de descripciones
+     * textuales.
+     *
+     * @param pedido pedido del que extraer el detalle
+     * @return lista de textos formateados o lista vacía si no tiene detalle
+     */
     private List<String> mapearDetalle(VentaPedido pedido) {
         List<LineaPedido> lineas = pedido.getDetalle();
         if (lineas == null) {
@@ -82,11 +94,21 @@ public class HistorialController implements Initializable {
                 .collect(Collectors.toList());
     }
 
+    // ---- Carga de tabla ----
+    /**
+     * Obtiene los pedidos desde el servicio, configura las columnas y puebla la
+     * tabla.
+     */
     private void cargarTabla() {
+        if (cajaService == null) {
+            logger.log(Level.WARNING, "Intento de cargar historial sin servicio de caja inicializado.");
+            return;
+        }
+
         try {
             List<VentaPedido> pedidos = cajaService.listaPedidos();
             ObservableList<VentaPedido> listaPedidos = FXCollections.observableArrayList(pedidos);
-            // definir el valor 
+
             tcId.setCellValueFactory(new PropertyValueFactory<>("id"));
             tcUsuarioId.setCellValueFactory(new PropertyValueFactory<>("usuario_id"));
             tcFecha.setCellValueFactory(new PropertyValueFactory<>("fecha"));
@@ -94,7 +116,6 @@ public class HistorialController implements Initializable {
             tcMetodoPago.setCellValueFactory(new PropertyValueFactory<>("metodo_pago"));
             tcTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
 
-            // asignar a la columna la lista ya mapeada (List<String>)
             tcDetalle.setCellValueFactory(new Callback<CellDataFeatures<VentaPedido, List<String>>, ObservableValue<List<String>>>() {
                 @Override
                 public ObservableValue<List<String>> call(CellDataFeatures<VentaPedido, List<String>> cell) {
@@ -102,7 +123,6 @@ public class HistorialController implements Initializable {
                 }
             });
 
-            // detalle dentro de comboBox
             tcDetalle.setCellFactory(new Callback<TableColumn<VentaPedido, List<String>>, TableCell<VentaPedido, List<String>>>() {
                 @Override
                 public TableCell<VentaPedido, List<String>> call(TableColumn<VentaPedido, List<String>> col) {
@@ -119,7 +139,6 @@ public class HistorialController implements Initializable {
                                 return;
                             }
 
-                            // cargar la lista dentro del combobox
                             comboDetalle.setItems(FXCollections.observableArrayList(detalle));
 
                             comboDetalle.setPromptText("Ver detalle (" + detalle.size() + ")");
@@ -132,15 +151,20 @@ public class HistorialController implements Initializable {
             });
 
             tvPedido.setItems(listaPedidos);
+            logger.info("Historial de pedidos cargado: " + pedidos.size() + " registros.");
 
         } catch (DaoException e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
+            logger.log(Level.SEVERE, "Error al cargar el historial de pedidos: " + e.getMessage(), e);
             util.Alertas.mostrarError(e.getMessage());
         }
     }
-    
-    // set service
-    public void setCajaService(CajaService servicio){
+
+    /**
+     * Asigna el servicio de caja y dispara la carga de datos en la tabla.
+     *
+     * @param servicio instancia de {@link CajaService}
+     */
+    public void setCajaService(CajaService servicio) {
         this.cajaService = servicio;
         cargarTabla();
     }
