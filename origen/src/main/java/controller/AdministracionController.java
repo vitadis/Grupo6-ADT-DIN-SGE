@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -46,13 +45,12 @@ import util.Alertas;
 import util.AppLogger;
 
 /**
- * Controller de la pantalla de administración.
+ * FXML Controller class del módulo Administración
  *
  * @author Joel
  */
-public class AdministracionController {
+public class AdministracionController implements UsuarioImplementacion {
 
-    // Clicks necesarios sobre una fila para abrir su dialog (1 = un click, 2 = doble click)
     private static final int CLICKS_PARA_ABRIR = 2;
 
     // ---- Cabecera ----
@@ -96,30 +94,31 @@ public class AdministracionController {
     // ---- List Logger ----
     @FXML
     private ListView<RegistroLog> listaLogger;
-    
+
+    // ---- Servicios y estado ----
     private final AdministracionService servicio = AdministracionService.getInstance();
     private final ObservableList<Usuario> listaUsuarios = FXCollections.observableArrayList();
     private final AppLogger logger = AppLogger.getInstance();
-    // Usuario que ha iniciado sesión (quien administra) y usuario de la fila elegida en la tabla
-
     private Usuario usuarioSeleccionado;
+    private Usuario usuario;
 
-    // Debe llamarse desde donde se navega a esta pantalla, pasando al usuario logueado
-    public void setUsuarioSesion(Usuario usuarioSesion) {
-        logger.setUser(usuarioSesion.getUsername());
-    }
-    
+    /**
+     * Inicializa los componentes visuales, los listeners de pestañas y carga la
+     * lista inicial de usuarios.
+     */
     @FXML
     private void initialize() {
         configurarTabla();
         configurarContadorPermisos();
         configurarMenuLogger();
 
-        // Al cambiar de pestaña se actualiza la cabecera y se recarga lo dinámico
         tabPaneAdmin.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
             @Override
             public void changed(ObservableValue<? extends Tab> obs, Tab anterior, Tab actual) {
                 actualizarCabecera(actual);
+                if (actual != null) {
+                    logger.log(Level.INFO, "Cambio a pestaña: " + actual.getText()); // <-- AQUÍ
+                }
                 if (actual == tabPermisos) {
                     cargarPermisos();
                 } else if (actual == tabLogger) {
@@ -128,34 +127,36 @@ public class AdministracionController {
             }
         });
         actualizarCabecera(tabPaneAdmin.getSelectionModel().getSelectedItem());
-        
+
         cargarUsuarios();
     }
 
-    // Tabla de usuarios
+    /**
+     * Enlaza las columnas de la tabla de usuarios, renderiza los permisos en un
+     * ComboBox y activa el clic por fila.
+     */
     private void configurarTabla() {
         tablaUsuarios.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_ALL_COLUMNS);
         tablaUsuarios.setItems(listaUsuarios);
-        
+
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        
+
         colUsername.setCellValueFactory(new PropertyValueFactory<>("username"));
-        
+
         colRol.setCellValueFactory(new PropertyValueFactory<>("rol"));
-        
+
         colPermisos.setCellValueFactory(new PropertyValueFactory<>("permisos"));
 
-        // Permisos en comboBox desplegable
         colPermisos.setCellFactory(new Callback<TableColumn<Usuario, List<String>>, TableCell<Usuario, List<String>>>() {
             @Override
             public TableCell<Usuario, List<String>> call(TableColumn<Usuario, List<String>> columna) {
                 return new TableCell<Usuario, List<String>>() {
                     private final ComboBox<String> comboPermisos = new ComboBox<String>();
-                    
+
                     {
                         comboPermisos.setMaxWidth(Double.MAX_VALUE);
                     }
-                    
+
                     @Override
                     protected void updateItem(List<String> permisos, boolean vacio) {
                         super.updateItem(permisos, vacio);
@@ -171,11 +172,14 @@ public class AdministracionController {
                 };
             }
         });
-        
+
         configurarClickFila();
     }
 
-    // Captura el click sobre cualquier celda de la fila y abre el dialog de ese usuario
+    /**
+     * Detecta el doble clic principal sobre una fila no vacía y abre el diálogo
+     * de detalle del usuario.
+     */
     private void configurarClickFila() {
         tablaUsuarios.setRowFactory(new Callback<TableView<Usuario>, TableRow<Usuario>>() {
             @Override
@@ -193,17 +197,24 @@ public class AdministracionController {
             }
         });
     }
-    
+
+    /**
+     * Obtiene los usuarios desde el servicio y actualiza la lista observable de
+     * la tabla.
+     */
     private void cargarUsuarios() {
         try {
             listaUsuarios.setAll(servicio.listarUsuarios());
         } catch (RuntimeException e) {
             Alertas.mostrarError(e.getMessage());
-            logger.log(Level.SEVERE, e.getMessage(), e);
+            logger.log(Level.SEVERE, "Error al cargar usuarios: " + e.getMessage(), e);
         }
     }
 
-    // Permisos (colección "permisos" -> lista "todos")
+    /**
+     * Escucha los cambios en el contenedor de permisos para actualizar el
+     * contador en pantalla.
+     */
     private void configurarContadorPermisos() {
         contenedorPermisos.getChildren().addListener(new ListChangeListener<Node>() {
             @Override
@@ -212,7 +223,11 @@ public class AdministracionController {
             }
         });
     }
-    
+
+    /**
+     * Limpia el contenedor y carga como etiquetas todos los permisos
+     * disponibles en el sistema.
+     */
     private void cargarPermisos() {
         try {
             contenedorPermisos.getChildren().clear();
@@ -221,19 +236,29 @@ public class AdministracionController {
             }
         } catch (RuntimeException e) {
             Alertas.mostrarError(e.getMessage());
-            logger.log(Level.SEVERE, e.getMessage(), e);
+            logger.log(Level.SEVERE, "Error al cargar permisos: " + e.getMessage(), e);
         }
     }
 
-    // Logger (se recarga cada vez que se entra en la pestaña)
+    /**
+     * Recarga los registros del historial del sistema en la lista visual.
+     */
     private void cargarLogger() {
-        listaLogger.getItems().setAll(AppLogger.getInstance().leer());
+        try {
+            listaLogger.getItems().setAll(logger.leer());
+        } catch (RuntimeException e) {
+            Alertas.mostrarError("No se pudo leer el historial de logs.");
+            logger.log(Level.SEVERE, "Error al leer registros del logger: " + e.getMessage(), e);
+        }
     }
 
-    // Click derecho sobre el historial -> "Copiar" (copia las líneas seleccionadas)
+    /**
+     * Habilita la selección múltiple en el logger y añade un menú contextual
+     * para copiar líneas al portapapeles.
+     */
     private void configurarMenuLogger() {
         listaLogger.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        
+
         final MenuItem copiar = new MenuItem("Copiar");
         copiar.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -250,7 +275,7 @@ public class AdministracionController {
                 Clipboard.getSystemClipboard().setContent(contenido);
             }
         });
-        
+
         ContextMenu menu = new ContextMenu(copiar);
         menu.setOnShowing(new EventHandler<WindowEvent>() {
             @Override
@@ -261,32 +286,38 @@ public class AdministracionController {
         listaLogger.setContextMenu(menu);
     }
 
-    // Cabecera dinámica
+    /**
+     * Actualiza la ruta, el título y la visibilidad del botón principal según
+     * la pestaña seleccionada.
+     */
     private void actualizarCabecera(Tab tab) {
         if (tab == null) {
             return;
         }
         lblRuta.setText("Administración > " + tab.getText());
-        
+
         boolean hayAccion = true;
         if (tab == tabUsuarios) {
             lblTitulo.setText("Usuarios y empleados");
             btnAccionPrincipal.setText("Alta usuario");
         } else if (tab == tabPermisos) {
             lblTitulo.setText("Permisos");
-            hayAccion = false; // Los permisos solo se consultan
+            hayAccion = false;
         } else if (tab == tabLogger) {
             lblTitulo.setText("Logger del sistema");
-            hayAccion = false; // El logger solo muestra el historial
+            hayAccion = false;
         } else if (tab == tabConfiguracion) {
             lblTitulo.setText("Configuración del sistema");
-            hayAccion = false; // Configuración no tiene acción principal
+            hayAccion = false;
         }
         btnAccionPrincipal.setVisible(hayAccion);
         btnAccionPrincipal.setManaged(hayAccion);
     }
 
-    // Botones (solo imprimen lo que harán)
+    // ---------------- Methods FXML ----------------
+    /**
+     * Ejecuta la acción principal correspondiente a la pestaña activa.
+     */
     @FXML
     private void onAccionPrincipal() {
         Tab tab = tabPaneAdmin.getSelectionModel().getSelectedItem();
@@ -295,138 +326,201 @@ public class AdministracionController {
         }
     }
 
-    // Alta de usuario: el mismo dialog de usuario, en modo alta
+    /**
+     * Limpia la selección previa y abre una nueva ventana modal con el
+     * formulario de alta de usuario.
+     */
     private void abrirAltaUsuario() {
+        usuarioSeleccionado = null;
+        tablaUsuarios.getSelectionModel().clearSelection();
         try {
             InstanciarEscena.createNewStage("/view/admin/usuarioView.fxml", "Alta de usuario", this::dialogAlta);
         } catch (IOException e) {
             Alertas.mostrarError("No se pudo abrir el dialog de alta.");
-            logger.log(Level.SEVERE, e.getMessage(), e);
+            logger.log(Level.SEVERE, "Error al abrir vista de alta de usuario: " + e.getMessage(), e);
         }
     }
-    
+
+    /**
+     * Configura el controlador del diálogo en modo alta limpiando datos previos
+     * y asignando callbacks.
+     *
+     * @param controller instancia del controlador del diálogo
+     */
     private void dialogAlta(Object controller) {
         try {
             DialogUsuarioController dialog = (DialogUsuarioController) controller;
             dialog.setAcciones(
-                    usuario -> accionCrear(dialog, usuario),
-                    usuario -> accionModificar(dialog, usuario),
-                    usuario -> accionEliminar(dialog, usuario));
+                    u -> accionCrear(dialog, u),
+                    u -> accionModificar(dialog, u),
+                    u -> accionEliminar(dialog, u));
             dialog.setPermisosDisponibles(servicio.listarPermisos());
             dialog.setModoAlta();
         } catch (Exception e) {
             Alertas.mostrarError("Error con el dialog de alta: " + e.getMessage());
-            logger.log(Level.SEVERE, e.getMessage(), e);
+            logger.log(Level.SEVERE, "Error al inicializar dialog de alta: " + e.getMessage(), e);
         }
     }
-    
+
+    /**
+     * Solicita confirmación al usuario y redirige a la vista de inicio de
+     * sesión.
+     *
+     * @param event evento de acción del botón
+     */
     @FXML
     private void onCerrarSesion(ActionEvent event) {
         Alertas.mostrarConfirmacion("Confirmación", "¿Seguro que quieres cerrar sesión?", () -> {
             try {
                 Button btnCS = (Button) event.getSource();
                 Stage stage = (Stage) btnCS.getScene().getWindow();
-                
+
+                logger.log(Level.INFO, "Cierre de sesión del usuario: " + (usuario != null ? usuario.getUsername() : "desconocido"));
                 InstanciarEscena.cambiarVista(stage, "/view/loginView.fxml", "Inicio Sesión");
             } catch (IOException ex) {
                 Alertas.mostrarError("No se pudo cerrar sesión: " + ex.getMessage());
-                logger.log(Level.SEVERE, ex.getMessage(), ex);
+                logger.log(Level.SEVERE, "Error al cerrar sesión: " + ex.getMessage(), ex);
             }
         });
     }
 
-    // Dialog del usuario elegido en la tabla
+    /**
+     * Abre la ventana modal con la información del usuario seleccionado en la
+     * tabla.
+     */
     private void abrirDialogUsuario() {
         if (usuarioSeleccionado == null) {
             return;
         }
-        
+
         try {
             InstanciarEscena.createNewStage("/view/admin/usuarioView.fxml", "Información de usuario", this::dialogUsuario);
         } catch (IOException e) {
             Alertas.mostrarError("No se pudo abrir el dialog de usuario.");
-            logger.log(Level.SEVERE, e.getMessage(), e);
+            logger.log(Level.SEVERE, "Error al abrir vista de usuario: " + e.getMessage(), e);
         }
     }
 
-    // verifica el usuario de la fila y se lo entrega al dialog
+    /**
+     * Carga el usuario seleccionado en el controlador del diálogo de edición.
+     *
+     * @param controller instancia del controlador del diálogo
+     */
     private void dialogUsuario(Object controller) {
         try {
             DialogUsuarioController dialog = (DialogUsuarioController) controller;
             dialog.setAcciones(
-                    usuario -> accionCrear(dialog, usuario),
-                    usuario -> accionModificar(dialog, usuario),
-                    usuario -> accionEliminar(dialog, usuario));
+                    u -> accionCrear(dialog, u),
+                    u -> accionModificar(dialog, u),
+                    u -> accionEliminar(dialog, u));
 
-            // El usuario de la fila cumple las reglas del modelo
-            usuarioSeleccionado.validar();
-            
             dialog.setPermisosDisponibles(servicio.listarPermisos());
             dialog.setUsuario(usuarioSeleccionado);
+            logger.log(Level.INFO, "Consulta de ficha del usuario: " + usuarioSeleccionado.getUsername());
         } catch (Exception e) {
             Alertas.mostrarError("Error con el dialog de usuario: " + e.getMessage());
-            logger.log(Level.SEVERE, e.getMessage(), e);
+            logger.log(Level.SEVERE, "Error al cargar datos en dialog de usuario: " + e.getMessage(), e);
         }
     }
 
-    // Acciones de los botones del dialog (negocio, validaciones y log)
+    /**
+     * Genera el username si hay empleado asociado, delega el alta al servicio y
+     * refresca la tabla.
+     *
+     * @param dialog controlador del diálogo activo
+     * @param nuevo usuario a dar de alta
+     */
     private void accionCrear(DialogUsuarioController dialog, Usuario nuevo) {
         try {
-            Empleado empleado = nuevo.getEmpleado();
-            empleado.setFecha_alta(LocalDate.now());
-            empleado.validar();
-            nuevo.setUsername(generarUsername(empleado));
-            
+            if (nuevo != null && nuevo.getEmpleado() != null) {
+                nuevo.setUsername(generarUsername(nuevo.getEmpleado()));
+            }
+
             servicio.altaUsuario(nuevo);
+            logger.log(Level.INFO, "Usuario creado: " + nuevo.getUsername() + " (Rol: " + nuevo.getRol() + ")");
             cargarUsuarios();
             dialog.cerrar();
+        } catch (IllegalArgumentException e) {
+            Alertas.mostrarError(e.getMessage());
+            logger.log(Level.WARNING, "Validación fallida al crear usuario: " + e.getMessage());
         } catch (RuntimeException e) {
             Alertas.mostrarError(e.getMessage());
-            logger.log(Level.SEVERE, e.getMessage(), e);
+            logger.log(Level.SEVERE, "Error al crear usuario: " + e.getMessage(), e);
         }
     }
-    
+
+    /**
+     * Delega la validación y actualización del usuario al servicio y refresca
+     * la tabla.
+     *
+     * @param dialog controlador del diálogo activo
+     * @param usuario usuario con los cambios aplicados
+     */
     private void accionModificar(DialogUsuarioController dialog, Usuario usuario) {
         try {
-            // El usuario puede no tener empleado asociado
-            if (usuario.getEmpleado() != null) {
-                usuario.getEmpleado().validar();
-            }
             servicio.modificarUsuario(usuario);
-            
+            logger.log(Level.INFO, "Usuario modificado: " + usuario.getUsername() + " (Rol: " + usuario.getRol() + ")");
+
             cargarUsuarios();
             dialog.cerrar();
+        } catch (IllegalArgumentException e) {
+            Alertas.mostrarError(e.getMessage());
+            logger.log(Level.WARNING, "Validación o modificación rechazada para '" + usuario.getUsername() + "': " + e.getMessage());
         } catch (RuntimeException e) {
             Alertas.mostrarError(e.getMessage());
-            logger.log(Level.SEVERE, e.getMessage(), e);
+            logger.log(Level.SEVERE, "Error al modificar usuario '" + usuario.getUsername() + "': " + e.getMessage(), e);
         }
     }
-    
+
+    /**
+     * Pide confirmación, delega la eliminación al servicio y recarga la tabla.
+     *
+     * @param dialog controlador del diálogo activo
+     * @param usuario usuario a eliminar
+     */
     private void accionEliminar(DialogUsuarioController dialog, Usuario usuario) {
         Alert confirmacion = new Alert(Alert.AlertType.CONFIRMATION);
         confirmacion.setTitle("Eliminar usuario");
         confirmacion.setHeaderText("¿Eliminar a '" + usuario.getUsername() + "'?");
         confirmacion.setContentText("Esta acción no se puede deshacer.");
-        
+
         Optional<ButtonType> respuesta = confirmacion.showAndWait();
         if (!respuesta.isPresent() || respuesta.get() != ButtonType.OK) {
             return;
         }
-        
+
         try {
             servicio.eliminarUsuario(usuario);
+            logger.log(Level.INFO, "Usuario eliminado: " + usuario.getUsername());
             cargarUsuarios();
             dialog.cerrar();
+        } catch (IllegalArgumentException e) {
+            Alertas.mostrarError(e.getMessage());
+            logger.log(Level.WARNING, "Validación fallida al eliminar usuario: " + e.getMessage());
         } catch (RuntimeException e) {
             Alertas.mostrarError(e.getMessage());
-            logger.log(Level.SEVERE, e.getMessage(), e);
+            logger.log(Level.SEVERE, "Error al eliminar usuario '" + usuario.getUsername() + "': " + e.getMessage(), e);
         }
     }
 
-    // Username "nombre.apellido" con la primera palabra de cada uno
+    /**
+     * Construye el nombre de usuario en minúsculas uniendo el primer nombre y
+     * el primer apellido con un punto.
+     *
+     * @param empleado empleado del que se extraen nombre y apellido
+     * @return username generado en formato nombre.apellido
+     */
     private String generarUsername(Empleado empleado) {
         String nombre = empleado.getNombre().trim().split("\\s+")[0];
         String apellido = empleado.getApellido().trim().split("\\s+")[0];
         return (nombre + "." + apellido).toLowerCase();
+    }
+
+    @Override
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+        if (usuario != null) {
+            logger.setUser(usuario.getUsername());
+        }
     }
 }
