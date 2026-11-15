@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
 import java.time.LocalDate;
@@ -94,7 +90,6 @@ public class Compra {
         validar();
     }
 
-    // reglas del negocio (validaciones)
     /**
      * Comprueba que los datos de la compra son válidos: proveedor, usuario, fecha, número de
      * factura, al menos una línea (cada una se valida con {@link LineaCompra#validar()}) y

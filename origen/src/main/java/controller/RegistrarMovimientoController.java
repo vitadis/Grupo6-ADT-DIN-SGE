@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package controller;
 
 import exceptions.DaoException;
@@ -53,9 +49,10 @@ public class RegistrarMovimientoController implements Initializable {
         "Seguros", "Impuestos", "Servicios", "Eventos", "Subvenciones", "Otros"};
 
     /**
-     * Service para validar y guardar el movimiento.
+     * Service para validar y guardar el movimiento. No se crea aquí: lo pasa
+     * {@link GestionEconomicaController} con {@link #setMovimientoService(MovimientoService)}.
      */
-    private final MovimientoService movimientoService = new MovimientoService();
+    private MovimientoService movimientoService;
 
     /**
      * Movimientos que ya había, para calcular la media de cada categoría.
@@ -155,6 +152,16 @@ public class RegistrarMovimientoController implements Initializable {
     }
 
     /**
+     * Recibe el service de la pantalla que abre la ventana, para usar el mismo.
+     * Lo llama {@link GestionEconomicaController} antes de mostrar la ventana.
+     *
+     * @param movimientoService service de los movimientos
+     */
+    public void setMovimientoService(MovimientoService movimientoService) {
+        this.movimientoService = movimientoService;
+    }
+
+    /**
      * Recibe el usuario que registra el movimiento y los movimientos que ya había. Las
      * categorías de esos movimientos que no estén en la lista se añaden al desplegable.
      * Lo llama {@link GestionEconomicaController} antes de mostrar la ventana.
@@ -245,7 +252,6 @@ public class RegistrarMovimientoController implements Initializable {
         }
 
         Movimiento m = new Movimiento();
-        // si no hay tipo o fecha se quedan en null y validar() da el error
         if (tgIngreso.isSelected()) {
             m.setTipo("ingreso");
         } else if (tgGasto.isSelected()) {

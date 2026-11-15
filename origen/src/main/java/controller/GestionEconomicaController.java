@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package controller;
 
 import exceptions.DaoException;
@@ -47,9 +43,11 @@ import model.Proveedor;
 import model.Transaccion;
 import model.Usuario;
 import model.VentaPedido;
-import services.ComprasService;
+import dao.implement.ComprasDaoImpl;
+import dao.implement.MovimientoDaoImpl;
+import dao.implement.PedidoDaoImp;
+import dao.implement.ProveedorDaoImpl;
 import services.MovimientoService;
-import services.PedidoService;
 import util.Alertas;
 import util.AppLogger;
 
@@ -66,14 +64,12 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
      */
     private final AppLogger logger = AppLogger.getInstance();
 
-    // ------------------------------- Botones de la cabecera -------------------------------
     /**
      * Abre la ventana para registrar un movimiento.
      */
     @FXML
     private Button btnRegistrarMovimiento;
 
-    // ------------------------------- Tarjetas de resumen -------------------------------
     /**
      * Título de la tarjeta de ingresos.
      */
@@ -115,7 +111,6 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
     @FXML
     private Label lblBeneficio;
 
-    // ------------------------------- Filtros -------------------------------
     /**
      * Fecha de inicio del filtro.
      */
@@ -147,7 +142,6 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
     @FXML
     private Button btnLimpiarFiltros;
 
-    // ------------------------------- Tabla de movimientos -------------------------------
     /**
      * Scroll de la tabla de movimientos.
      */
@@ -179,7 +173,6 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
     @FXML
     private Button btnPaginaSiguiente;
 
-    // ------------------------------- Gráfico y aviso -------------------------------
     /**
      * Gráfico de barras con el gasto de cada mes.
      */
@@ -206,12 +199,13 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
     @FXML
     private Button btnRevisarGastos;
 
-    private final ComprasService comprasService = new ComprasService();
-    private final PedidoService pedidoService = new PedidoService();
     /**
-     * Service de los movimientos (gastos e ingresos que no son compras ni ventas).
+     * Único service de la pantalla: movimientos, compras, ventas y proveedores. Se le pasan los
+     * DAOs de MongoDB, y la ventana «Registrar movimiento» recibe este mismo service.
      */
-    private final MovimientoService movimientoService = new MovimientoService();
+    private final MovimientoService movimientoService = new MovimientoService(
+            MovimientoDaoImpl.getInstance(), ComprasDaoImpl.getInstance(),
+            PedidoDaoImp.getInstance(), ProveedorDaoImpl.getInstance());
 
     /**
      * Formato en el que se muestran las fechas en la tabla (dd/MM).
@@ -273,8 +267,6 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
         }
     }
 
-    // ------------------------------- Registrar movimiento -------------------------------
-
     /**
      * Abre la ventana de registrar movimiento y, si se guarda, vuelve a cargar la pantalla.
      *
@@ -292,6 +284,7 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
                             if (usuario != null && usuario.getId() != null) {
                                 usuarioId = usuario.getId();
                             }
+                            ventana.setMovimientoService(movimientoService);
                             ventana.setDatos(usuarioId, movimientos);
                         }
                     });
@@ -326,14 +319,14 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
      */
     private void cargarDatos() {
         try {
-            compras = comprasService.listarCompras();
+            compras = movimientoService.listarCompras();
         } catch (DaoException e) {
             Alertas.mostrarError("No se pudieron leer las compras: " + e.getMessage());
             logger.log(Level.SEVERE, e.getMessage(), e);
         }
 
         try {
-            pedidos = pedidoService.listaPedidos();
+            pedidos = movimientoService.listarVentas();
         } catch (DaoException e) {
             Alertas.mostrarError("No se pudieron leer las ventas: " + e.getMessage());
             logger.log(Level.SEVERE, e.getMessage(), e);
@@ -422,8 +415,6 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
 
     }
 
-    // ------------------------------- Tabla de movimientos -------------------------------
-
     /**
      * Monta la lista {@link #todas} con los gastos (una fila por compra) y los ingresos (una
      * fila por día con la suma de los pedidos cobrados), ordenada de la más nueva a la más
@@ -433,7 +424,7 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
         todas.clear();
         Map<Integer, String> nombresProveedor = new HashMap<>();
         try {
-            for (Proveedor p : comprasService.listarProveedores()) {
+            for (Proveedor p : movimientoService.listarProveedores()) {
                 nombresProveedor.put(p.getId(), p.getNombre());
             }
         } catch (DaoException e) {
@@ -462,7 +453,6 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
             double total = Math.round(ventasPorDia.get(dia) * 100) / 100.0;
             todas.add(new Transaccion(dia, "Ventas del día (TPV)", "Ventas", true, total));
         }
-        // movimientos: una fila por movimiento (luz, nóminas, alquiler...)
         for (Movimiento m : movimientos) {
             todas.add(new Transaccion(LocalDate.parse(m.getFecha()), m.getConcepto(), m.getCategoria(),
                     m.esIngreso(), m.getImporte()));
@@ -473,7 +463,6 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
                 return b.getFecha().compareTo(a.getFecha());
             }
         });
-        // al recargar se vuelve a poner la categoría que estaba elegida
         String elegida = cbCategoria.getValue();
         cbCategoria.getItems().clear();
         cbCategoria.getItems().add("Todas");
@@ -556,8 +545,6 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
         return l;
     }
 
-    // ------------------------------- Filtros -------------------------------
-
     /**
      * Vuelve a pintar la tabla solo con las transacciones que cumplen todos los filtros.
      * Lo llaman las fechas, los dos ComboBox y el campo de concepto al cambiar.
@@ -566,14 +553,14 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
      */
     @FXML
     private void onFiltrar(Event event) {
-        LocalDate desde = dpDesde.getValue();       // null si está vacío
+        LocalDate desde = dpDesde.getValue();
         LocalDate hasta = dpHasta.getValue();
         String tipo = cbTipo.getValue();
         String categoria = cbCategoria.getValue();
         String texto = txtConcepto.getText().trim().toLowerCase();
 
         List<Transaccion> filtradas = new ArrayList<>();
-        for (Transaccion t : todas) {               // atributo con TODAS las transacciones
+        for (Transaccion t : todas) {
             if (desde != null && t.getFecha().isBefore(desde)) {
                 continue;
             }

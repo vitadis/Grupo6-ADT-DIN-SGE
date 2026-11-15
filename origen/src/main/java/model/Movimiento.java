@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
 import java.time.LocalDate;
@@ -85,7 +81,6 @@ public class Movimiento {
         validar();
     }
 
-    // reglas del negocio (validaciones)
     /**
      * Comprueba que los datos del movimiento son válidos: fecha con formato {@code yyyy-MM-dd},
      * concepto y categoría obligatorios, tipo {@code "ingreso"} o {@code "gasto"}, importe mayor

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package services;
 
 import dao.ComprasDao;
@@ -25,6 +21,9 @@ import model.Proveedor;
  * el {@code validar()} de cada modelo y después llama a los DAOs. Al registrar una compra
  * también suma al stock de cada producto la cantidad comprada.
  *
+ * Los DAOs se reciben por el constructor (como {@code CajaService}), así en los tests se le
+ * pueden pasar DAOs falsos y probar el service aislado, sin MongoDB.
+ *
  * @author anazk
  */
 public class ComprasService {
@@ -32,23 +31,38 @@ public class ComprasService {
     /**
      * DAO de compras.
      */
-    private final ComprasDao comprasDao = ComprasDaoImpl.getInstance();
+    private final ComprasDao comprasDao;
     /**
      * DAO de proveedores.
      */
-    private final ProveedorDao proveedorDao = ProveedorDaoImpl.getInstance();
+    private final ProveedorDao proveedorDao;
     /**
      * DAO de productos, para leer los productos y actualizar su stock.
      */
-    private final ProductoDao productoDao = ProductoDaoImp.getInstance();
+    private final ProductoDao productoDao;
 
     /**
-     * Constructor vacío.
+     * Crea el service con los DAOs que va a usar.
+     *
+     * @param comprasDao DAO de compras
+     * @param proveedorDao DAO de proveedores
+     * @param productoDao DAO de productos
      */
-    public ComprasService() {
+    public ComprasService(ComprasDao comprasDao, ProveedorDao proveedorDao, ProductoDao productoDao) {
+        this.comprasDao = comprasDao;
+        this.proveedorDao = proveedorDao;
+        this.productoDao = productoDao;
     }
 
-    // ------------------------------- Compras -------------------------------
+    /**
+     * Crea el service con los DAOs de MongoDB.
+     *
+     * TEMPORAL: solo lo usa {@code InicioService} (de Hodei), que todavía crea este service con
+     * {@code new ComprasService()}. Cuando lo cambie, este constructor se puede borrar.
+     */
+    public ComprasService() {
+        this(ComprasDaoImpl.getInstance(), ProveedorDaoImpl.getInstance(), ProductoDaoImp.getInstance());
+    }
 
     /**
      * Devuelve todas las compras ordenadas por identificador.
@@ -88,11 +102,8 @@ public class ComprasService {
 
         compra.validar();
 
-        // consulta con el dao
         comprasDao.insertarCompra(compra);
 
-        // sumar al stock lo que se ha comprado
-        // se leen los productos de la base de datos para tener el stock actual (la caja puede haber vendido)
         List<Producto> productos = productoDao.listarProductos();
         for (LineaCompra l : compra.getDetalle()) {
             Producto p = buscarProducto(productos, l.getProducto_id());
@@ -121,8 +132,6 @@ public class ComprasService {
         }
         return null;
     }
-
-    // ------------------------------ Proveedores ------------------------------
 
     /**
      * Devuelve todos los proveedores.
@@ -165,15 +174,12 @@ public class ComprasService {
 
         proveedor.validar();
 
-        // consulta con el dao
         if (proveedor.getId() == 0) {
             proveedorDao.insertarProveedores(proveedor);
         } else {
             proveedorDao.actualizarProveedores(proveedor);
         }
     }
-
-    // ------------------------------- Productos -------------------------------
 
     /**
      * Devuelve todos los productos, para la lista sugerida.
