@@ -36,9 +36,6 @@ import util.AppLogger;
  */
 public class EditarProveedorController implements Initializable {
 
-    /**
-     * Logger de la aplicación (escribe en {@code logs/app.log}).
-     */
     private final AppLogger logger = AppLogger.getInstance();
 
     /**
@@ -65,104 +62,44 @@ public class EditarProveedorController implements Initializable {
      */
     private CheckBox[] checksDias;
 
-    /**
-     * Título de la ventana: «NUEVO PROVEEDOR» o «EDITAR PROVEEDOR».
-     */
     @FXML
     private Label lblTitulo;
-    /**
-     * Nombre del proveedor (obligatorio).
-     */
     @FXML
     private TextField txtNombre;
-    /**
-     * NIF o CIF del proveedor (obligatorio).
-     */
     @FXML
     private TextField txtNifCif;
-    /**
-     * IBAN del proveedor.
-     */
     @FXML
     private TextField txtIban;
-    /**
-     * Plazo de entrega en días (número entero, no negativo).
-     */
     @FXML
     private TextField txtPlazoEntrega;
-    /**
-     * Día laboral: lunes.
-     */
     @FXML
     private CheckBox chkLunes;
-    /**
-     * Día laboral: martes.
-     */
     @FXML
     private CheckBox chkMartes;
-    /**
-     * Día laboral: miércoles.
-     */
     @FXML
     private CheckBox chkMiercoles;
-    /**
-     * Día laboral: jueves.
-     */
     @FXML
     private CheckBox chkJueves;
-    /**
-     * Día laboral: viernes.
-     */
     @FXML
     private CheckBox chkViernes;
-    /**
-     * Día laboral: sábado.
-     */
     @FXML
     private CheckBox chkSabado;
-    /**
-     * Día laboral: domingo.
-     */
     @FXML
     private CheckBox chkDomingo;
-    /**
-     * Indica si el proveedor está activo.
-     */
     @FXML
     private CheckBox chkActivo;
-    /**
-     * Nombre de la persona de contacto.
-     */
     @FXML
     private TextField txtPersona;
-    /**
-     * Teléfono de contacto.
-     */
     @FXML
     private TextField txtTelefono;
-    /**
-     * Correo electrónico de contacto.
-     */
     @FXML
     private TextField txtEmail;
-    /**
-     * Dirección del proveedor.
-     */
     @FXML
     private TextField txtDireccion;
-    /**
-     * Muestra los errores de validación o de la base de datos.
-     */
     @FXML
     private Label lblError;
-    /**
-     * Cierra la ventana sin guardar.
-     */
     @FXML
     private Button btnCancelar;
-    /**
-     * Valida y guarda el proveedor.
-     */
     @FXML
     private Button btnGuardar;
 

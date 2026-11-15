@@ -42,9 +42,6 @@ import util.AppLogger;
  */
 public class RegistrarCompraController implements Initializable {
 
-    /**
-     * Logger de la aplicación (escribe en {@code logs/app.log}).
-     */
     private final AppLogger logger = AppLogger.getInstance();
 
     /**
@@ -74,84 +71,36 @@ public class RegistrarCompraController implements Initializable {
      */
     private double totalIva;
 
-    /**
-     * Título de la ventana.
-     */
     @FXML
     private Label lblTitulo;
-    /**
-     * Proveedor de la compra (solo proveedores activos).
-     */
     @FXML
     private ComboBox<Proveedor> cbProveedor;
-    /**
-     * Fecha de la compra; por defecto, hoy.
-     */
     @FXML
     private DatePicker dpFecha;
-    /**
-     * Número de factura (obligatorio y no repetido).
-     */
     @FXML
     private TextField txtNumeroFactura;
-    /**
-     * Producto que se va a añadir (solo productos activos).
-     */
     @FXML
     private ComboBox<Producto> cbProducto;
-    /**
-     * Cantidad del producto que se va a añadir.
-     */
     @FXML
     private TextField txtCantidad;
-    /**
-     * Precio por unidad sin IVA del producto que se va a añadir.
-     */
     @FXML
     private TextField txtPrecioUnidad;
-    /**
-     * Añade el producto, la cantidad y el precio como una línea nueva.
-     */
     @FXML
     private Button btnAnadirLinea;
-    /**
-     * Scroll de la tabla de líneas.
-     */
     @FXML
     private ScrollPane scrollLineas;
-    /**
-     * Contenedor donde se pintan las filas de las líneas.
-     */
     @FXML
     private VBox contenedorLineas;
-    /**
-     * Muestra la base imponible.
-     */
     @FXML
     private Label lblBase;
-    /**
-     * Muestra el IVA total.
-     */
     @FXML
     private Label lblTotalIva;
-    /**
-     * Muestra el importe total.
-     */
     @FXML
     private Label lblTotal;
-    /**
-     * Muestra los errores de validación o de la base de datos.
-     */
     @FXML
     private Label lblError;
-    /**
-     * Cierra la ventana sin guardar.
-     */
     @FXML
     private Button btnCancelar;
-    /**
-     * Valida y guarda la compra.
-     */
     @FXML
     private Button btnGuardar;
 

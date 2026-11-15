@@ -59,143 +59,62 @@ import util.AppLogger;
  */
 public class GestionEconomicaController implements Initializable, UsuarioImplementacion, ActualizarDatos {
 
-    /**
-     * Logger de la aplicación (escribe en {@code logs/app.log}).
-     */
     private final AppLogger logger = AppLogger.getInstance();
 
-    /**
-     * Abre la ventana para registrar un movimiento.
-     */
     @FXML
     private Button btnRegistrarMovimiento;
 
-    /**
-     * Título de la tarjeta de ingresos.
-     */
     @FXML
     private Label lblTituloIngresos;
-    /**
-     * Variación de los ingresos respecto al mes anterior.
-     */
     @FXML
     private Label lblVariacionIngresos;
-    /**
-     * Total de ingresos.
-     */
     @FXML
     private Label lblIngresos;
-    /**
-     * Título de la tarjeta de gastos.
-     */
     @FXML
     private Label lblTituloGastos;
-    /**
-     * Variación de los gastos respecto al mes anterior.
-     */
     @FXML
     private Label lblVariacionGastos;
-    /**
-     * Total de gastos.
-     */
     @FXML
     private Label lblGastos;
-    /**
-     * Margen de beneficio en porcentaje.
-     */
     @FXML
     private Label lblMargen;
-    /**
-     * Beneficio estimado (ingresos - gastos).
-     */
     @FXML
     private Label lblBeneficio;
 
-    /**
-     * Fecha de inicio del filtro.
-     */
     @FXML
     private DatePicker dpDesde;
-    /**
-     * Fecha de fin del filtro.
-     */
     @FXML
     private DatePicker dpHasta;
-    /**
-     * Filtro por tipo (ingreso o gasto).
-     */
     @FXML
     private ComboBox<String> cbTipo;
-    /**
-     * Filtro por categoría.
-     */
     @FXML
     private ComboBox<String> cbCategoria;
-    /**
-     * Búsqueda por concepto.
-     */
     @FXML
     private TextField txtConcepto;
-    /**
-     * Quita todos los filtros.
-     */
     @FXML
     private Button btnLimpiarFiltros;
 
-    /**
-     * Scroll de la tabla de movimientos.
-     */
     @FXML
     private ScrollPane scrollMovimientos;
-    /**
-     * Contenedor donde se pinta una fila (HBox) por movimiento.
-     */
     @FXML
     private VBox contenedorMovimientos;
-    /**
-     * Texto «Mostrando X de Y movimientos».
-     */
     @FXML
     private Label lblContador;
-    /**
-     * Va a la página anterior.
-     */
     @FXML
     private Button btnPaginaAnterior;
-    /**
-     * Página actual.
-     */
     @FXML
     private Label lblPagina;
-    /**
-     * Va a la página siguiente.
-     */
     @FXML
     private Button btnPaginaSiguiente;
 
-    /**
-     * Gráfico de barras con el gasto de cada mes.
-     */
     @FXML
     private BarChart<String, Number> graficoGastos;
-    /**
-     * Eje X del gráfico: los meses.
-     */
     @FXML
     private CategoryAxis ejeMeses;
-    /**
-     * Eje Y del gráfico: el importe en euros.
-     */
     @FXML
     private NumberAxis ejeImporte;
-    /**
-     * Texto de la tarjeta de aviso.
-     */
     @FXML
     private Label lblTextoAviso;
-    /**
-     * Abre los gastos por categoría.
-     */
     @FXML
     private Button btnRevisarGastos;
 
@@ -241,7 +160,7 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
     }
 
     /**
-     * Se ejecuta al cargar la vista.
+     * Rellena el filtro de tipo y carga los datos con {@link #actualizarDatos()}.
      *
      * @param url ubicación del FXML (no se usa)
      * @param rb recursos de idioma (no se usa)

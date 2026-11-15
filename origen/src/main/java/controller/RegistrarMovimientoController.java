@@ -37,9 +37,6 @@ import util.AppLogger;
  */
 public class RegistrarMovimientoController implements Initializable {
 
-    /**
-     * Logger de la aplicación (escribe en {@code logs/app.log}).
-     */
     private final AppLogger logger = AppLogger.getInstance();
 
     /**
@@ -67,69 +64,30 @@ public class RegistrarMovimientoController implements Initializable {
      */
     private boolean guardado = false;
 
-    /**
-     * Agrupa los dos botones de tipo para que solo se pueda elegir uno.
-     */
     @FXML
     private ToggleGroup grupoTipo;
-    /**
-     * Tipo de movimiento: ingreso.
-     */
     @FXML
     private ToggleButton tgIngreso;
-    /**
-     * Tipo de movimiento: gasto (seleccionado al abrir).
-     */
     @FXML
     private ToggleButton tgGasto;
-    /**
-     * Concepto del movimiento (obligatorio).
-     */
     @FXML
     private TextField txtConcepto;
-    /**
-     * Importe en euros (obligatorio, mayor que 0).
-     */
     @FXML
     private TextField txtImporte;
-    /**
-     * Fecha del movimiento (obligatoria; hoy al abrir).
-     */
     @FXML
     private DatePicker dpFecha;
-    /**
-     * Categoría: se elige de la lista o se escribe una nueva.
-     */
     @FXML
     private ComboBox<String> cbCategoria;
-    /**
-     * Observaciones (opcional).
-     */
     @FXML
     private TextArea txtObservaciones;
-    /**
-     * Caja ámbar del aviso de importe superior a la media.
-     */
     @FXML
     private VBox cajaAviso;
-    /**
-     * Texto del aviso de importe superior a la media.
-     */
     @FXML
     private Label lblAviso;
-    /**
-     * Muestra los errores de validación o de la base de datos.
-     */
     @FXML
     private Label lblError;
-    /**
-     * Cierra la ventana sin guardar.
-     */
     @FXML
     private Button btnCancelar;
-    /**
-     * Valida y guarda el movimiento.
-     */
     @FXML
     private Button btnGuardar;
 
