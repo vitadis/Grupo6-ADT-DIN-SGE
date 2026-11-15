@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
 /**
@@ -56,7 +52,6 @@ public class Contacto {
         validar();
     }
 
-    // reglas del negocio (validaciones)
     /**
      * Comprueba que los datos de contacto son válidos. Todos son opcionales, pero si hay
      * correo tiene que llevar {@code @} y si hay teléfono solo puede tener números, espacios y {@code +}.

@@ -142,7 +142,6 @@ public class CajaTest extends ApplicationTest {
 
     @Test
     public void testContenedorProductosNoVacio() {
-        // tiene datos porque hago consulta a la db, si no hay datos salta un mensaje
         FlowPane productos = lookup("#contenedorProductos").queryAs(FlowPane.class);
         assertFalse(productos.getChildren().isEmpty());
     }

@@ -1,9 +1,9 @@
 package controller;
 
+import dao.UsuarioDao;
 import dao.implement.UsuarioDaoImp;
 import exceptions.DaoException;
 import java.net.URL;
-import dao.UsuarioDao;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import javafx.event.ActionEvent;
@@ -16,16 +16,16 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.Usuario;
 import services.LoginService;
-import  util.AppLogger;
+import util.AppLogger;
 
 /**
- * FXML Controller class
+ * FXML Controller class para la pantalla de inicio de sesión.
  *
  * @author Joel
  */
 public class LoginController implements Initializable {
-    
-    // --------------------- Variables FXML ---------------------
+
+    // ---- Variables FXML ----
     @FXML
     private TextField txtUsuario;
     @FXML
@@ -35,12 +35,19 @@ public class LoginController implements Initializable {
     @FXML
     private Label lblMensajeError;
 
-    // --------------------- Atributos ---------------------
+    // ---- Atributos ----
     private Usuario usuario;
-    private final AppLogger logger= AppLogger.getInstance();
+    private final AppLogger logger = AppLogger.getInstance();
     private LoginService loginService;
 
-    // --------------------- Inicialización ---------------------
+    // ---- Inicialización ----
+    /**
+     * Enlaza los campos de contraseña visible y oculta e inicializa el servicio
+     * de autenticación.
+     *
+     * @param url ubicación utilizada para resolver rutas relativas
+     * @param rb recursos utilizados para localizar el objeto raíz
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         txtContrasenaVisible.textProperty()
@@ -50,12 +57,23 @@ public class LoginController implements Initializable {
         loginService = new LoginService(usuarioDao);
     }
 
-    // --------------------- Usuario ---------------------
+    // ---- Usuario ----
+    /**
+     * Devuelve el usuario autenticado tras iniciar sesión.
+     *
+     * @return usuario autenticado o null si no ha iniciado sesión
+     */
     public Usuario getUsuario() {
         return usuario;
     }
 
-    // --------------------- Métodos FXML ---------------------
+    // ---- Métodos FXML ----
+    /**
+     * Alterna la visibilidad entre el campo de contraseña oculto y el de texto
+     * plano.
+     *
+     * @param event evento de acción del botón
+     */
     @FXML
     private void alternarContrasena(ActionEvent event) {
         boolean mostrando = txtContrasenaVisible.isVisible();
@@ -73,34 +91,44 @@ public class LoginController implements Initializable {
         activo.positionCaret(activo.getText().length());
     }
 
+    /**
+     * Valida las credenciales introducidas, registra el inicio de sesión y abre
+     * la vista principal.
+     *
+     * @param event evento de acción del botón de acceso
+     */
     @FXML
     private void validar(ActionEvent event) {
+        String usernameIntentado = txtUsuario.getText();
         try {
             usuario = loginService.iniciarSesion(
-                    txtUsuario.getText(),
+                    usernameIntentado,
                     txtContrasena.getText()
             );
 
             lblMensajeError.setText("");
-            abrirNav();
-            
-            // logger
             logger.setUser(usuario.getUsername());
-            logger.info("Inicio sesión");
+            logger.info("Inicio de sesión exitoso.");
+
+            abrirNav();
 
         } catch (IllegalArgumentException e) {
             lblMensajeError.setText(e.getMessage());
-            logger.info(e.getMessage());
+            logger.log(Level.WARNING, "Intento de inicio de sesión fallido para '" + usernameIntentado + "': " + e.getMessage());
 
         } catch (DaoException e) {
             lblMensajeError.setText(
                     "No se ha podido iniciar sesión."
             );
-            logger.log(Level.SEVERE, e.getMessage(), e);
+            logger.log(Level.SEVERE, "Error de acceso a datos durante el login: " + e.getMessage(), e);
         }
     }
 
-    // --------------------- Métodos auxiliares ---------------------
+    // ---- Métodos auxiliares ----
+    /**
+     * Cambia la escena actual a la pantalla principal de navegación y le asigna
+     * el usuario autenticado.
+     */
     private void abrirNav() {
         try {
             Stage stage = (Stage) txtUsuario.getScene().getWindow();
@@ -108,7 +136,7 @@ public class LoginController implements Initializable {
             navController.setUsuario(usuario);
         } catch (Exception e) {
             lblMensajeError.setText("No se ha podido cargar la pantalla principal.");
-            logger.log(Level.SEVERE, e.getMessage(), e);
+            logger.log(Level.SEVERE, "Error al cargar la vista principal tras el login: " + e.getMessage(), e);
         }
     }
 }

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao.implement;
 
 import com.mongodb.MongoException;
@@ -82,7 +78,6 @@ public class MovimientoDaoImpl extends AccesoMongoDB implements MovimientoDao {
             MongoClient client = getClient();
             MongoCollection<Movimiento> coleccion = getCollection(client, COLECCION_MOVIMIENTOS, Movimiento.class);
 
-            // Los _id son enteros y el driver no los genera: siguiente = mayor + 1
             Movimiento ultimo = coleccion.find().sort(Sorts.descending("_id")).first();
             if (ultimo == null) {
                 movimiento.setId(1);

@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package controller;
 
 import exceptions.DaoException;
@@ -51,9 +47,10 @@ public class EditarProveedorController implements Initializable {
     private static final String[] DIAS = {"lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"};
 
     /**
-     * Service para validar y guardar el proveedor.
+     * Service para validar y guardar el proveedor. No se crea aquí: lo pasa
+     * {@link ComprasController} con {@link #setComprasService(ComprasService)}.
      */
-    private final ComprasService comprasService = new ComprasService();
+    private ComprasService comprasService;
 
     /**
      * Proveedor que se está editando; es {@code null} cuando la ventana se usa para dar de alta uno nuevo.
@@ -188,6 +185,16 @@ public class EditarProveedorController implements Initializable {
     }
 
     /**
+     * Recibe el service de la pantalla que abre la ventana, para usar el mismo.
+     * Lo llama {@link ComprasController} antes de mostrar la ventana.
+     *
+     * @param comprasService service de compras y proveedores
+     */
+    public void setComprasService(ComprasService comprasService) {
+        this.comprasService = comprasService;
+    }
+
+    /**
      * Pasa la ventana a modo edición y rellena los campos con los datos del proveedor.
      * Lo llama {@link ComprasController} antes de mostrar la ventana.
      *
@@ -259,7 +266,6 @@ public class EditarProveedorController implements Initializable {
         contacto.setDireccion(txtDireccion.getText().trim());
 
         Proveedor datos = new Proveedor();
-        // con id 0 el service lo da de alta; con el id del original lo actualiza
         if (proveedor != null) {
             datos.setId(proveedor.getId());
         }
@@ -272,7 +278,6 @@ public class EditarProveedorController implements Initializable {
         datos.setContacto(contacto);
 
         try {
-            // valida con Proveedor.validar() y Contacto.validar() y guarda
             comprasService.guardarProveedor(datos);
             guardado = true;
             logger.info("Proveedor guardado: " + datos.getNombre());

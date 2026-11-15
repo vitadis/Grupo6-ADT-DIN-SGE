@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package controller;
 
 import exceptions.DaoException;
@@ -40,6 +36,9 @@ import model.Compra;
 import model.LineaCompra;
 import model.Producto;
 import model.Proveedor;
+import dao.implement.ComprasDaoImpl;
+import dao.implement.ProductoDaoImp;
+import dao.implement.ProveedorDaoImpl;
 import services.ComprasService;
 import model.Usuario;
 import util.Alertas;
@@ -66,9 +65,11 @@ public class ComprasController implements Initializable, UsuarioImplementacion, 
     private final AppLogger logger = AppLogger.getInstance();
 
     /**
-     * Service de compras, proveedores y productos.
+     * Único service de la pantalla: compras, proveedores y productos. Se le pasan los DAOs de
+     * MongoDB, y las ventanas de compra y de proveedor reciben este mismo service.
      */
-    private final ComprasService comprasService = new ComprasService();
+    private final ComprasService comprasService = new ComprasService(
+            ComprasDaoImpl.getInstance(), ProveedorDaoImpl.getInstance(), ProductoDaoImp.getInstance());
     /**
      * Proveedores por identificador, para sacar su nombre a partir de un {@code proveedor_id}.
      */
@@ -432,6 +433,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion, 
                     new Consumer<EditarProveedorController>() {
                         @Override
                         public void accept(EditarProveedorController ventana) {
+                            ventana.setComprasService(comprasService);
                             if (proveedor != null) {
                                 ventana.setProveedor(proveedor);
                             }
@@ -465,6 +467,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion, 
                     new Consumer<RegistrarCompraController>() {
                         @Override
                         public void accept(RegistrarCompraController ventana) {
+                            ventana.setComprasService(comprasService);
                             if (usuario != null && usuario.getId() != null) {
                                 ventana.setUsuarioId(usuario.getId());
                             }
@@ -520,7 +523,6 @@ public class ComprasController implements Initializable, UsuarioImplementacion, 
                 lineasSugeridas.add(new LineaCompra(p.getId(), p.getNombre(), cantidad, precio,
                         p.getIva(), Math.round(cantidad * precio * 100) / 100.0));
                 proveedoresSugeridos.add(idProveedor);
-                // crearTarjetaSugerencia añade su CheckBox a checksSugeridos
                 contenedorSugerencias.getChildren().add(crearTarjetaSugerencia(p));
             }
         }
@@ -582,7 +584,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion, 
      */
     private HBox crearFilaCompra(Compra c) {
         Proveedor p = proveedores.get(c.getProveedor_id());
-        String nombreProveedor = (p != null) ? p.getNombre() : "Desconocido"; //Operador ternario
+        String nombreProveedor = (p != null) ? p.getNombre() : "Desconocido";
 
         Label importe = celda(String.format("%.2f €", c.getTotal()), 110);
         importe.getStyleClass().add("compra-dato-destacado");
