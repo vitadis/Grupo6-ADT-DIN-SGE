@@ -35,7 +35,6 @@ public class GestionStockService {
         return stockDao.listarActivos();
     }
 
-    /** Categorías que pertenecen a un tipo (Venta / Ingrediente). */
     public List<CategoriaProducto> categoriasDeTipo(TipoProducto tipo) {
         List<CategoriaProducto> filtradas = new ArrayList<>();
         if (tipo != null) {
@@ -116,7 +115,6 @@ public class GestionStockService {
         List<Integer> proveedores = new ArrayList<>();
         proveedores.add(proveedor.getId());
 
-        // El tipo antes que la categoría (el setter las compara)
         Producto p = new Producto();
         p.setNombre(limpio);
         p.setTipo(tipo);
