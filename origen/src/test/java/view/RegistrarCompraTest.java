@@ -4,6 +4,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.model.Filters;
 import controller.RegistrarCompraController;
+import dao.ProductoDao;
 import dao.implement.ComprasDaoImpl;
 import dao.implement.ProductoDaoImp;
 import dao.implement.ProveedorDaoImpl;
@@ -97,7 +98,7 @@ public class RegistrarCompraTest extends ApplicationTest {
     public void start(Stage stage) throws IOException {
         this.stage = stage;
         servicio = new ComprasService(ComprasDaoImpl.getInstance(), ProveedorDaoImpl.getInstance(),
-                ProductoDaoImp.getInstance());
+                (ProductoDao) ProductoDaoImp.getInstance());
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/compra/registrarCompra.fxml"));
         Parent root = loader.load();

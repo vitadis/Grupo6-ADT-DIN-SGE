@@ -4,6 +4,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.model.Filters;
 import controller.UsuarioImplementacion;
+import dao.PedidoDao;
 import dao.implement.ComprasDaoImpl;
 import dao.implement.MovimientoDaoImpl;
 import dao.implement.PedidoDaoImp;
@@ -109,7 +110,7 @@ public class GestionEconomicaTest extends ApplicationTest {
     public void start(Stage stage) throws IOException {
         stagePrincipal = stage;
         servicio = new MovimientoService(MovimientoDaoImpl.getInstance(), ComprasDaoImpl.getInstance(),
-                PedidoDaoImp.getInstance(), ProveedorDaoImpl.getInstance());
+                (PedidoDao) PedidoDaoImp.getInstance(), ProveedorDaoImpl.getInstance());
 
         cerrarAvisosAlCargar(5);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/economia/gestionEconomicaView.fxml"));

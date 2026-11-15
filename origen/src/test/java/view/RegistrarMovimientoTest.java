@@ -4,6 +4,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.model.Filters;
 import controller.RegistrarMovimientoController;
+import dao.PedidoDao;
 import dao.implement.ComprasDaoImpl;
 import dao.implement.MovimientoDaoImpl;
 import dao.implement.PedidoDaoImp;
@@ -82,7 +83,7 @@ public class RegistrarMovimientoTest extends ApplicationTest {
     public void start(Stage stage) throws IOException {
         this.stage = stage;
         servicio = new MovimientoService(MovimientoDaoImpl.getInstance(), ComprasDaoImpl.getInstance(),
-                PedidoDaoImp.getInstance(), ProveedorDaoImpl.getInstance());
+                (PedidoDao) PedidoDaoImp.getInstance(), ProveedorDaoImpl.getInstance());
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/economia/registrarMovimiento.fxml"));
         Parent root = loader.load();
