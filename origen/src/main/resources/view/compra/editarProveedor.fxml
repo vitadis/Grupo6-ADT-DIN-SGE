@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<!-- Ventana para dar de alta y editar proveedores -->
 <VBox prefWidth="520" spacing="16" styleClass="ventana" stylesheets="@../../css/theme.css, @../../css/style.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditarProveedorController">
     <padding>
         <Insets bottom="24" left="28" right="28" top="24" />
@@ -20,7 +19,6 @@
 
     <Label fx:id="lblTitulo" styleClass="tituloVentana" text="EDITAR PROVEEDOR" />
 
-    <!-- Datos del proveedor -->
     <Label styleClass="subtitulo" text="Datos del proveedor" />
     <GridPane hgap="12" vgap="10">
         <columnConstraints>
@@ -58,7 +56,6 @@
         <CheckBox fx:id="chkActivo" selected="true" text="Activo" GridPane.columnIndex="1" GridPane.rowIndex="5" />
     </GridPane>
 
-    <!-- Persona de contacto -->
     <Label styleClass="subtitulo" text="Contacto" />
     <GridPane hgap="12" vgap="10">
         <columnConstraints>
@@ -79,7 +76,6 @@
         <TextField fx:id="txtDireccion" GridPane.columnIndex="1" GridPane.rowIndex="3" />
     </GridPane>
 
-    <!-- Mensaje de error de validación (vacío hasta que haga falta) -->
     <Label fx:id="lblError" styleClass="texto-error" wrapText="true" />
 
     <HBox alignment="CENTER_RIGHT" spacing="10">

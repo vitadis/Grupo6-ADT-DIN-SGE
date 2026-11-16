@@ -23,7 +23,6 @@ public class InicioService {
     private final GestionStockService stockService = new GestionStockService();
     private final ComprasService comprasService = new ComprasService();
 
-    /** Productos con stock 0. */
     public List<Producto> productosAgotados() throws DaoException {
         List<Producto> lista = new ArrayList<>();
         for (Producto p : stockService.listarProductos()) {
@@ -34,7 +33,6 @@ public class InicioService {
         return lista;
     }
 
-    /** Productos con stock mayor que 0 y hasta el mínimo. */
     public List<Producto> productosStockBajo() throws DaoException {
         List<Producto> lista = new ArrayList<>();
         for (Producto p : stockService.listarProductos()) {
@@ -45,7 +43,6 @@ public class InicioService {
         return lista;
     }
 
-    /** Las últimas compras, de la más nueva a la más antigua. */
     public List<Compra> ultimasCompras(int max) throws DaoException {
         List<Compra> todas = comprasService.listarCompras();
         List<Compra> ultimas = new ArrayList<>();
@@ -59,7 +56,6 @@ public class InicioService {
         return comprasService.listarCompras().size();
     }
 
-    /** Suma de las compras del mes actual. */
     public double gastosDelMes() throws DaoException {
         LocalDate hoy = LocalDate.now();
         double gastos = 0;
@@ -72,7 +68,6 @@ public class InicioService {
         return gastos;
     }
 
-    /** Nombre de cada proveedor por id (incluye inactivos). */
     public Map<Integer, String> nombresProveedores() throws DaoException {
         Map<Integer, String> nombres = new HashMap<Integer, String>();
         for (Proveedor p : comprasService.listarProveedores()) {

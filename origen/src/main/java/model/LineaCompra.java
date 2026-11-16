@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
 /**
@@ -68,7 +64,6 @@ public class LineaCompra {
         validar();
     }
 
-    // reglas del negocio (validaciones)
     /**
      * Comprueba que los datos de la línea son válidos: hay producto, la cantidad es mayor que 0,
      * el precio no es negativo y el IVA está entre 0 y 1.

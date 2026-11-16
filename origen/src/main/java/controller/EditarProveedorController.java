@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package controller;
 
 import exceptions.DaoException;
@@ -40,9 +36,6 @@ import util.AppLogger;
  */
 public class EditarProveedorController implements Initializable {
 
-    /**
-     * Logger de la aplicación (escribe en {@code logs/app.log}).
-     */
     private final AppLogger logger = AppLogger.getInstance();
 
     /**
@@ -51,9 +44,10 @@ public class EditarProveedorController implements Initializable {
     private static final String[] DIAS = {"lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"};
 
     /**
-     * Service para validar y guardar el proveedor.
+     * Service para validar y guardar el proveedor. No se crea aquí: lo pasa
+     * {@link ComprasController} con {@link #setComprasService(ComprasService)}.
      */
-    private final ComprasService comprasService = new ComprasService();
+    private ComprasService comprasService;
 
     /**
      * Proveedor que se está editando; es {@code null} cuando la ventana se usa para dar de alta uno nuevo.
@@ -68,104 +62,44 @@ public class EditarProveedorController implements Initializable {
      */
     private CheckBox[] checksDias;
 
-    /**
-     * Título de la ventana: «NUEVO PROVEEDOR» o «EDITAR PROVEEDOR».
-     */
     @FXML
     private Label lblTitulo;
-    /**
-     * Nombre del proveedor (obligatorio).
-     */
     @FXML
     private TextField txtNombre;
-    /**
-     * NIF o CIF del proveedor (obligatorio).
-     */
     @FXML
     private TextField txtNifCif;
-    /**
-     * IBAN del proveedor.
-     */
     @FXML
     private TextField txtIban;
-    /**
-     * Plazo de entrega en días (número entero, no negativo).
-     */
     @FXML
     private TextField txtPlazoEntrega;
-    /**
-     * Día laboral: lunes.
-     */
     @FXML
     private CheckBox chkLunes;
-    /**
-     * Día laboral: martes.
-     */
     @FXML
     private CheckBox chkMartes;
-    /**
-     * Día laboral: miércoles.
-     */
     @FXML
     private CheckBox chkMiercoles;
-    /**
-     * Día laboral: jueves.
-     */
     @FXML
     private CheckBox chkJueves;
-    /**
-     * Día laboral: viernes.
-     */
     @FXML
     private CheckBox chkViernes;
-    /**
-     * Día laboral: sábado.
-     */
     @FXML
     private CheckBox chkSabado;
-    /**
-     * Día laboral: domingo.
-     */
     @FXML
     private CheckBox chkDomingo;
-    /**
-     * Indica si el proveedor está activo.
-     */
     @FXML
     private CheckBox chkActivo;
-    /**
-     * Nombre de la persona de contacto.
-     */
     @FXML
     private TextField txtPersona;
-    /**
-     * Teléfono de contacto.
-     */
     @FXML
     private TextField txtTelefono;
-    /**
-     * Correo electrónico de contacto.
-     */
     @FXML
     private TextField txtEmail;
-    /**
-     * Dirección del proveedor.
-     */
     @FXML
     private TextField txtDireccion;
-    /**
-     * Muestra los errores de validación o de la base de datos.
-     */
     @FXML
     private Label lblError;
-    /**
-     * Cierra la ventana sin guardar.
-     */
     @FXML
     private Button btnCancelar;
-    /**
-     * Valida y guarda el proveedor.
-     */
     @FXML
     private Button btnGuardar;
 
@@ -185,6 +119,16 @@ public class EditarProveedorController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         checksDias = new CheckBox[]{chkLunes, chkMartes, chkMiercoles, chkJueves, chkViernes, chkSabado, chkDomingo};
         lblTitulo.setText("NUEVO PROVEEDOR");
+    }
+
+    /**
+     * Recibe el service de la pantalla que abre la ventana, para usar el mismo.
+     * Lo llama {@link ComprasController} antes de mostrar la ventana.
+     *
+     * @param comprasService service de compras y proveedores
+     */
+    public void setComprasService(ComprasService comprasService) {
+        this.comprasService = comprasService;
     }
 
     /**
@@ -259,7 +203,6 @@ public class EditarProveedorController implements Initializable {
         contacto.setDireccion(txtDireccion.getText().trim());
 
         Proveedor datos = new Proveedor();
-        // con id 0 el service lo da de alta; con el id del original lo actualiza
         if (proveedor != null) {
             datos.setId(proveedor.getId());
         }
@@ -272,7 +215,6 @@ public class EditarProveedorController implements Initializable {
         datos.setContacto(contacto);
 
         try {
-            // valida con Proveedor.validar() y Contacto.validar() y guarda
             comprasService.guardarProveedor(datos);
             guardado = true;
             logger.info("Proveedor guardado: " + datos.getNombre());

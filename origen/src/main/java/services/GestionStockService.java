@@ -41,7 +41,6 @@ public class GestionStockService {
         return stockDao.listarActivos();
     }
 
-    /** Categorías que pertenecen a un tipo (Venta / Ingrediente). */
     public List<CategoriaProducto> categoriasDeTipo(TipoProducto tipo) {
         List<CategoriaProducto> filtradas = new ArrayList<>();
         if (tipo != null) {

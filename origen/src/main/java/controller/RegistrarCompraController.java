@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package controller;
 
 import exceptions.DaoException;
@@ -46,15 +42,13 @@ import util.AppLogger;
  */
 public class RegistrarCompraController implements Initializable {
 
-    /**
-     * Logger de la aplicación (escribe en {@code logs/app.log}).
-     */
     private final AppLogger logger = AppLogger.getInstance();
 
     /**
-     * Service para cargar proveedores y productos y guardar la compra.
+     * Service para cargar proveedores y productos y guardar la compra. No se crea aquí: lo pasa
+     * {@link ComprasController} con {@link #setComprasService(ComprasService)}.
      */
-    private final ComprasService comprasService = new ComprasService();
+    private ComprasService comprasService;
 
     /**
      * Líneas que se han añadido a la compra.
@@ -77,84 +71,36 @@ public class RegistrarCompraController implements Initializable {
      */
     private double totalIva;
 
-    /**
-     * Título de la ventana.
-     */
     @FXML
     private Label lblTitulo;
-    /**
-     * Proveedor de la compra (solo proveedores activos).
-     */
     @FXML
     private ComboBox<Proveedor> cbProveedor;
-    /**
-     * Fecha de la compra; por defecto, hoy.
-     */
     @FXML
     private DatePicker dpFecha;
-    /**
-     * Número de factura (obligatorio y no repetido).
-     */
     @FXML
     private TextField txtNumeroFactura;
-    /**
-     * Producto que se va a añadir (solo productos activos).
-     */
     @FXML
     private ComboBox<Producto> cbProducto;
-    /**
-     * Cantidad del producto que se va a añadir.
-     */
     @FXML
     private TextField txtCantidad;
-    /**
-     * Precio por unidad sin IVA del producto que se va a añadir.
-     */
     @FXML
     private TextField txtPrecioUnidad;
-    /**
-     * Añade el producto, la cantidad y el precio como una línea nueva.
-     */
     @FXML
     private Button btnAnadirLinea;
-    /**
-     * Scroll de la tabla de líneas.
-     */
     @FXML
     private ScrollPane scrollLineas;
-    /**
-     * Contenedor donde se pintan las filas de las líneas.
-     */
     @FXML
     private VBox contenedorLineas;
-    /**
-     * Muestra la base imponible.
-     */
     @FXML
     private Label lblBase;
-    /**
-     * Muestra el IVA total.
-     */
     @FXML
     private Label lblTotalIva;
-    /**
-     * Muestra el importe total.
-     */
     @FXML
     private Label lblTotal;
-    /**
-     * Muestra los errores de validación o de la base de datos.
-     */
     @FXML
     private Label lblError;
-    /**
-     * Cierra la ventana sin guardar.
-     */
     @FXML
     private Button btnCancelar;
-    /**
-     * Valida y guarda la compra.
-     */
     @FXML
     private Button btnGuardar;
 
@@ -165,8 +111,9 @@ public class RegistrarCompraController implements Initializable {
     }
 
     /**
-     * Pone la fecha de hoy, configura cómo se muestran los productos en su ComboBox
-     * y carga los proveedores y productos activos.
+     * Pone la fecha de hoy y configura cómo se muestran los productos en su ComboBox.
+     * Los proveedores y productos se cargan en {@link #setComprasService(ComprasService)},
+     * porque el service llega después de este método.
      *
      * @param url ubicación del FXML (no se usa)
      * @param rb recursos de idioma (no se usa)
@@ -189,6 +136,19 @@ public class RegistrarCompraController implements Initializable {
             }
         });
 
+        pintarLineas();
+    }
+
+    /**
+     * Recibe el service de la pantalla que abre la ventana y carga con él los proveedores y
+     * productos activos en sus ComboBox. Lo llama {@link ComprasController} antes de mostrar la
+     * ventana, y antes de {@link #setLineasSugeridas(int, List)}, que necesita los proveedores.
+     *
+     * @param comprasService service de compras y proveedores
+     */
+    public void setComprasService(ComprasService comprasService) {
+        this.comprasService = comprasService;
+
         try {
             cbProveedor.getItems().addAll(comprasService.listarProveedoresActivos());
             cbProducto.getItems().addAll(comprasService.listarProductosActivos());
@@ -196,8 +156,6 @@ public class RegistrarCompraController implements Initializable {
             lblError.setText(e.getMessage());
             logger.log(Level.SEVERE, e.getMessage(), e);
         }
-
-        pintarLineas();
     }
 
     /**
@@ -268,7 +226,6 @@ public class RegistrarCompraController implements Initializable {
 
         LineaCompra linea;
         try {
-            // el constructor llama a validar()
             linea = new LineaCompra(producto.getId(), producto.getNombre(), cantidad, precio,
                     producto.getIva(), Math.round(cantidad * precio * 100) / 100.0);
         } catch (IllegalArgumentException e) {
@@ -303,7 +260,6 @@ public class RegistrarCompraController implements Initializable {
         lblError.setText("");
 
         Compra compra = new Compra();
-        // si no hay proveedor o fecha se quedan en 0 / null y validar() da el error
         if (cbProveedor.getValue() != null) {
             compra.setProveedor_id(cbProveedor.getValue().getId());
         }
