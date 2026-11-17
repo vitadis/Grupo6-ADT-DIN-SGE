@@ -22,6 +22,9 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import dao.implement.ComprasDaoImpl;
+import dao.implement.MovimientoDaoImpl;
+import dao.implement.ProveedorDaoImpl;
 import model.Movimiento;
 import services.MovimientoService;
 import util.AppLogger;
@@ -31,7 +34,7 @@ import util.AppLogger;
  *
  * Sirve para anotar un ingreso o un gasto que no es ni una compra ni una venta de la caja
  * (luz, nóminas, alquiler...). Lo abre {@link GestionEconomicaController}, que antes llama a
- * {@link #setDatos(int, List)} y, al cerrarse, consulta {@link #isGuardado()}.
+ * {@link #setUsuarioId(int)} y, al cerrarse, consulta {@link #isGuardado()}.
  *
  * @author anazk
  */
@@ -46,10 +49,10 @@ public class RegistrarMovimientoController implements Initializable {
         "Seguros", "Impuestos", "Servicios", "Eventos", "Subvenciones", "Otros"};
 
     /**
-     * Service para validar y guardar el movimiento. No se crea aquí: lo pasa
-     * {@link GestionEconomicaController} con {@link #setMovimientoService(MovimientoService)}.
+     * Service para leer los registros anteriores y validar y guardar el movimiento.
      */
-    private MovimientoService movimientoService;
+    private final MovimientoService movimientoService = new MovimientoService(
+            MovimientoDaoImpl.getInstance(), ComprasDaoImpl.getInstance(), ProveedorDaoImpl.getInstance());
 
     /**
      * Movimientos que ya había, para calcular la media de cada categoría.
@@ -98,7 +101,10 @@ public class RegistrarMovimientoController implements Initializable {
     }
 
     /**
-     * Pone la fecha de hoy y carga las categorías por defecto.
+     * Pone la fecha de hoy, carga las categorías por defecto y lee los registros que ya hay,
+     * para calcular la media de cada categoría. Las categorías de los registros metidos a mano
+     * que no estén en la lista se añaden al desplegable; las de compras y pedidos no, porque
+     * esos se apuntan solos.
      *
      * @param url ubicación del FXML (no se usa)
      * @param rb recursos de idioma (no se usa)
@@ -107,37 +113,29 @@ public class RegistrarMovimientoController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         dpFecha.setValue(LocalDate.now());
         cbCategoria.getItems().addAll(CATEGORIAS);
-    }
 
-    /**
-     * Recibe el service de la pantalla que abre la ventana, para usar el mismo.
-     * Lo llama {@link GestionEconomicaController} antes de mostrar la ventana.
-     *
-     * @param movimientoService service de los movimientos
-     */
-    public void setMovimientoService(MovimientoService movimientoService) {
-        this.movimientoService = movimientoService;
-    }
+        try {
+            anteriores.addAll(movimientoService.listarMovimientos());
+        } catch (DaoException e) {
+            lblError.setText(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
+        }
 
-    /**
-     * Recibe el usuario que registra el movimiento y los registros que ya había. Las
-     * categorías de los registros metidos a mano que no estén en la lista se añaden al
-     * desplegable; las de compras y pedidos no, porque esos se apuntan solos.
-     * Lo llama {@link GestionEconomicaController} antes de mostrar la ventana.
-     *
-     * @param usuarioId identificador del usuario con la sesión iniciada
-     * @param movimientos registros que ya había
-     */
-    public void setDatos(int usuarioId, List<Movimiento> movimientos) {
-        this.usuarioId = usuarioId;
-        anteriores.clear();
-        anteriores.addAll(movimientos);
-
-        for (Movimiento m : movimientos) {
+        for (Movimiento m : anteriores) {
             if (m.getOrigen() == null && !cbCategoria.getItems().contains(m.getCategoria())) {
                 cbCategoria.getItems().add(m.getCategoria());
             }
         }
+    }
+
+    /**
+     * Indica qué usuario registra el movimiento.
+     * Lo llama {@link GestionEconomicaController} antes de mostrar la ventana.
+     *
+     * @param usuarioId identificador del usuario con la sesión iniciada
+     */
+    public void setUsuarioId(int usuarioId) {
+        this.usuarioId = usuarioId;
     }
 
     /**

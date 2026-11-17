@@ -1,12 +1,8 @@
 package view;
 
 import controller.RegistrarMovimientoController;
-import dao.implement.ComprasDaoImpl;
-import dao.implement.MovimientoDaoImpl;
-import dao.implement.ProveedorDaoImpl;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.concurrent.TimeoutException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,23 +15,20 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import model.Movimiento;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationTest;
 import org.testfx.util.WaitForAsyncUtils;
-import services.MovimientoService;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
  * Tests del diálogo «Registrar movimiento» ({@code registrarMovimiento.fxml}), abierto solo.
  *
- * Necesita MongoDB arrancado. El diálogo se abre con datos reales: se le pasan el service y los
- * registros de {@code registros_economicos}, igual que hace {@code GestionEconomicaController}.
- * Solo prueba la vista (carga, desplegable, aviso y mensajes de error): ningún test llega a
- * guardar.
+ * Necesita MongoDB arrancado y con alguna compra: el diálogo lee al abrirse los registros de
+ * {@code registros_economicos}, y los tests del aviso usan la categoría de las compras
+ * («Aprovisionamiento»), que siempre tiene gastos. Solo prueba la vista (carga, desplegable,
+ * aviso y mensajes de error): ningún test llega a guardar.
  *
  * @author anazk
  */
@@ -50,10 +43,9 @@ public class RegistrarMovimientoTest extends ApplicationTest {
      */
     private RegistrarMovimientoController controlador;
     /**
-     * Registros que se le pasan al diálogo, para elegir una categoría con gastos en los tests
-     * del aviso.
+     * Categoría de los gastos de las compras, que siempre tiene registros anteriores.
      */
-    private List<Movimiento> anteriores;
+    private static final String CATEGORIA_CON_GASTOS = "Aprovisionamiento";
 
     /**
      * Constructor vacío. Lo usa JUnit para crear el test.
@@ -62,8 +54,7 @@ public class RegistrarMovimientoTest extends ApplicationTest {
     }
 
     /**
-     * Abre el diálogo con los estilos de la aplicación y le pasa el service y los registros, como
-     * hace {@code GestionEconomicaController}.
+     * Abre el diálogo con los estilos de la aplicación.
      *
      * @param stage ventana que da TestFX
      * @throws IOException si no se encuentra el FXML
@@ -71,15 +62,9 @@ public class RegistrarMovimientoTest extends ApplicationTest {
     @Override
     public void start(Stage stage) throws IOException {
         this.stage = stage;
-        MovimientoService movimientoService = new MovimientoService(MovimientoDaoImpl.getInstance(),
-                ComprasDaoImpl.getInstance(), ProveedorDaoImpl.getInstance());
-        anteriores = movimientoService.listarMovimientos();
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/economia/registrarMovimiento.fxml"));
         Parent root = loader.load();
         controlador = loader.getController();
-        controlador.setMovimientoService(movimientoService);
-        controlador.setDatos(1, anteriores);
 
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/css/theme.css").toExternalForm());
@@ -182,12 +167,10 @@ public class RegistrarMovimientoTest extends ApplicationTest {
      */
     @Test
     public void testAvisoSiElGastoSuperaLaMedia() {
-        String categoria = categoriaConGastos();
-
-        rellenar("Prueba", categoria, "99999");
+        rellenar("Prueba", CATEGORIA_CON_GASTOS, "99999");
 
         assertTrue(avisoVisible());
-        assertTrue(texto("#lblAviso").contains("«" + categoria + "»"));
+        assertTrue(texto("#lblAviso").contains("«" + CATEGORIA_CON_GASTOS + "»"));
     }
 
     /**
@@ -195,7 +178,7 @@ public class RegistrarMovimientoTest extends ApplicationTest {
      */
     @Test
     public void testSinAvisoSiElGastoEsBajo() {
-        rellenar("Prueba", categoriaConGastos(), "0,01");
+        rellenar("Prueba", CATEGORIA_CON_GASTOS, "0,01");
 
         assertFalse(avisoVisible());
     }
@@ -205,10 +188,9 @@ public class RegistrarMovimientoTest extends ApplicationTest {
      */
     @Test
     public void testUnIngresoNoTieneAviso() {
-        String categoria = categoriaConGastos();
         clickOn("#tgIngreso");
 
-        rellenar("Prueba", categoria, "99999");
+        rellenar("Prueba", CATEGORIA_CON_GASTOS, "99999");
 
         assertFalse(avisoVisible());
     }
@@ -237,22 +219,6 @@ public class RegistrarMovimientoTest extends ApplicationTest {
         FxToolkit.hideStage();
         release(new KeyCode[]{});
         release(new MouseButton[]{});
-    }
-
-    /**
-     * Devuelve la categoría del primer gasto de los registros. Si no hay ningún gasto, el test
-     * se salta.
-     *
-     * @return la categoría
-     */
-    private String categoriaConGastos() {
-        for (Movimiento m : anteriores) {
-            if (!m.esIngreso()) {
-                return m.getCategoria();
-            }
-        }
-        assumeTrue(false, "No hay gastos en la BD");
-        return null;
     }
 
     /**

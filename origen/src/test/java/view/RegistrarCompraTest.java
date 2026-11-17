@@ -1,10 +1,6 @@
 package view;
 
 import controller.RegistrarCompraController;
-import dao.implement.ComprasDaoImpl;
-import dao.implement.MovimientoDaoImpl;
-import dao.implement.ProductoDaoImp;
-import dao.implement.ProveedorDaoImpl;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -32,7 +28,6 @@ import org.junit.jupiter.api.Test;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationTest;
 import org.testfx.util.WaitForAsyncUtils;
-import services.ComprasService;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.testfx.matcher.control.LabeledMatchers.hasText;
@@ -40,10 +35,9 @@ import static org.testfx.matcher.control.LabeledMatchers.hasText;
 /**
  * Tests del diálogo «Registrar compra» ({@code registrarCompra.fxml}), abierto solo.
  *
- * Necesita MongoDB arrancado y con proveedores y productos activos. El diálogo se abre con datos
- * reales: se le pasa el service igual que hace {@code ComprasController}, y los proveedores y
- * productos de los tests se cogen de sus combos. Solo prueba la vista (carga, líneas, totales y
- * mensajes de error): ningún test llega a guardar.
+ * Necesita MongoDB arrancado y con proveedores y productos activos: el diálogo carga sus datos
+ * reales al abrirse, y los proveedores y productos de los tests se cogen de sus combos. Solo
+ * prueba la vista (carga, líneas, totales y mensajes de error): ningún test llega a guardar.
  *
  * @author anazk
  */
@@ -65,7 +59,7 @@ public class RegistrarCompraTest extends ApplicationTest {
     }
 
     /**
-     * Abre el diálogo con los estilos de la aplicación y le pasa el service, como hace
+     * Abre el diálogo con los estilos de la aplicación y le dice el usuario, como hace
      * {@code ComprasController}.
      *
      * @param stage ventana que da TestFX
@@ -78,8 +72,6 @@ public class RegistrarCompraTest extends ApplicationTest {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/compra/registrarCompra.fxml"));
         Parent root = loader.load();
         controlador = loader.getController();
-        controlador.setComprasService(new ComprasService(ComprasDaoImpl.getInstance(),
-                ProveedorDaoImpl.getInstance(), ProductoDaoImp.getInstance(), MovimientoDaoImpl.getInstance()));
         controlador.setUsuarioId(1);
 
         Scene scene = new Scene(root);
@@ -358,21 +350,28 @@ public class RegistrarCompraTest extends ApplicationTest {
     }
 
     /**
-     * Abre un ComboBox y hace clic en la opción con ese texto de la lista desplegable.
+     * Abre un ComboBox y hace clic en la opción con ese texto de la lista desplegable. Si a la
+     * primera no se abre, lo intenta otra vez.
      *
      * @param id selector del ComboBox
      * @param texto texto de la opción
      */
     private void elegir(String id, String texto) {
-        clickOn(id);
-        WaitForAsyncUtils.waitForFxEvents();
-        for (Node nodo : lookup(".list-cell").queryAll()) {
-            if (nodo instanceof ListCell && nodo.getScene().getWindow() != stage
-                    && texto.equals(((ListCell<?>) nodo).getText())) {
-                clickOn(nodo);
-                WaitForAsyncUtils.waitForFxEvents();
-                return;
+        for (int intento = 0; intento < 2; intento++) {
+            clickOn(id);
+            WaitForAsyncUtils.waitForFxEvents();
+            for (Node nodo : lookup(".list-cell").queryAll()) {
+                if (nodo instanceof ListCell && nodo.getScene().getWindow() != stage
+                        && texto.equals(((ListCell<?>) nodo).getText())) {
+                    clickOn(nodo);
+                    WaitForAsyncUtils.waitForFxEvents();
+                    return;
+                }
             }
+            // En Windows el primer clic en una ventana sin foco solo la activa y no abre el
+            // desplegable: se cierra lo que haya abierto y se vuelve a intentar.
+            type(KeyCode.ESCAPE);
+            WaitForAsyncUtils.waitForFxEvents();
         }
         fail("No se encuentra la opción «" + texto + "» en " + id);
     }

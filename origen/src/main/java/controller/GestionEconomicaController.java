@@ -114,7 +114,7 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
 
     /**
      * Único service de la pantalla: registros económicos, compras y proveedores. Se le pasan los
-     * DAOs de MongoDB, y la ventana «Registrar movimiento» recibe este mismo service.
+     * DAOs de MongoDB. La ventana «Registrar movimiento» crea el suyo y carga sus datos sola.
      */
     private final MovimientoService movimientoService = new MovimientoService(
             MovimientoDaoImpl.getInstance(), ComprasDaoImpl.getInstance(), ProveedorDaoImpl.getInstance());
@@ -194,8 +194,7 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
                             if (usuario != null && usuario.getId() != null) {
                                 usuarioId = usuario.getId();
                             }
-                            ventana.setMovimientoService(movimientoService);
-                            ventana.setDatos(usuarioId, movimientos);
+                            ventana.setUsuarioId(usuarioId);
                         }
                     });
 

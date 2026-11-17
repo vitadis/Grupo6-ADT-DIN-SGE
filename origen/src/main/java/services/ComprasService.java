@@ -66,10 +66,9 @@ public class ComprasService {
     }
 
     /**
-     * Crea el service con los DAOs de MongoDB.
-     *
-     * TEMPORAL: solo lo usa {@code InicioService} (de Hodei), que todavía crea este service con
-     * {@code new ComprasService()}. Cuando lo cambie, este constructor se puede borrar.
+     * Crea el service con los DAOs de MongoDB. Lo usan las ventanas que cargan sus datos solas
+     * ({@code RegistrarCompraController}, {@code EditarProveedorController}) e
+     * {@code InicioService}.
      */
     public ComprasService() {
         this(ComprasDaoImpl.getInstance(), ProveedorDaoImpl.getInstance(), ProductoDaoImp.getInstance(),

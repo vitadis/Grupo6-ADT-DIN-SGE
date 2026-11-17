@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
@@ -242,18 +243,24 @@ public class ComprasTest extends ApplicationTest {
     }
 
     /**
-     * El botón «Editar» de la ficha abre el diálogo de proveedor.
+     * El botón «Editar» de la ficha abre el diálogo de proveedor en modo edición, con los datos
+     * del proveedor seleccionado.
      */
     @Test
-    public void testEditarProveedorAbreElDialogo() {
+    public void testEditarProveedorAbreElDialogoConSusDatos() {
         abrirPestana("Proveedores");
         assumeTrue(!contenedor("#contenedorListaProveedores").getChildren().isEmpty(), "No hay proveedores en la BD");
+        String nombre = texto("#lblNombreProveedor");
         int ventanas = listWindows().size();
 
         clickOn("#btnEditarProveedor");
         WaitForAsyncUtils.waitForFxEvents();
 
         assertTrue(listWindows().size() > ventanas, "«Editar» no abre ninguna ventana");
+        Parent dialogo = rootDialogo();
+        assertEquals("EDITAR PROVEEDOR", from(dialogo).lookup("#lblTitulo").queryAs(Label.class).getText());
+        assertEquals(nombre, from(dialogo).lookup("#txtNombre").queryAs(TextField.class).getText());
+        assertFalse(from(dialogo).lookup("#txtNifCif").queryAs(TextField.class).getText().isEmpty());
     }
 
     /**

@@ -45,10 +45,9 @@ public class RegistrarCompraController implements Initializable {
     private final AppLogger logger = AppLogger.getInstance();
 
     /**
-     * Service para cargar proveedores y productos y guardar la compra. No se crea aquí: lo pasa
-     * {@link ComprasController} con {@link #setComprasService(ComprasService)}.
+     * Service para cargar proveedores y productos y guardar la compra.
      */
-    private ComprasService comprasService;
+    private final ComprasService comprasService = new ComprasService();
 
     /**
      * Líneas que se han añadido a la compra.
@@ -111,9 +110,8 @@ public class RegistrarCompraController implements Initializable {
     }
 
     /**
-     * Pone la fecha de hoy y configura cómo se muestran los productos en su ComboBox.
-     * Los proveedores y productos se cargan en {@link #setComprasService(ComprasService)},
-     * porque el service llega después de este método.
+     * Pone la fecha de hoy, configura cómo se muestran los productos en su ComboBox y carga los
+     * proveedores y productos activos.
      *
      * @param url ubicación del FXML (no se usa)
      * @param rb recursos de idioma (no se usa)
@@ -136,19 +134,15 @@ public class RegistrarCompraController implements Initializable {
             }
         });
 
+        cargarCombos();
         pintarLineas();
     }
 
     /**
-     * Recibe el service de la pantalla que abre la ventana y carga con él los proveedores y
-     * productos activos en sus ComboBox. Lo llama {@link ComprasController} antes de mostrar la
-     * ventana, y antes de {@link #setLineasSugeridas(int, List)}, que necesita los proveedores.
-     *
-     * @param comprasService service de compras y proveedores
+     * Carga los proveedores y productos activos en sus ComboBox. Si falla la base de datos,
+     * muestra el error en la ventana.
      */
-    public void setComprasService(ComprasService comprasService) {
-        this.comprasService = comprasService;
-
+    private void cargarCombos() {
         try {
             cbProveedor.getItems().addAll(comprasService.listarProveedoresActivos());
             cbProducto.getItems().addAll(comprasService.listarProductosActivos());

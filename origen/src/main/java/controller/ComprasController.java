@@ -64,7 +64,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion, 
 
     /**
      * Único service de la pantalla: compras, proveedores y productos. Se le pasan los DAOs de
-     * MongoDB, y las ventanas de compra y de proveedor reciben este mismo service.
+     * MongoDB. Las ventanas de compra y de proveedor crean el suyo y cargan sus datos solas.
      */
     private final ComprasService comprasService = new ComprasService(
             ComprasDaoImpl.getInstance(), ProveedorDaoImpl.getInstance(), ProductoDaoImp.getInstance(),
@@ -321,7 +321,6 @@ public class ComprasController implements Initializable, UsuarioImplementacion, 
                     new Consumer<EditarProveedorController>() {
                         @Override
                         public void accept(EditarProveedorController ventana) {
-                            ventana.setComprasService(comprasService);
                             if (proveedor != null) {
                                 ventana.setProveedor(proveedor);
                             }
@@ -355,7 +354,6 @@ public class ComprasController implements Initializable, UsuarioImplementacion, 
                     new Consumer<RegistrarCompraController>() {
                         @Override
                         public void accept(RegistrarCompraController ventana) {
-                            ventana.setComprasService(comprasService);
                             if (usuario != null && usuario.getId() != null) {
                                 ventana.setUsuarioId(usuario.getId());
                             }

@@ -1,12 +1,7 @@
 package view;
 
 import controller.EditarProveedorController;
-import dao.implement.ComprasDaoImpl;
-import dao.implement.MovimientoDaoImpl;
-import dao.implement.ProductoDaoImp;
-import dao.implement.ProveedorDaoImpl;
 import java.io.IOException;
-import java.util.List;
 import java.util.concurrent.TimeoutException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -17,24 +12,20 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
-import model.Proveedor;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationTest;
 import org.testfx.util.WaitForAsyncUtils;
-import services.ComprasService;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
- * Tests del diálogo de proveedor ({@code editarProveedor.fxml}), abierto solo, en modo alta y en
- * modo edición.
+ * Tests del diálogo de proveedor ({@code editarProveedor.fxml}), abierto solo, en modo alta.
+ * El modo edición se prueba desde la pantalla, en {@link ComprasTest}, porque es ella la que le
+ * pasa el proveedor.
  *
- * Necesita MongoDB arrancado y con algún proveedor. El diálogo se abre con datos reales: se le
- * pasa el service igual que hace {@code ComprasController}, y el modo edición se prueba con el
- * primer proveedor de la base de datos. Solo prueba la vista (carga, modos y mensajes de error):
- * ningún test llega a guardar.
+ * Necesita MongoDB arrancado. Solo prueba la vista (carga y mensajes de error): ningún test
+ * llega a guardar.
  *
  * @author anazk
  */
@@ -48,10 +39,6 @@ public class EditarProveedorTest extends ApplicationTest {
      * Controller del diálogo, para pasarlo a modo edición como hace {@code ComprasController}.
      */
     private EditarProveedorController controlador;
-    /**
-     * Service que se le pasa al diálogo, como hace {@code ComprasController}.
-     */
-    private ComprasService comprasService;
 
     /**
      * Constructor vacío. Lo usa JUnit para crear el test.
@@ -60,7 +47,7 @@ public class EditarProveedorTest extends ApplicationTest {
     }
 
     /**
-     * Abre el diálogo en modo alta, con los estilos de la aplicación, y le pasa el service.
+     * Abre el diálogo en modo alta, con los estilos de la aplicación.
      *
      * @param stage ventana que da TestFX
      * @throws IOException si no se encuentra el FXML
@@ -68,13 +55,9 @@ public class EditarProveedorTest extends ApplicationTest {
     @Override
     public void start(Stage stage) throws IOException {
         this.stage = stage;
-        comprasService = new ComprasService(ComprasDaoImpl.getInstance(), ProveedorDaoImpl.getInstance(),
-                ProductoDaoImp.getInstance(), MovimientoDaoImpl.getInstance());
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/compra/editarProveedor.fxml"));
         Parent root = loader.load();
         controlador = loader.getController();
-        controlador.setComprasService(comprasService);
 
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("/css/theme.css").toExternalForm());
@@ -188,28 +171,6 @@ public class EditarProveedorTest extends ApplicationTest {
     }
 
     /**
-     * En modo edición, el título cambia y los campos y los días vienen con los datos del primer
-     * proveedor de la base de datos.
-     */
-    @Test
-    public void testModoEdicionRellenaLosCampos() {
-        List<Proveedor> proveedores = comprasService.listarProveedores();
-        assumeTrue(!proveedores.isEmpty(), "No hay proveedores en la BD");
-        Proveedor p = proveedores.get(0);
-        editar(p);
-
-        assertEquals("EDITAR PROVEEDOR", texto("#lblTitulo"));
-        assertEquals(p.getNombre(), campo("#txtNombre").getText());
-        assertEquals(p.getNif_cif(), campo("#txtNifCif").getText());
-        assertEquals(String.valueOf(p.getPlazo_entrega()), campo("#txtPlazoEntrega").getText());
-        assertEquals(p.isActivo(), check("#chkActivo").isSelected());
-        assertEquals(p.getDias_laborales().contains("lunes"), check("#chkLunes").isSelected());
-        if (p.getContacto() != null) {
-            assertEquals(p.getContacto().getEmail(), campo("#txtEmail").getText());
-        }
-    }
-
-    /**
      * Oculta la ventana y suelta el teclado y el ratón.
      *
      * @throws TimeoutException si TestFX no consigue ocultar la ventana
@@ -257,19 +218,5 @@ public class EditarProveedorTest extends ApplicationTest {
      */
     private CheckBox check(String id) {
         return lookup(id).queryAs(CheckBox.class);
-    }
-
-    /**
-     * Pasa el diálogo a modo edición, como hace {@code ComprasController} al pulsar «Editar».
-     *
-     * @param proveedor proveedor que se edita
-     */
-    private void editar(final Proveedor proveedor) {
-        interact(new Runnable() {
-            @Override
-            public void run() {
-                controlador.setProveedor(proveedor);
-            }
-        });
     }
 }
