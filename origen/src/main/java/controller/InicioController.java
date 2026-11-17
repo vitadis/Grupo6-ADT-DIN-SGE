@@ -5,6 +5,8 @@ import dao.GestionStockDao;
 import dao.ProveedorDao;
 import dao.implement.ComprasDaoImpl;
 import dao.implement.GestionStockDaoImp;
+import dao.implement.PedidoDaoImp;
+import dao.implement.ProductoDaoImp;
 import dao.implement.ProveedorDaoImpl;
 import exceptions.DaoException;
 import java.net.URL;
@@ -31,6 +33,7 @@ import model.Compra;
 import model.Producto;
 import model.Proveedor;
 import model.VentaPedido;
+import services.CajaService;
 import services.PedidoService;
 import util.Alertas;
 import util.AppLogger;
@@ -40,40 +43,51 @@ import util.AppLogger;
  * @author Hodei.Torres
  */
 public class InicioController implements Initializable, ActualizarDatos {
-        
+
     private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yy");
     private static final int MAX_COMPRAS = 8;
 
-    @FXML private GridPane gridInfoStock;
-    @FXML private Label cantIngreso;
-    @FXML private Label gastoMes;
-    @FXML private Label beneficioAprox;
-    @FXML private Label cantStockBajo;
-    @FXML private VBox contenedorCompras;
-    @FXML private Label lblContador;
-    @FXML private VBox contenedorAlertas;
-    @FXML private Label lblContadorAlertas;
-    @FXML private Button registrarCompra;
-    @FXML private Button registrarPerdida;
-    @FXML private Button historialVentas;
-    @FXML private Button anadirProducto;
+    @FXML
+    private GridPane gridInfoStock;
+    @FXML
+    private Label cantIngreso;
+    @FXML
+    private Label gastoMes;
+    @FXML
+    private Label beneficioAprox;
+    @FXML
+    private Label cantStockBajo;
+    @FXML
+    private VBox contenedorCompras;
+    @FXML
+    private Label lblContador;
+    @FXML
+    private VBox contenedorAlertas;
+    @FXML
+    private Label lblContadorAlertas;
+    @FXML
+    private Button registrarCompra;
+    @FXML
+    private Button registrarPerdida;
+    @FXML
+    private Button historialVentas;
+    @FXML
+    private Button anadirProducto;
 
     private final ComprasDao comprasDao = ComprasDaoImpl.getInstance();
     private final GestionStockDao stockDao = GestionStockDaoImp.getInstance();
     private final ProveedorDao proveedorDao = ProveedorDaoImpl.getInstance();
     private final AppLogger logger = AppLogger.getInstance();
     private final PedidoService pedidoService = new PedidoService();
-    
-    
-    private double gastosMes = 0;
 
+    private double gastosMes = 0;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         configurarBotones();
         cargarDatos();
     }
-    
+
     @Override
     public void actualizarDatos() {
         cargarDatos();
@@ -99,19 +113,23 @@ public class InicioController implements Initializable, ActualizarDatos {
                 abrir("/view/compra/registrarCompra.fxml", "Registrar compra");
             }
         });
-        historialVentas.setOnAction(new EventHandler<ActionEvent>(){
+        historialVentas.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 abrir("/view/caja/historialView.fxml", "Historial de Ventas");
             }
         });
-        
+
     }
+
     /* Abre la vista que le mandes por parametro*/
     private void abrir(String ruta, String titulo) {
         try {
-            InstanciarEscena.createNewStage(ruta, titulo, null);
-            cargarDatos();   
+            InstanciarEscena.createNewStage(ruta, titulo, (c) -> {
+                HistorialController controlador = (HistorialController) c;
+                controlador.setCajaService(new CajaService(ProductoDaoImp.getInstance(), PedidoDaoImp.getInstance()));
+            });
+            cargarDatos();
         } catch (Exception e) {
             e.printStackTrace();
             Alertas.mostrarError("No se pudo abrir la ventana: " + e.getMessage());
@@ -160,11 +178,11 @@ public class InicioController implements Initializable, ActualizarDatos {
         cantStockBajo.setText(String.valueOf(agotados + bajos));
         lblContadorAlertas.setText(agotados + " agotados · " + bajos + " con stock bajo");
     }
-    
+
     private void cargarIngresos() throws DaoException {
         LocalDate hoy = LocalDate.now();
         double ingresos = 0;
-        
+
         for (VentaPedido v : pedidoService.listaPedidos()) {
             String fechaTexto = v.getFecha();
             if (fechaTexto == null || fechaTexto.length() < 10) {
@@ -176,7 +194,7 @@ public class InicioController implements Initializable, ActualizarDatos {
                 ingresos += v.getTotal();
             }
         }
-        
+
         cantIngreso.setText(String.format("%.2f €", ingresos));
         beneficioAprox.setText(String.format("%.2f €", ingresos - gastosMes));
     }
@@ -201,7 +219,6 @@ public class InicioController implements Initializable, ActualizarDatos {
         fila.getStyleClass().add("compra-fila");
         return fila;
     }
-
 
     private void cargarCompras() {
         Map<Integer, String> nombres = new HashMap<Integer, String>();
