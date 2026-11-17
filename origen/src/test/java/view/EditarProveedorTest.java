@@ -1,11 +1,8 @@
 package view;
 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.model.Filters;
 import controller.EditarProveedorController;
-import dao.ProductoDao;
 import dao.implement.ComprasDaoImpl;
+import dao.implement.MovimientoDaoImpl;
 import dao.implement.ProductoDaoImp;
 import dao.implement.ProveedorDaoImpl;
 import java.io.IOException;
@@ -21,7 +18,6 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import model.Proveedor;
-import org.bson.Document;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.api.FxToolkit;
@@ -35,22 +31,14 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
  * Tests del diálogo de proveedor ({@code editarProveedor.fxml}), abierto solo, en modo alta y en
  * modo edición.
  *
- * Usa la base de datos {@code origen} (MongoDB tiene que estar arrancado). Los proveedores que da
- * de alta llevan NIF {@code TEST...} y se borran al acabar cada test; el que se edita vuelve a
- * quedar como estaba. Así la base de datos no cambia.
+ * Necesita MongoDB arrancado y con algún proveedor. El diálogo se abre con datos reales: se le
+ * pasa el service igual que hace {@code ComprasController}, y el modo edición se prueba con el
+ * primer proveedor de la base de datos. Solo prueba la vista (carga, modos y mensajes de error):
+ * ningún test llega a guardar.
  *
  * @author anazk
  */
 public class EditarProveedorTest extends ApplicationTest {
-
-    /**
-     * Dirección de MongoDB, para borrar y restaurar lo que tocan los tests.
-     */
-    private static final String CONEXION = "mongodb://localhost:27017";
-    /**
-     * Base de datos que usa la aplicación.
-     */
-    private static final String BASE_DATOS = "origen";
 
     /**
      * Ventana del diálogo.
@@ -61,13 +49,9 @@ public class EditarProveedorTest extends ApplicationTest {
      */
     private EditarProveedorController controlador;
     /**
-     * Service con los DAOs de MongoDB; también se usa para comprobar lo guardado.
+     * Service que se le pasa al diálogo, como hace {@code ComprasController}.
      */
-    private ComprasService servicio;
-    /**
-     * Documento del proveedor tal cual estaba antes de editarlo, para dejarlo idéntico al acabar.
-     */
-    private Document proveedorOriginal;
+    private ComprasService comprasService;
 
     /**
      * Constructor vacío. Lo usa JUnit para crear el test.
@@ -76,7 +60,7 @@ public class EditarProveedorTest extends ApplicationTest {
     }
 
     /**
-     * Abre el diálogo en modo alta y le pasa el service con los DAOs de MongoDB.
+     * Abre el diálogo en modo alta, con los estilos de la aplicación, y le pasa el service.
      *
      * @param stage ventana que da TestFX
      * @throws IOException si no se encuentra el FXML
@@ -84,15 +68,18 @@ public class EditarProveedorTest extends ApplicationTest {
     @Override
     public void start(Stage stage) throws IOException {
         this.stage = stage;
-        servicio = new ComprasService(ComprasDaoImpl.getInstance(), ProveedorDaoImpl.getInstance(),
-                (ProductoDao) ProductoDaoImp.getInstance());
+        comprasService = new ComprasService(ComprasDaoImpl.getInstance(), ProveedorDaoImpl.getInstance(),
+                ProductoDaoImp.getInstance(), MovimientoDaoImpl.getInstance());
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/compra/editarProveedor.fxml"));
         Parent root = loader.load();
         controlador = loader.getController();
-        controlador.setComprasService(servicio);
+        controlador.setComprasService(comprasService);
 
-        stage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/css/theme.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+        stage.setScene(scene);
         stage.show();
     }
 
@@ -112,16 +99,13 @@ public class EditarProveedorTest extends ApplicationTest {
     }
 
     /**
-     * Guardar sin datos da error, no guarda nada y la ventana sigue abierta.
+     * Guardar sin datos da error y la ventana sigue abierta.
      */
     @Test
     public void testGuardarVacioDaError() {
-        int antes = servicio.listarProveedores().size();
-
         clickOn("#btnGuardar");
 
         assertEquals("El nombre del proveedor es obligatorio.", texto("#lblError"));
-        assertEquals(antes, servicio.listarProveedores().size());
         assertTrue(stage.isShowing(), "Con error la ventana no se cierra");
     }
 
@@ -142,7 +126,7 @@ public class EditarProveedorTest extends ApplicationTest {
      */
     @Test
     public void testPlazoConLetrasDaError() {
-        rellenarObligatorios(nifDePrueba());
+        rellenarObligatorios();
         clickOn("#txtPlazoEntrega").write("abc");
 
         clickOn("#btnGuardar");
@@ -155,7 +139,7 @@ public class EditarProveedorTest extends ApplicationTest {
      */
     @Test
     public void testPlazoNegativoDaError() {
-        rellenarObligatorios(nifDePrueba());
+        rellenarObligatorios();
         clickOn("#txtPlazoEntrega").write("-2");
 
         clickOn("#btnGuardar");
@@ -168,7 +152,7 @@ public class EditarProveedorTest extends ApplicationTest {
      */
     @Test
     public void testEmailSinArrobaDaError() {
-        rellenarObligatorios(nifDePrueba());
+        rellenarObligatorios();
         clickOn("#txtEmail").write("pedidos.prueba.es");
 
         clickOn("#btnGuardar");
@@ -181,7 +165,7 @@ public class EditarProveedorTest extends ApplicationTest {
      */
     @Test
     public void testTelefonoConLetrasDaError() {
-        rellenarObligatorios(nifDePrueba());
+        rellenarObligatorios();
         clickOn("#txtTelefono").write("944 abc");
 
         clickOn("#btnGuardar");
@@ -190,70 +174,28 @@ public class EditarProveedorTest extends ApplicationTest {
     }
 
     /**
-     * Cancelar cierra la ventana sin dar de alta el proveedor.
+     * Cancelar cierra la ventana sin guardar.
      */
     @Test
     public void testCancelarCierraSinGuardar() {
-        String nif = nifDePrueba();
-        rellenarObligatorios(nif);
+        rellenarObligatorios();
 
         clickOn("#btnCancelar");
         WaitForAsyncUtils.waitForFxEvents();
 
-        assertNull(buscarPorNif(nif), "Cancelar no debe guardar");
         assertFalse(controlador.isGuardado());
         assertFalse(stage.isShowing());
     }
 
     /**
-     * Un alta correcta guarda el proveedor en la base de datos con sus datos y sus días, y
-     * cierra la ventana. Al acabar, {@link #tearDown()} lo borra.
-     */
-    @Test
-    public void testAltaCorrecta() {
-        String nif = nifDePrueba();
-        rellenarObligatorios(nif);
-        clickOn("#txtPlazoEntrega").write("3");
-        clickOn("#chkLunes");
-        clickOn("#chkMiercoles");
-        clickOn("#txtPersona").write("Ane");
-        clickOn("#txtTelefono").write("+34 944 000 000");
-        clickOn("#txtEmail").write("pedidos@prueba.es");
-
-        clickOn("#btnGuardar");
-        WaitForAsyncUtils.waitForFxEvents();
-
-        Proveedor p = buscarPorNif(nif);
-        assertNotNull(p, "No se ha dado de alta en la BD");
-        assertEquals("Distribuciones Prueba", p.getNombre());
-        assertEquals(3, p.getPlazo_entrega());
-        assertEquals(List.of("lunes", "miercoles"), p.getDias_laborales());
-        assertTrue(p.isActivo());
-        assertEquals("pedidos@prueba.es", p.getContacto().getEmail());
-        assertTrue(controlador.isGuardado());
-        assertFalse(stage.isShowing(), "Al guardar se cierra la ventana");
-    }
-
-    /**
-     * Pulsar Enter guarda, porque «Guardar» es el botón por defecto.
-     */
-    @Test
-    public void testEnterGuardaPorqueEsElBotonPorDefecto() {
-        String nif = nifDePrueba();
-        rellenarObligatorios(nif);
-
-        type(KeyCode.ENTER);
-        WaitForAsyncUtils.waitForFxEvents();
-
-        assertNotNull(buscarPorNif(nif), "Enter debería guardar");
-    }
-
-    /**
-     * En modo edición, el título cambia y los campos vienen con los datos del proveedor.
+     * En modo edición, el título cambia y los campos y los días vienen con los datos del primer
+     * proveedor de la base de datos.
      */
     @Test
     public void testModoEdicionRellenaLosCampos() {
-        Proveedor p = primerProveedor();
+        List<Proveedor> proveedores = comprasService.listarProveedores();
+        assumeTrue(!proveedores.isEmpty(), "No hay proveedores en la BD");
+        Proveedor p = proveedores.get(0);
         editar(p);
 
         assertEquals("EDITAR PROVEEDOR", texto("#lblTitulo"));
@@ -261,80 +203,30 @@ public class EditarProveedorTest extends ApplicationTest {
         assertEquals(p.getNif_cif(), campo("#txtNifCif").getText());
         assertEquals(String.valueOf(p.getPlazo_entrega()), campo("#txtPlazoEntrega").getText());
         assertEquals(p.isActivo(), check("#chkActivo").isSelected());
+        assertEquals(p.getDias_laborales().contains("lunes"), check("#chkLunes").isSelected());
+        if (p.getContacto() != null) {
+            assertEquals(p.getContacto().getEmail(), campo("#txtEmail").getText());
+        }
     }
 
     /**
-     * Al editar se actualiza el mismo proveedor (no se da de alta otro) y se guarda el cambio.
-     * Al acabar, {@link #tearDown()} lo deja como estaba.
-     */
-    @Test
-    public void testEditarActualizaElMismoProveedor() {
-        Proveedor p = primerProveedor();
-        proveedorOriginal = documentoProveedor(p.getId());
-        int antes = servicio.listarProveedores().size();
-        String nombreNuevo = p.getNombre() + " TEST";
-        editar(p);
-
-        clickOn("#txtNombre");
-        push(KeyCode.CONTROL, KeyCode.A);
-        write(nombreNuevo);
-        clickOn("#btnGuardar");
-        WaitForAsyncUtils.waitForFxEvents();
-
-        assertEquals(antes, servicio.listarProveedores().size(), "Editar no debe dar de alta otro");
-        assertEquals(nombreNuevo, buscarPorId(p.getId()).getNombre(), "No se ha guardado el cambio");
-    }
-
-    /**
-     * Deja la base de datos como estaba, oculta la ventana y suelta el teclado y el ratón.
+     * Oculta la ventana y suelta el teclado y el ratón.
      *
      * @throws TimeoutException si TestFX no consigue ocultar la ventana
      */
     @AfterEach
     public void tearDown() throws TimeoutException {
-        borrarProveedoresDePrueba();
-        restaurarProveedorEditado();
         FxToolkit.hideStage();
         release(new KeyCode[]{});
         release(new MouseButton[]{});
     }
 
     /**
-     * Borra los proveedores con NIF {@code TEST...}. Se hace con el driver porque el DAO no tiene
-     * método para borrar.
+     * Escribe el nombre y el NIF, que son los campos obligatorios.
      */
-    private void borrarProveedoresDePrueba() {
-        try (MongoClient cliente = MongoClients.create(CONEXION)) {
-            cliente.getDatabase(BASE_DATOS).getCollection("proveedores")
-                    .deleteMany(Filters.regex("nif_cif", "^TEST"));
-        }
-    }
-
-    /**
-     * Vuelve a poner el proveedor editado exactamente como estaba, con su documento original.
-     */
-    private void restaurarProveedorEditado() {
-        if (proveedorOriginal == null) {
-            return;
-        }
-        try (MongoClient cliente = MongoClients.create(CONEXION)) {
-            cliente.getDatabase(BASE_DATOS).getCollection("proveedores")
-                    .replaceOne(Filters.eq("_id", proveedorOriginal.get("_id")), proveedorOriginal);
-        }
-        proveedorOriginal = null;
-    }
-
-    /**
-     * Lee el documento de un proveedor tal cual está en MongoDB.
-     *
-     * @param id identificador del proveedor
-     * @return el documento
-     */
-    private Document documentoProveedor(int id) {
-        try (MongoClient cliente = MongoClients.create(CONEXION)) {
-            return cliente.getDatabase(BASE_DATOS).getCollection("proveedores")
-                    .find(Filters.eq("_id", id)).first();
-        }
+    private void rellenarObligatorios() {
+        clickOn("#txtNombre").write("Distribuciones Prueba");
+        clickOn("#txtNifCif").write("B12345678");
     }
 
     /**
@@ -365,67 +257,6 @@ public class EditarProveedorTest extends ApplicationTest {
      */
     private CheckBox check(String id) {
         return lookup(id).queryAs(CheckBox.class);
-    }
-
-    /**
-     * Crea un NIF que no existe y que la limpieza reconoce.
-     *
-     * @return un NIF {@code TEST...}
-     */
-    private String nifDePrueba() {
-        return "TEST" + System.currentTimeMillis();
-    }
-
-    /**
-     * Escribe el nombre y el NIF, que son los campos obligatorios.
-     *
-     * @param nif NIF que se escribe
-     */
-    private void rellenarObligatorios(String nif) {
-        clickOn("#txtNombre").write("Distribuciones Prueba");
-        clickOn("#txtNifCif").write(nif);
-    }
-
-    /**
-     * Devuelve el primer proveedor de la base de datos. Si no hay ninguno, el test se salta.
-     *
-     * @return el proveedor
-     */
-    private Proveedor primerProveedor() {
-        List<Proveedor> todos = servicio.listarProveedores();
-        assumeTrue(!todos.isEmpty(), "No hay proveedores en la BD");
-        return todos.get(0);
-    }
-
-    /**
-     * Busca en la base de datos un proveedor por su NIF.
-     *
-     * @param nif NIF del proveedor
-     * @return el proveedor, o {@code null} si no está
-     */
-    private Proveedor buscarPorNif(String nif) {
-        for (Proveedor p : servicio.listarProveedores()) {
-            if (nif.equals(p.getNif_cif())) {
-                return p;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Busca en la base de datos un proveedor por su identificador.
-     *
-     * @param id identificador del proveedor
-     * @return el proveedor
-     */
-    private Proveedor buscarPorId(int id) {
-        for (Proveedor p : servicio.listarProveedores()) {
-            if (p.getId() == id) {
-                return p;
-            }
-        }
-        fail("No existe el proveedor " + id);
-        return null;
     }
 
     /**

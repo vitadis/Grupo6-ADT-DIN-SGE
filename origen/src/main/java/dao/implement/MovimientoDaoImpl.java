@@ -13,7 +13,7 @@ import model.Movimiento;
 /**
  * Implementación de {@link MovimientoDao} con MongoDB.
  *
- * Trabaja con la colección {@code movimientos}. Es un singleton: se obtiene con
+ * Trabaja con la colección {@code registros_economicos}. Es un singleton: se obtiene con
  * {@link #getInstance()}. Cada operación abre su conexión y la cierra al
  * terminar (try-with-resources).
  *
@@ -22,9 +22,9 @@ import model.Movimiento;
 public class MovimientoDaoImpl extends AccesoMongoDB implements MovimientoDao {
 
     /**
-     * Nombre de la colección de movimientos en MongoDB.
+     * Nombre de la colección de registros económicos en MongoDB.
      */
-    private static final String COLECCION_MOVIMIENTOS = "movimientos";
+    private static final String COLECCION_MOVIMIENTOS = "registros_economicos";
 
     /**
      * Única instancia de la clase (singleton).

@@ -37,6 +37,7 @@ import model.LineaCompra;
 import model.Producto;
 import model.Proveedor;
 import dao.implement.ComprasDaoImpl;
+import dao.implement.MovimientoDaoImpl;
 import dao.implement.ProductoDaoImp;
 import dao.implement.ProveedorDaoImpl;
 import services.ComprasService;
@@ -66,7 +67,8 @@ public class ComprasController implements Initializable, UsuarioImplementacion, 
      * MongoDB, y las ventanas de compra y de proveedor reciben este mismo service.
      */
     private final ComprasService comprasService = new ComprasService(
-            ComprasDaoImpl.getInstance(), ProveedorDaoImpl.getInstance(), ProductoDaoImp.getInstance());
+            ComprasDaoImpl.getInstance(), ProveedorDaoImpl.getInstance(), ProductoDaoImp.getInstance(),
+            MovimientoDaoImpl.getInstance());
     /**
      * Proveedores por identificador, para sacar su nombre a partir de un {@code proveedor_id}.
      */
@@ -106,8 +108,6 @@ public class ComprasController implements Initializable, UsuarioImplementacion, 
     private Label lblTitulo;
     @FXML
     private Label lblSubtitulo;
-    @FXML
-    private Button btnGenerarLista;
     @FXML
     private ScrollPane scrollCompras;
     @FXML
@@ -230,7 +230,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion, 
     /**
      * Cabecera dinámica: adapta el título, el subtítulo y los botones a la pestaña elegida
      * (igual que {@code AdministracionController}). En Proveedores el botón principal pasa a
-     * «Nuevo proveedor» y «Generar lista» solo se ve en Compras.
+     * «Nuevo proveedor».
      *
      * @param pestana pestaña seleccionada
      */
@@ -238,10 +238,6 @@ public class ComprasController implements Initializable, UsuarioImplementacion, 
         if (pestana == null) {
             return;
         }
-
-        boolean enCompras = (pestana == tabCompras);
-        btnGenerarLista.setVisible(enCompras);
-        btnGenerarLista.setManaged(enCompras);
 
         if (pestana == tabProveedores) {
             lblTitulo.setText("Proveedores");
@@ -251,21 +247,6 @@ public class ComprasController implements Initializable, UsuarioImplementacion, 
             lblTitulo.setText("Compras");
             lblSubtitulo.setText("Compras registradas y lista de compra sugerida");
             btnAccionPrincipal.setText("Registrar compra");
-        }
-    }
-
-    /**
-     * Vuelve a generar la lista sugerida.
-     *
-     * @param event evento del botón Generar lista de compra
-     */
-    @FXML
-    private void onGenerarLista(ActionEvent event) {
-        try {
-            generarListaSugerida();
-        } catch (DaoException e) {
-            Alertas.mostrarError(e.getMessage());
-            logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -299,8 +280,9 @@ public class ComprasController implements Initializable, UsuarioImplementacion, 
     }
 
     /**
-     * Agrupa por proveedor los productos marcados de la lista sugerida y abre una ventana
-     * de compra por cada proveedor, ya rellena.
+     * Agrupa por proveedor los productos marcados de la lista sugerida y abre una sola ventana
+     * de compra, ya rellena, con los productos del primer proveedor. Una compra es de un único
+     * proveedor, así que el resto se puede pedir después volviendo a pulsar el botón.
      *
      * @param event evento del botón Crear compra con esta lista
      */
@@ -323,9 +305,8 @@ public class ComprasController implements Initializable, UsuarioImplementacion, 
             return;
         }
 
-        for (Integer idProveedor : porProveedor.keySet()) {
-            abrirVentanaCompra(idProveedor, porProveedor.get(idProveedor));
-        }
+        Integer primerProveedor = porProveedor.keySet().iterator().next();
+        abrirVentanaCompra(primerProveedor, porProveedor.get(primerProveedor));
     }
 
     /**
@@ -386,6 +367,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion, 
 
             if (c.isGuardado()) {
                 cargarCompras();
+                generarListaSugerida();
                 if (proveedorSeleccionado != null) {
                     cargarHistorialProveedor(proveedorSeleccionado);
                 }

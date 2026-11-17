@@ -120,12 +120,13 @@ public class RegistrarMovimientoController implements Initializable {
     }
 
     /**
-     * Recibe el usuario que registra el movimiento y los movimientos que ya había. Las
-     * categorías de esos movimientos que no estén en la lista se añaden al desplegable.
+     * Recibe el usuario que registra el movimiento y los registros que ya había. Las
+     * categorías de los registros metidos a mano que no estén en la lista se añaden al
+     * desplegable; las de compras y pedidos no, porque esos se apuntan solos.
      * Lo llama {@link GestionEconomicaController} antes de mostrar la ventana.
      *
      * @param usuarioId identificador del usuario con la sesión iniciada
-     * @param movimientos movimientos que ya había
+     * @param movimientos registros que ya había
      */
     public void setDatos(int usuarioId, List<Movimiento> movimientos) {
         this.usuarioId = usuarioId;
@@ -133,7 +134,7 @@ public class RegistrarMovimientoController implements Initializable {
         anteriores.addAll(movimientos);
 
         for (Movimiento m : movimientos) {
-            if (!cbCategoria.getItems().contains(m.getCategoria())) {
+            if (m.getOrigen() == null && !cbCategoria.getItems().contains(m.getCategoria())) {
                 cbCategoria.getItems().add(m.getCategoria());
             }
         }

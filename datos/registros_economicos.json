@@ -1,0 +1,914 @@
+[
+  {
+    "_id": 1,
+    "tipo": "gasto",
+    "categoria": "Aprovisionamiento",
+    "importe": 177.01,
+    "fecha": "2026-10-01",
+    "origen": {
+      "coleccion": "compras",
+      "procedencia_id": 1
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 2,
+    "tipo": "gasto",
+    "categoria": "Aprovisionamiento",
+    "importe": 61.17,
+    "fecha": "2026-10-02",
+    "origen": {
+      "coleccion": "compras",
+      "procedencia_id": 2
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 3,
+    "tipo": "gasto",
+    "categoria": "Aprovisionamiento",
+    "importe": 238.92,
+    "fecha": "2026-10-03",
+    "origen": {
+      "coleccion": "compras",
+      "procedencia_id": 3
+    },
+    "usuario_id": 3
+  },
+  {
+    "_id": 4,
+    "tipo": "gasto",
+    "categoria": "Aprovisionamiento",
+    "importe": 29.7,
+    "fecha": "2026-10-05",
+    "origen": {
+      "coleccion": "compras",
+      "procedencia_id": 4
+    },
+    "usuario_id": 4
+  },
+  {
+    "_id": 5,
+    "tipo": "gasto",
+    "categoria": "Aprovisionamiento",
+    "importe": 23.03,
+    "fecha": "2026-10-06",
+    "origen": {
+      "coleccion": "compras",
+      "procedencia_id": 5
+    },
+    "usuario_id": 5
+  },
+  {
+    "_id": 6,
+    "tipo": "gasto",
+    "categoria": "Aprovisionamiento",
+    "importe": 14.87,
+    "fecha": "2026-10-07",
+    "origen": {
+      "coleccion": "compras",
+      "procedencia_id": 6
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 7,
+    "tipo": "gasto",
+    "categoria": "Aprovisionamiento",
+    "importe": 159.5,
+    "fecha": "2026-10-08",
+    "origen": {
+      "coleccion": "compras",
+      "procedencia_id": 7
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 8,
+    "tipo": "gasto",
+    "categoria": "Aprovisionamiento",
+    "importe": 27.72,
+    "fecha": "2026-10-09",
+    "origen": {
+      "coleccion": "compras",
+      "procedencia_id": 8
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 9,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 21.51,
+    "fecha": "2026-10-10",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 1
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 10,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 13.42,
+    "fecha": "2026-10-10",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 2
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 11,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 12.28,
+    "fecha": "2026-10-10",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 3
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 12,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 7.92,
+    "fecha": "2026-10-11",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 4
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 13,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 4.95,
+    "fecha": "2026-10-11",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 5
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 14,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 8.03,
+    "fecha": "2026-10-11",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 6
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 15,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 9.57,
+    "fecha": "2026-10-11",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 7
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 16,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 18.1,
+    "fecha": "2026-10-12",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 8
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 17,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 6.69,
+    "fecha": "2026-10-12",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 9
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 18,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 13.42,
+    "fecha": "2026-10-12",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 10
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 19,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 6.54,
+    "fecha": "2026-10-12",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 11
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 20,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 16.5,
+    "fecha": "2026-10-12",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 12
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 21,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 3.39,
+    "fecha": "2026-10-12",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 13
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 22,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 14.17,
+    "fecha": "2026-10-12",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 14
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 23,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 12.38,
+    "fecha": "2026-10-12",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 15
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 24,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 4.67,
+    "fecha": "2026-10-13",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 16
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 25,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 9.44,
+    "fecha": "2026-10-13",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 17
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 26,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 16.82,
+    "fecha": "2026-10-13",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 18
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 27,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 10.12,
+    "fecha": "2026-10-13",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 19
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 28,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 24.48,
+    "fecha": "2026-10-13",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 20
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 29,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 3.3,
+    "fecha": "2026-10-14",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 21
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 30,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 13.45,
+    "fecha": "2026-10-14",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 22
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 31,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 8.25,
+    "fecha": "2026-10-14",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 23
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 32,
+    "tipo": "gasto",
+    "categoria": "Aprovisionamiento",
+    "importe": 66.13,
+    "fecha": "2026-10-15",
+    "origen": {
+      "coleccion": "compras",
+      "procedencia_id": 9
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 33,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 3.3,
+    "fecha": "2026-10-15",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 24
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 34,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 12.98,
+    "fecha": "2026-10-15",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 25
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 35,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 18.54,
+    "fecha": "2026-10-15",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 26
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 36,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 13.42,
+    "fecha": "2026-10-16",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 27
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 37,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 3.3,
+    "fecha": "2026-10-16",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 28
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 38,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 3.85,
+    "fecha": "2026-10-17",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 29
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 39,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 5.04,
+    "fecha": "2026-10-17",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 30
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 40,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 3.63,
+    "fecha": "2026-10-17",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 31
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 41,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 3.39,
+    "fecha": "2026-10-17",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 32
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 42,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 5.04,
+    "fecha": "2026-10-17",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 33
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 43,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 17.69,
+    "fecha": "2026-10-18",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 34
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 44,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 9.44,
+    "fecha": "2026-10-18",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 35
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 45,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 17.66,
+    "fecha": "2026-10-18",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 36
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 46,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 11.36,
+    "fecha": "2026-10-18",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 37
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 47,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 5.04,
+    "fecha": "2026-10-18",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 38
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 48,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 22.55,
+    "fecha": "2026-10-19",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 39
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 49,
+    "tipo": "gasto",
+    "categoria": "Aprovisionamiento",
+    "importe": 29.7,
+    "fecha": "2026-10-20",
+    "origen": {
+      "coleccion": "compras",
+      "procedencia_id": 10
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 50,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 17.99,
+    "fecha": "2026-10-20",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 40
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 51,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 4.4,
+    "fecha": "2026-10-20",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 41
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 52,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 3.85,
+    "fecha": "2026-10-20",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 42
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 53,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 1.65,
+    "fecha": "2026-10-20",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 43
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 54,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 4.67,
+    "fecha": "2026-10-21",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 44
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 55,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 16.12,
+    "fecha": "2026-10-21",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 45
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 56,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 3.3,
+    "fecha": "2026-10-21",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 46
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 57,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 16.81,
+    "fecha": "2026-10-22",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 47
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 58,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 6.33,
+    "fecha": "2026-10-22",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 48
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 59,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 5.5,
+    "fecha": "2026-10-23",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 49
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 60,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 1.65,
+    "fecha": "2026-10-23",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 50
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 61,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 14.48,
+    "fecha": "2026-10-23",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 51
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 62,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 7.7,
+    "fecha": "2026-10-23",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 52
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 63,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 11.22,
+    "fecha": "2026-10-23",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 53
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 64,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 27.78,
+    "fecha": "2026-10-24",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 54
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 65,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 5.5,
+    "fecha": "2026-10-24",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 55
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 66,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 9.96,
+    "fecha": "2026-10-24",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 56
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 67,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 8.2,
+    "fecha": "2026-10-24",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 57
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 68,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 18.24,
+    "fecha": "2026-10-25",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 58
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 69,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 21.81,
+    "fecha": "2026-10-25",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 59
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 70,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 3.3,
+    "fecha": "2026-10-25",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 60
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 71,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 1.65,
+    "fecha": "2026-10-25",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 61
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 72,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 15.73,
+    "fecha": "2026-10-25",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 62
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 73,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 16.92,
+    "fecha": "2026-10-25",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 63
+    },
+    "usuario_id": 2
+  },
+  {
+    "_id": 74,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 22.09,
+    "fecha": "2026-10-25",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 64
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 75,
+    "tipo": "ingreso",
+    "categoria": "Ventas",
+    "importe": 8.3,
+    "fecha": "2026-10-26",
+    "origen": {
+      "coleccion": "pedidos",
+      "procedencia_id": 65
+    },
+    "usuario_id": 1
+  },
+  {
+    "_id": 76,
+    "tipo": "gasto",
+    "categoria": "Aprovisionamiento",
+    "importe": 275.0,
+    "fecha": "2026-11-04",
+    "origen": {
+      "coleccion": "compras",
+      "procedencia_id": 11
+    },
+    "usuario_id": 1
+  }
+]

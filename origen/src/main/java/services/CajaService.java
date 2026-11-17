@@ -1,11 +1,14 @@
 package services;
 
+import dao.MovimientoDao;
 import dao.PedidoDao;
 import dao.ProductoDao;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import model.CategoriaProducto;
+import model.EstadoPedido;
+import model.Movimiento;
 import model.Producto;
 import model.TipoProducto;
 import model.VentaPedido;
@@ -21,16 +24,20 @@ public class CajaService {
     // ---- Dependencias ----
     private final ProductoDao productoDao;
     private final PedidoDao pedidoDao;
+    private final MovimientoDao movimientoDao;
 
     /**
-     * Inicializa el servicio con los DAO de productos y pedidos.
+     * Inicializa el servicio con los DAO de productos, pedidos y registros económicos.
      *
      * @param productoDao acceso a datos de productos
      * @param pedidoDao acceso a datos de pedidos
+     * @param movimientoDao acceso a {@code registros_economicos}, para apuntar el ingreso de
+     * cada pedido cobrado
      */
-    public CajaService(ProductoDao productoDao, PedidoDao pedidoDao) {
+    public CajaService(ProductoDao productoDao, PedidoDao pedidoDao, MovimientoDao movimientoDao) {
         this.productoDao = productoDao;
         this.pedidoDao = pedidoDao;
+        this.movimientoDao = movimientoDao;
     }
 
     // ---- Productos y categorías ----
@@ -100,7 +107,8 @@ public class CajaService {
     // ---- Pedidos ----
     /**
      * Comprueba que el pedido no esté vacío, lo valida y lo registra en
-     * persistencia.
+     * persistencia. Si está cobrado, apunta también su ingreso de «Ventas» en
+     * {@code registros_economicos}, con origen el pedido.
      *
      * @param pedido pedido a registrar
      */
@@ -110,6 +118,9 @@ public class CajaService {
         }
         pedido.validar();
         pedidoDao.agregar(pedido);
+        if (pedido.getEstado() == EstadoPedido.COBRADO) {
+            movimientoDao.insertarMovimiento(Movimiento.dePedido(pedido));
+        }
     }
 
     /**

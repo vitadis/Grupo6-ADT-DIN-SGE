@@ -41,7 +41,6 @@
                 </VBox>
                 <Region HBox.hgrow="ALWAYS" />
                 <HBox fx:id="contenedorBotonesAccion" alignment="BOTTOM_RIGHT" spacing="10">
-                    <Button fx:id="btnGenerarLista" onAction="#onGenerarLista" styleClass="btn-secundario" text="Generar lista de compra" />
                     <Button fx:id="btnAccionPrincipal" onAction="#onAccionPrincipal" styleClass="btn-primario" text="Registrar compra" />
                 </HBox>
             </HBox>

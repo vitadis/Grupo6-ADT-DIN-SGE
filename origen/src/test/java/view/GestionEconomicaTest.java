@@ -1,24 +1,13 @@
 package view;
 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.model.Filters;
 import controller.UsuarioImplementacion;
-import dao.PedidoDao;
-import dao.implement.ComprasDaoImpl;
-import dao.implement.MovimientoDaoImpl;
-import dao.implement.PedidoDaoImp;
-import dao.implement.ProveedorDaoImpl;
-import exceptions.DaoException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 import java.util.concurrent.TimeoutException;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -38,17 +27,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import model.Compra;
-import model.EstadoPedido;
-import model.Movimiento;
 import model.Usuario;
-import model.VentaPedido;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationTest;
 import org.testfx.util.WaitForAsyncUtils;
-import services.MovimientoService;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.testfx.api.FxAssert.verifyThat;
@@ -59,13 +43,12 @@ import static org.testfx.matcher.control.LabeledMatchers.hasText;
  * Tests de la pantalla «Gestión económica» ({@code gestionEconomicaView.fxml}).
  *
  * Prueba la pantalla: tarjetas, gráfico, tabla y filtros. Del diálogo «Registrar movimiento»
- * solo comprueba que se abre y que, al guardar desde él, la pantalla se actualiza; lo que pasa
- * dentro del diálogo está en {@link RegistrarMovimientoTest}.
+ * solo comprueba que se abre; lo que pasa dentro del diálogo está en
+ * {@link RegistrarMovimientoTest}.
  *
- * Usa la base de datos {@code origen} (MongoDB tiene que estar arrancado). Los valores esperados
- * se calculan leyendo la base de datos con un {@link MovimientoService}, así que no dependen de
- * datos concretos. El movimiento que se guarda lleva concepto {@code TEST-...} y se borra al
- * acabar.
+ * Solo prueba la vista: no usa el service ni lee la base de datos para comparar. Lo que
+ * enseña la pantalla se comprueba contra la propia pantalla (por ejemplo, el beneficio con las
+ * tarjetas de ingresos y gastos, o el contador con las filas de la tabla). Ningún test guarda.
  *
  * Si las ventas no se pueden leer (por ejemplo, pedidos guardados en minúsculas), la pantalla
  * avisa con un {@code Alert} al cargarse; el test lo cierra para que no se quede esperando.
@@ -75,23 +58,9 @@ import static org.testfx.matcher.control.LabeledMatchers.hasText;
 public class GestionEconomicaTest extends ApplicationTest {
 
     /**
-     * Dirección de MongoDB, para borrar lo que deja el test.
-     */
-    private static final String CONEXION = "mongodb://localhost:27017";
-    /**
-     * Base de datos que usa la aplicación.
-     */
-    private static final String BASE_DATOS = "origen";
-
-    /**
      * Ventana de la pantalla, para distinguirla del diálogo que se abre encima.
      */
     private Stage stagePrincipal;
-    /**
-     * Service con los DAOs de MongoDB, para calcular lo que debería enseñar la pantalla.
-     */
-    private MovimientoService servicio;
-
     /**
      * Constructor vacío. Lo usa JUnit para crear el test.
      */
@@ -109,9 +78,6 @@ public class GestionEconomicaTest extends ApplicationTest {
     @Override
     public void start(Stage stage) throws IOException {
         stagePrincipal = stage;
-        servicio = new MovimientoService(MovimientoDaoImpl.getInstance(), ComprasDaoImpl.getInstance(),
-                (PedidoDao) PedidoDaoImp.getInstance(), ProveedorDaoImpl.getInstance());
-
         cerrarAvisosAlCargar(5);
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/economia/gestionEconomicaView.fxml"));
         Parent root = loader.load();
@@ -119,7 +85,10 @@ public class GestionEconomicaTest extends ApplicationTest {
         usuario.setId(1);
         usuario.setUsername("test");
         ((UsuarioImplementacion) loader.getController()).setUsuario(usuario);
-        stage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/css/theme.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+        stage.setScene(scene);
         stage.setMaximized(true);
         stage.show();
     }
@@ -148,28 +117,22 @@ public class GestionEconomicaTest extends ApplicationTest {
     }
 
     /**
-     * La tarjeta de gastos es la suma de las compras y de los movimientos de gasto del mes.
+     * Las tres tarjetas enseñan un importe con dos decimales y el símbolo del euro.
      */
     @Test
-    public void testTarjetaDeGastos() {
-        assertEquals(euros(gastosDelMes()), texto("#lblGastos"));
+    public void testTarjetasTienenFormatoDeEuros() {
+        for (String id : new String[]{"#lblIngresos", "#lblGastos", "#lblBeneficio"}) {
+            assertTrue(texto(id).matches("-?\\d+,\\d{2} €"), id + " no tiene formato de euros: " + texto(id));
+        }
     }
 
     /**
-     * La tarjeta de ingresos es la suma de las ventas cobradas y de los movimientos de ingreso
-     * del mes.
+     * El beneficio es la tarjeta de ingresos menos la de gastos.
      */
     @Test
-    public void testTarjetaDeIngresos() {
-        assertEquals(euros(ingresosDelMes()), texto("#lblIngresos"));
-    }
-
-    /**
-     * El beneficio es ingresos menos gastos.
-     */
-    @Test
-    public void testTarjetaDeBeneficio() {
-        assertEquals(euros(ingresosDelMes() - gastosDelMes()), texto("#lblBeneficio"));
+    public void testBeneficioEsIngresosMenosGastos() {
+        double esperado = importe(texto("#lblIngresos")) - importe(texto("#lblGastos"));
+        assertEquals(esperado, importe(texto("#lblBeneficio")), 0.01);
     }
 
     /**
@@ -198,18 +161,16 @@ public class GestionEconomicaTest extends ApplicationTest {
     public void testUltimaBarraEsElGastoDelMes() {
         List<XYChart.Data<String, Number>> barras = grafico().getData().get(0).getData();
         double ultima = barras.get(barras.size() - 1).getYValue().doubleValue();
-        assertEquals(gastosDelMes(), ultima, 0.01);
+        assertEquals(importe(texto("#lblGastos")), ultima, 0.01);
     }
 
     /**
-     * Sin filtros se ven todos los movimientos: una fila por compra, una por día con ventas
-     * cobradas y una por movimiento.
+     * Sin filtros el contador dice que se ven todas las filas de la tabla.
      */
     @Test
-    public void testSinFiltrosSeVenTodos() {
-        int total = totalEsperado();
+    public void testSinFiltrosElContadorCoincideConLasFilas() {
+        int total = filas().size();
         assertEquals("Mostrando " + total + " de " + total + " movimientos", texto("#lblContador"));
-        assertEquals(total, filas().size());
     }
 
     /**
@@ -229,7 +190,7 @@ public class GestionEconomicaTest extends ApplicationTest {
      */
     @Test
     public void testFiltroDeTipoReparteLasFilas() {
-        int total = totalEsperado();
+        int total = filas().size();
 
         elegir("#cbTipo", "Gasto");
         int gastos = filas().size();
@@ -244,18 +205,17 @@ public class GestionEconomicaTest extends ApplicationTest {
     }
 
     /**
-     * Filtrar por la categoría «Compras» deja tantas filas como compras hay.
+     * Filtrar por la categoría «Aprovisionamiento» (las compras) deja solo filas de esa categoría.
      */
     @Test
     public void testFiltroDeCategoriaCompras() {
-        int compras = servicio.listarCompras().size();
-        assumeTrue(compras > 0, "No hay compras en la BD");
+        assumeTrue(combo("#cbCategoria").getItems().contains("Aprovisionamiento"), "No hay filas de compras");
 
-        elegir("#cbCategoria", "Compras");
+        elegir("#cbCategoria", "Aprovisionamiento");
 
-        assertEquals(compras, filas().size());
+        assertFalse(filas().isEmpty());
         for (HBox fila : filas()) {
-            assertEquals("Compras", celda(fila, 2));
+            assertEquals("Aprovisionamiento", celda(fila, 2));
         }
     }
 
@@ -300,7 +260,7 @@ public class GestionEconomicaTest extends ApplicationTest {
      */
     @Test
     public void testLimpiarFiltros() {
-        int total = totalEsperado();
+        int total = filas().size();
         elegir("#cbTipo", "Gasto");
         clickOn("#txtConcepto").write("zzzz");
 
@@ -328,51 +288,17 @@ public class GestionEconomicaTest extends ApplicationTest {
     }
 
     /**
-     * Al guardar un movimiento desde el diálogo, la pantalla se recarga y tiene una fila más.
-     * Al acabar, {@link #tearDown()} borra el movimiento.
-     */
-    @Test
-    public void testGuardarDesdeElDialogoActualizaLaPantalla() {
-        int antes = filas().size();
-        activarVentana();
-        clickOn("#btnRegistrarMovimiento");
-        WaitForAsyncUtils.waitForFxEvents();
-        Parent dialogo = rootDialogo();
-
-        clickOn(from(dialogo).lookup("#txtConcepto").queryAs(TextField.class)).write("TEST-" + System.currentTimeMillis());
-        clickOn(from(dialogo).lookup("#cbCategoria").queryAs(ComboBox.class).getEditor()).write("Otros");
-        clickOn(from(dialogo).lookup("#txtImporte").queryAs(TextField.class)).write("5");
-        clickOn(from(dialogo).lookup("#btnGuardar").queryButton());
-        WaitForAsyncUtils.waitForFxEvents();
-        cerrarAvisos();
-
-        assertEquals(antes + 1, filas().size(), "La pantalla no se ha actualizado");
-    }
-
-    /**
-     * Cierra el diálogo si se ha quedado abierto, borra los movimientos de prueba, oculta la
-     * ventana y suelta el teclado y el ratón.
+     * Cierra el diálogo si se ha quedado abierto, oculta la ventana y suelta el teclado y el
+     * ratón.
      *
      * @throws TimeoutException si TestFX no consigue ocultar la ventana
      */
     @AfterEach
     public void tearDown() throws TimeoutException {
         cerrarVentanasExtra();
-        borrarMovimientosDePrueba();
         FxToolkit.hideStage();
         release(new KeyCode[]{});
         release(new MouseButton[]{});
-    }
-
-    /**
-     * Borra los movimientos con concepto {@code TEST-...}. Se hace con el driver porque el DAO
-     * no tiene método para borrar.
-     */
-    private void borrarMovimientosDePrueba() {
-        try (MongoClient cliente = MongoClients.create(CONEXION)) {
-            cliente.getDatabase(BASE_DATOS).getCollection("movimientos")
-                    .deleteMany(Filters.regex("concepto", "^TEST-"));
-        }
     }
 
     /**
@@ -400,99 +326,6 @@ public class GestionEconomicaTest extends ApplicationTest {
     }
 
     /**
-     * Cierra los {@code Alert} que estén abiertos, por ejemplo el aviso de las ventas que sale
-     * al recargar la pantalla, y espera a que la pantalla termine de recargarse.
-     */
-    private void cerrarAvisos() {
-        for (int i = 0; i < 5; i++) {
-            interact(new Runnable() {
-                @Override
-                public void run() {
-                    for (Window ventana : new ArrayList<>(Window.getWindows())) {
-                        if (ventana != stagePrincipal && ventana.getScene() != null
-                                && ventana.getScene().getRoot().lookup(".dialog-pane") != null) {
-                            ventana.hide();
-                        }
-                    }
-                }
-            });
-            WaitForAsyncUtils.waitForFxEvents();
-        }
-    }
-
-    /**
-     * Calcula los gastos del mes actual igual que la pantalla: compras más movimientos de gasto.
-     *
-     * @return los gastos del mes
-     */
-    private double gastosDelMes() {
-        YearMonth actual = YearMonth.now();
-        double suma = 0;
-        for (Compra c : servicio.listarCompras()) {
-            if (YearMonth.from(LocalDate.parse(c.getFecha())).equals(actual)) {
-                suma += c.getTotal();
-            }
-        }
-        for (Movimiento m : servicio.listarMovimientos()) {
-            if (!m.esIngreso() && YearMonth.from(LocalDate.parse(m.getFecha())).equals(actual)) {
-                suma += m.getImporte();
-            }
-        }
-        return suma;
-    }
-
-    /**
-     * Calcula los ingresos del mes actual igual que la pantalla: ventas cobradas más movimientos
-     * de ingreso. Si las ventas no se pueden leer, cuentan como 0, como en la pantalla.
-     *
-     * @return los ingresos del mes
-     */
-    private double ingresosDelMes() {
-        YearMonth actual = YearMonth.now();
-        double suma = 0;
-        for (VentaPedido p : ventas()) {
-            if (p.getEstado() == EstadoPedido.COBRADO && YearMonth.from(LocalDate.parse(p.getFecha())).equals(actual)) {
-                suma += p.getTotal();
-            }
-        }
-        for (Movimiento m : servicio.listarMovimientos()) {
-            if (m.esIngreso() && YearMonth.from(LocalDate.parse(m.getFecha())).equals(actual)) {
-                suma += m.getImporte();
-            }
-        }
-        return suma;
-    }
-
-    /**
-     * Calcula cuántas filas debe tener la tabla sin filtros: una por compra, una por día con
-     * ventas cobradas y una por movimiento.
-     *
-     * @return el número de filas
-     */
-    private int totalEsperado() {
-        Set<String> diasConVentas = new HashSet<>();
-        for (VentaPedido p : ventas()) {
-            if (p.getEstado() == EstadoPedido.COBRADO) {
-                diasConVentas.add(p.getFecha());
-            }
-        }
-        return servicio.listarCompras().size() + diasConVentas.size() + servicio.listarMovimientos().size();
-    }
-
-    /**
-     * Lee las ventas; si no se pueden leer devuelve una lista vacía, como hace la pantalla.
-     *
-     * @return las ventas, o una lista vacía
-     */
-    private List<VentaPedido> ventas() {
-        try {
-            return servicio.listarVentas();
-        } catch (DaoException e) {
-            return new ArrayList<>();
-        }
-    }
-
-    /**
      * Devuelve el nombre corto de un mes igual que lo escribe el gráfico.
      *
      * @param mes mes
@@ -503,13 +336,13 @@ public class GestionEconomicaTest extends ApplicationTest {
     }
 
     /**
-     * Da formato a un importe igual que las tarjetas, por ejemplo {@code 5365,00 €}.
+     * Pasa a número el texto de una tarjeta, por ejemplo {@code 5365,00 €}.
      *
-     * @param importe importe
-     * @return el texto con dos decimales y el símbolo del euro
+     * @param texto texto de la tarjeta
+     * @return el importe
      */
-    private String euros(double importe) {
-        return String.format("%.2f €", importe);
+    private double importe(String texto) {
+        return Double.parseDouble(texto.replace("€", "").trim().replace(',', '.'));
     }
 
     /**

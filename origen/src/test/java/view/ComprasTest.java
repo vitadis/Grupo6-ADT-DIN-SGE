@@ -62,20 +62,22 @@ public class ComprasTest extends ApplicationTest {
         FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/view/compra/CompraView.fxml"));
         Parent root = loader.load();
-        stage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/css/theme.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+        stage.setScene(scene);
         stage.setMaximized(true);
         stage.show();
     }
 
     /**
-     * Se ven el título, el subtítulo y los dos botones de la cabecera.
+     * Se ven el título, el subtítulo y el botón principal de la cabecera.
      */
     @Test
     public void testVisibilidadCabecera() {
         verifyThat("#lblTitulo", isVisible());
         verifyThat("#lblSubtitulo", isVisible());
         verifyThat("#btnAccionPrincipal", isVisible());
-        verifyThat("#btnGenerarLista", isVisible());
     }
 
     /**
@@ -98,12 +100,10 @@ public class ComprasTest extends ApplicationTest {
         assertEquals("Compras", texto("#lblTitulo"));
         assertEquals("Compras registradas y lista de compra sugerida", texto("#lblSubtitulo"));
         assertEquals("Registrar compra", boton("#btnAccionPrincipal").getText());
-        assertEquals("Generar lista de compra", boton("#btnGenerarLista").getText());
     }
 
     /**
-     * En la pestaña Proveedores cambian el título, el subtítulo y el botón principal, y se
-     * oculta «Generar lista».
+     * En la pestaña Proveedores cambian el título, el subtítulo y el botón principal.
      */
     @Test
     public void testPestanaProveedoresCambiaLaCabecera() {
@@ -112,8 +112,6 @@ public class ComprasTest extends ApplicationTest {
         assertEquals("Proveedores", texto("#lblTitulo"));
         assertEquals("Datos de contacto e historial de compras de cada proveedor", texto("#lblSubtitulo"));
         assertEquals("Nuevo proveedor", boton("#btnAccionPrincipal").getText());
-        assertFalse(boton("#btnGenerarLista").isVisible(), "«Generar lista» solo se ve en Compras");
-        assertFalse(boton("#btnGenerarLista").isManaged(), "«Generar lista» no debería ocupar sitio");
     }
 
     /**
@@ -126,7 +124,6 @@ public class ComprasTest extends ApplicationTest {
 
         assertEquals("Compras", texto("#lblTitulo"));
         assertEquals("Registrar compra", boton("#btnAccionPrincipal").getText());
-        assertTrue(boton("#btnGenerarLista").isVisible());
     }
 
     /**
@@ -169,21 +166,6 @@ public class ComprasTest extends ApplicationTest {
             assertTrue(texto("#lblSubtituloSugerencias").startsWith("Generada con " + sugeridas));
             assertFalse(boton("#btnCrearCompra").isDisabled());
         }
-    }
-
-    /**
-     * «Generar lista» no abre ninguna ventana ni cambia la lista de compras.
-     */
-    @Test
-    public void testGenerarListaNoAbreVentanasNiBorraCompras() {
-        int ventanas = listWindows().size();
-        int filas = contenedor("#contenedorCompras").getChildren().size();
-
-        clickOn("#btnGenerarLista");
-        WaitForAsyncUtils.waitForFxEvents();
-
-        assertEquals(ventanas, listWindows().size());
-        assertEquals(filas, contenedor("#contenedorCompras").getChildren().size());
     }
 
     /**

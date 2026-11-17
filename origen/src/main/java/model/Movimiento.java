@@ -4,11 +4,20 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
 /**
- * Movimiento económico que no es ni una compra ni una venta de la caja: luz, nóminas,
- * alquiler, una subvención...
+ * Registro económico: un ingreso o un gasto del negocio.
  *
- * Corresponde a un documento de la colección {@code movimientos} de MongoDB. Los nombres de los
- * atributos coinciden con los de los campos para que el driver los rellene automáticamente.
+ * Corresponde a un documento de la colección {@code registros_economicos} de MongoDB, que
+ * recoge todo el dinero que entra y sale:
+ * <ul>
+ * <li>Cada compra genera un gasto de «Aprovisionamiento» con {@link #origen}
+ * {@code {coleccion: "compras", procedencia_id}}.</li>
+ * <li>Cada pedido cobrado en la caja genera un ingreso de «Ventas» con {@link #origen}
+ * {@code {coleccion: "pedidos", procedencia_id}}.</li>
+ * <li>Lo demás (luz, nóminas, alquiler, una subvención...) se registra a mano, sin origen y con
+ * concepto.</li>
+ * </ul>
+ * Los nombres de los atributos coinciden con los de los campos para que el driver los rellene
+ * automáticamente.
  *
  * @author anazk
  */
@@ -46,6 +55,45 @@ public class Movimiento {
      * El identificador del usuario que registró el movimiento.
      */
     private int usuario_id;
+    /**
+     * Compra o pedido del que sale el registro; {@code null} si se ha metido a mano.
+     */
+    private ProcedenciaMovimiento origen;
+
+    /**
+     * Crea el gasto de «Aprovisionamiento» que corresponde a una compra.
+     *
+     * @param compra compra ya guardada (con su {@code _id})
+     * @return el registro, todavía sin identificador
+     */
+    public static Movimiento deCompra(Compra compra) {
+        Movimiento m = new Movimiento();
+        m.setFecha(compra.getFecha());
+        m.setCategoria("Aprovisionamiento");
+        m.setTipo("gasto");
+        m.setImporte(compra.getTotal());
+        m.setUsuario_id(compra.getUsuario_id());
+        m.setOrigen(new ProcedenciaMovimiento(ProcedenciaMovimiento.COMPRAS, compra.getId()));
+        return m;
+    }
+
+    /**
+     * Crea el ingreso de «Ventas» que corresponde a un pedido cobrado. El importe es lo cobrado,
+     * con IVA.
+     *
+     * @param pedido pedido ya guardado (con su {@code _id})
+     * @return el registro, todavía sin identificador
+     */
+    public static Movimiento dePedido(VentaPedido pedido) {
+        Movimiento m = new Movimiento();
+        m.setFecha(pedido.getFecha());
+        m.setCategoria("Ventas");
+        m.setTipo("ingreso");
+        m.setImporte(Math.round(pedido.totalConIva() * 100) / 100.0);
+        m.setUsuario_id(pedido.getUsuario_id());
+        m.setOrigen(new ProcedenciaMovimiento(ProcedenciaMovimiento.PEDIDOS, pedido.getId()));
+        return m;
+    }
 
     /**
      * Constructor vacío.
@@ -103,9 +151,13 @@ public class Movimiento {
                     "La fecha debe tener formato yyyy-MM-dd.");
         }
 
-        if (concepto == null || concepto.isBlank()) {
+        if (origen == null && (concepto == null || concepto.isBlank())) {
             throw new IllegalArgumentException(
                     "El concepto es obligatorio.");
+        }
+
+        if (origen != null) {
+            origen.validar();
         }
 
         if (categoria == null || categoria.isBlank()) {
@@ -280,6 +332,24 @@ public class Movimiento {
      */
     public void setUsuario_id(int usuario_id) {
         this.usuario_id = usuario_id;
+    }
+
+    /**
+     * Devuelve la compra o el pedido del que sale el registro.
+     *
+     * @return el origen, o {@code null} si se ha metido a mano
+     */
+    public ProcedenciaMovimiento getOrigen() {
+        return origen;
+    }
+
+    /**
+     * Cambia el origen del registro.
+     *
+     * @param origen la compra o el pedido, o {@code null} si se mete a mano
+     */
+    public void setOrigen(ProcedenciaMovimiento origen) {
+        this.origen = origen;
     }
 
     /**
