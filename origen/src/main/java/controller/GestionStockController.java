@@ -33,10 +33,17 @@ import services.GestionStockService;
 import util.AppLogger;
 
 /**
+ * FXML Controller class de la pantalla de gestión de stock.
  *
  * @author Hodei.Torres
  */
 public class GestionStockController implements Initializable, UsuarioImplementacion, ActualizarDatos {
+
+    /**
+     * Constructor vacío usado por el FXMLLoader.
+     */
+    public GestionStockController() {
+    }
 
     @FXML
     private Label cantProduc;

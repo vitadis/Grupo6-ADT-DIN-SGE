@@ -43,10 +43,18 @@ import util.Alertas;
 import util.AppLogger;
 
 /**
+ * FXML Controller class de la pantalla de inicio: alertas de stock, últimas compras y
+ * resumen de gastos.
  *
  * @author Hodei.Torres
  */
 public class InicioController implements Initializable, ActualizarDatos, UsuarioImplementacion {
+
+    /**
+     * Constructor vacío usado por el FXMLLoader.
+     */
+    public InicioController() {
+    }
 
     private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yy");
     private static final int MAX_COMPRAS = 8;

@@ -17,6 +17,12 @@ import util.AppLogger;
  */
 public class ProductoPedidoComponentController {
 
+    /**
+     * Constructor vacío usado por el FXMLLoader.
+     */
+    public ProductoPedidoComponentController() {
+    }
+
     // ---- Componentes FXML ----
     @FXML
     private Label lblNombre;

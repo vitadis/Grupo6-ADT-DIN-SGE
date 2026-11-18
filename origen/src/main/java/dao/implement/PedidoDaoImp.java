@@ -4,10 +4,6 @@
  */
 package dao.implement;
 
-/**
- *
- * @author Joel
- */
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
@@ -18,6 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 import model.VentaPedido;
 
+/**
+ * Implementación con MongoDB de {@link dao.PedidoDao} sobre la colección {@code pedidos}. Es
+ * un singleton.
+ *
+ * @author Joel
+ */
 public class PedidoDaoImp extends AccesoMongoDB implements PedidoDao {
 
     private static final String COLECCION = "pedidos";
@@ -28,6 +30,11 @@ public class PedidoDaoImp extends AccesoMongoDB implements PedidoDao {
     private PedidoDaoImp() {
     }
 
+    /**
+     * Devuelve la única instancia del DAO (patrón Singleton).
+     *
+     * @return instancia del DAO
+     */
     public static synchronized PedidoDaoImp getInstance() {
         if (instance == null) {
             instance = new PedidoDaoImp();

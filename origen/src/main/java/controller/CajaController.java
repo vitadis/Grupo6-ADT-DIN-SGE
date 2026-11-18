@@ -39,6 +39,12 @@ import util.AppLogger;
  */
 public class CajaController implements UsuarioImplementacion {
 
+    /**
+     * Constructor vacío usado por el FXMLLoader.
+     */
+    public CajaController() {
+    }
+
     private static final String RUTA_TARJETA = "/view/caja/productoComponent.fxml";
     private static final String RUTA_LINEA_PEDIDO = "/view/caja/productoPedidoComponent.fxml";
 

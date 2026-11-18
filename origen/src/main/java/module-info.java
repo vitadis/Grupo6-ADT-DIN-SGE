@@ -1,3 +1,7 @@
+/**
+ * Módulo de la aplicación Origen: gestión de caja, stock, compras, economía y usuarios con
+ * JavaFX y MongoDB.
+ */
 module com.origen {
     requires javafx.controls;
     requires javafx.fxml;

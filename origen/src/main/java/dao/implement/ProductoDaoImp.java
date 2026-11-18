@@ -16,6 +16,7 @@ import org.bson.BsonDocumentWrapper;
 import org.bson.Document;
 
 /**
+ * Implementación con MongoDB de {@link dao.ProductoDao}. Es un singleton.
  *
  * @author Joel
  */
@@ -29,6 +30,11 @@ public class ProductoDaoImp extends AccesoMongoDB implements dao.ProductoDao {
     private ProductoDaoImp() {
     }
 
+    /**
+     * Devuelve la única instancia del DAO (patrón Singleton).
+     *
+     * @return instancia del DAO
+     */
     public static synchronized ProductoDaoImp getInstance() {
         if (instance == null) {
             instance = new ProductoDaoImp();

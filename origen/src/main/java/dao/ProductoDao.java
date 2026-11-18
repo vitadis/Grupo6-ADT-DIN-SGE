@@ -8,13 +8,26 @@ import java.util.List;
 import model.Producto;
 
 /**
+ * Operaciones de acceso a datos de los productos.
  *
  * @author Joel
  */
 public interface ProductoDao {
 
+    /**
+     * Devuelve todos los productos.
+     *
+     * @return lista de productos (vacía si no hay ninguno)
+     * @throws exceptions.DaoException si falla el acceso a la base de datos
+     */
     public List<Producto> listarProductos();
 
+    /**
+     * Sustituye los datos de un producto existente por los nuevos.
+     *
+     * @param producto producto con los datos nuevos; se busca por su identificador
+     * @throws exceptions.DaoException si falla el acceso a la base de datos
+     */
     public void modificarProducto(Producto producto);
 
     /**

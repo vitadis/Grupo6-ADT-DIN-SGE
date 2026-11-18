@@ -18,6 +18,12 @@ import util.AppLogger;
  */
 public class ProductoComponentController {
 
+    /**
+     * Constructor vacío usado por el FXMLLoader.
+     */
+    public ProductoComponentController() {
+    }
+
     // ---- Componentes FXML ----
     @FXML
     private ImageView imgProducto;

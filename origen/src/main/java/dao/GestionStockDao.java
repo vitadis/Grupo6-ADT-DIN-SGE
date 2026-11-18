@@ -6,16 +6,25 @@ import model.Producto;
 import model.Proveedor;
 
 /**
+ * Operaciones de acceso a datos de la pantalla de gestión de stock.
  *
  * @author Hodei.Torres
  */
 public interface GestionStockDao {
 
     /**
-     * Descuenta stock (primero de los lotes que caducan antes) y guarda el
-     * movimiento de pérdida.
+     * Devuelve los proveedores que están activos.
+     *
+     * @return lista de proveedores activos
+     * @throws DaoException si falla el acceso a la base de datos
      */
     List<Proveedor> listarActivos() throws DaoException;
 
+    /**
+     * Devuelve todos los productos del inventario.
+     *
+     * @return lista de productos
+     * @throws DaoException si falla el acceso a la base de datos
+     */
     List<Producto> listarProductos() throws DaoException;
 }

@@ -22,10 +22,17 @@ import services.GestionStockService;
 import util.AppLogger;
 
 /**
+ * FXML Controller class del diálogo para registrar una pérdida de stock.
  *
  * @author Hodei.Torres
  */
 public class RegistrarPerdidaController implements Initializable {
+
+    /**
+     * Constructor vacío usado por el FXMLLoader.
+     */
+    public RegistrarPerdidaController() {
+    }
 
     @FXML
     private Label titulo;
@@ -65,6 +72,10 @@ public class RegistrarPerdidaController implements Initializable {
         });
     }
 
+    /**
+     * Carga los productos en el desplegable y selecciona el primero. Si falla, muestra un
+     * mensaje de error.
+     */
     public void cargarProductos() {
         try {
             List<Producto> lista = stockService.listarProductos();

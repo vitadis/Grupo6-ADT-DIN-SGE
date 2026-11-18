@@ -25,6 +25,12 @@ import util.AppLogger;
  */
 public class LoginController implements Initializable {
 
+    /**
+     * Constructor vacío usado por el FXMLLoader.
+     */
+    public LoginController() {
+    }
+
     // ---- Variables FXML ----
     @FXML
     private TextField txtUsuario;

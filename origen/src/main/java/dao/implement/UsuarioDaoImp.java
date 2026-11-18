@@ -30,6 +30,8 @@ public class UsuarioDaoImp extends AccesoMongoDB implements dao.UsuarioDao {
 
     /**
      * Obtiene la única instancia de UsuarioDaoImp (patrón Singleton).
+     *
+     * @return instancia del DAO
      */
     public static synchronized UsuarioDaoImp getInstance() {
         if (instance == null) {

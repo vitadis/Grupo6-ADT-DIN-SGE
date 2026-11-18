@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Pedido de venta de la caja: líneas de producto, estado, método de pago y total. Se guarda en
+ * MongoDB con los mismos nombres de campo.
  *
  * @author Joel
  */
@@ -19,6 +21,9 @@ public class VentaPedido {
     private List<LineaPedido> detalle;
     private double total;
 
+    /**
+     * Crea un pedido vacío, en estado PENDIENTE y con la fecha de hoy.
+     */
     public VentaPedido() {
         this.detalle = new ArrayList<>();
         this.fecha = LocalDate.now().toString();
@@ -32,6 +37,7 @@ public class VentaPedido {
      * Añade una unidad. Si el producto ya está en el pedido sube su cantidad;
      * si no, crea una línea nueva. No permite superar el stock disponible.
      *
+     * @param producto producto que se añade
      * @return true si se añadió, false si no hay stock suficiente
      */
     public boolean agregar(Producto producto) {
@@ -56,6 +62,8 @@ public class VentaPedido {
 
     /**
      * Quita una unidad. Si la cantidad llega a 0 se elimina la línea.
+     *
+     * @param producto producto del que se quita una unidad
      */
     public void restar(Producto producto) {
         LineaPedido linea = buscar(producto);
@@ -71,6 +79,8 @@ public class VentaPedido {
 
     /**
      * Elimina la línea entera, sea cual sea su cantidad.
+     *
+     * @param producto producto cuya línea se elimina
      */
     public void quitar(Producto producto) {
         LineaPedido linea = buscar(producto);
@@ -80,17 +90,27 @@ public class VentaPedido {
         }
     }
 
+    /**
+     * Elimina todas las líneas del pedido.
+     */
     public void limpiar() {
         detalle.clear();
         recalcularTotal();
     }
 
+    /**
+     * Indica si el pedido no tiene líneas.
+     *
+     * @return {@code true} si el pedido está vacío
+     */
     public boolean estaVacio() {
         return detalle.isEmpty();
     }
 
     /**
      * Total de unidades (suma de las cantidades de todas las líneas).
+     *
+     * @return número total de unidades
      */
     public int numProductos() {
         int suma = 0;
@@ -102,6 +122,8 @@ public class VentaPedido {
 
     /**
      * Total con IVA (el de la pantalla de caja).
+     *
+     * @return total del pedido con IVA
      */
     public double totalConIva() {
         double suma = 0;
@@ -113,6 +135,8 @@ public class VentaPedido {
 
     /**
      * Copia de la lista, para recorrerla mientras se modifica el pedido.
+     *
+     * @return copia de las líneas del pedido
      */
     public List<LineaPedido> lineas() {
         return new ArrayList<>(detalle);
@@ -135,6 +159,12 @@ public class VentaPedido {
      * Cierra el pedido como COBRADO con fecha de hoy. El id lo generas tú
      * (siguiente _id de la colección). Devuelve este mismo objeto, listo para
      * insertar.
+     *
+     * @param id identificador del pedido
+     * @param usuarioId identificador del usuario que cobra
+     * @param metodoPago método de pago
+     * @return este mismo pedido, ya cerrado y validado
+     * @throws IllegalStateException si el pedido está vacío
      */
     public VentaPedido cobrar(int id, int usuarioId, MetodoPago metodoPago) {
         return cerrar(id, usuarioId, metodoPago, EstadoPedido.COBRADO);
@@ -142,6 +172,12 @@ public class VentaPedido {
 
     /**
      * Guarda el pedido como PENDIENTE (por ejemplo, una cuenta abierta).
+     *
+     * @param id identificador del pedido
+     * @param usuarioId identificador del usuario que lo guarda
+     * @param metodoPago método de pago previsto
+     * @return este mismo pedido, ya validado
+     * @throws IllegalStateException si el pedido está vacío
      */
     public VentaPedido guardarPendiente(int id, int usuarioId, MetodoPago metodoPago) {
         return cerrar(id, usuarioId, metodoPago, EstadoPedido.PENDIENTE);
@@ -164,6 +200,9 @@ public class VentaPedido {
 
     /**
      * Cambia el estado respetando las transiciones permitidas.
+     *
+     * @param nuevo estado al que se quiere pasar
+     * @throws IllegalStateException si la transición no está permitida
      */
     public void cambiarEstado(EstadoPedido nuevo) {
         if (!estado.puedePasarA(nuevo)) {
@@ -173,6 +212,12 @@ public class VentaPedido {
         this.estado = nuevo;
     }
 
+    /**
+     * Comprueba las reglas de negocio del pedido: ids positivos, fecha válida, estado y método
+     * de pago obligatorios, al menos una línea válida y total igual a la suma de subtotales.
+     *
+     * @throws IllegalArgumentException si algún dato no es válido
+     */
     public void validar() {
         if (id <= 0) {
             throw new IllegalArgumentException("El ID debe ser positivo.");
@@ -227,10 +272,20 @@ public class VentaPedido {
     // =========================================================================
     // GETTERS Y SETTERS
     // =========================================================================
+    /**
+     * Devuelve el identificador del pedido.
+     *
+     * @return el identificador del pedido
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Asigna el identificador del pedido.
+     *
+     * @param id el identificador del pedido
+     */
     public void setId(int id) {
         if (id <= 0) {
             throw new IllegalArgumentException("El ID debe ser positivo.");
@@ -238,10 +293,20 @@ public class VentaPedido {
         this.id = id;
     }
 
+    /**
+     * Devuelve el identificador del usuario que registró el pedido.
+     *
+     * @return el identificador del usuario que registró el pedido
+     */
     public int getUsuario_id() {
         return usuario_id;
     }
 
+    /**
+     * Asigna el identificador del usuario que registró el pedido.
+     *
+     * @param usuario_id el identificador del usuario que registró el pedido
+     */
     public void setUsuario_id(int usuario_id) {
         if (usuario_id <= 0) {
             throw new IllegalArgumentException("El ID de usuario debe ser positivo.");
@@ -249,21 +314,41 @@ public class VentaPedido {
         this.usuario_id = usuario_id;
     }
 
+    /**
+     * Devuelve la fecha del pedido (yyyy-MM-dd).
+     *
+     * @return la fecha del pedido (yyyy-MM-dd)
+     */
     public String getFecha() {
         return fecha;
     }
 
+    /**
+     * Asigna la fecha del pedido (yyyy-MM-dd).
+     *
+     * @param fecha la fecha del pedido (yyyy-MM-dd)
+     */
     public void setFecha(String fecha) {
         validarFecha(fecha);
         this.fecha = fecha;
     }
 
+    /**
+     * Devuelve el estado del pedido.
+     *
+     * @return el estado del pedido
+     */
     public EstadoPedido getEstado() {
         return estado;
     }
 
     // No comprueba transiciones para poder cargar cualquier estado de Mongo.
     // Desde la aplicación usa cambiarEstado().
+    /**
+     * Asigna el estado del pedido.
+     *
+     * @param estado el estado del pedido
+     */
     public void setEstado(EstadoPedido estado) {
         if (estado == null) {
             throw new IllegalArgumentException("El estado es obligatorio.");
@@ -271,10 +356,20 @@ public class VentaPedido {
         this.estado = estado;
     }
 
+    /**
+     * Devuelve el método de pago del pedido.
+     *
+     * @return el método de pago del pedido
+     */
     public MetodoPago getMetodo_pago() {
         return metodo_pago;
     }
 
+    /**
+     * Asigna el método de pago del pedido.
+     *
+     * @param metodo_pago el método de pago del pedido
+     */
     public void setMetodo_pago(MetodoPago metodo_pago) {
         if (metodo_pago == null) {
             throw new IllegalArgumentException("El método de pago es obligatorio.");
@@ -282,18 +377,38 @@ public class VentaPedido {
         this.metodo_pago = metodo_pago;
     }
 
+    /**
+     * Devuelve las líneas del pedido.
+     *
+     * @return las líneas del pedido
+     */
     public List<LineaPedido> getDetalle() {
         return new ArrayList<>(detalle);
     }
 
+    /**
+     * Asigna las líneas del pedido.
+     *
+     * @param detalle las líneas del pedido
+     */
     public void setDetalle(List<LineaPedido> detalle) {
         this.detalle = detalle != null ? new ArrayList<>(detalle) : new ArrayList<>();
     }
 
+    /**
+     * Devuelve el total del pedido sin IVA.
+     *
+     * @return el total del pedido sin IVA
+     */
     public double getTotal() {
         return total;
     }
 
+    /**
+     * Asigna el total del pedido sin IVA.
+     *
+     * @param total el total del pedido sin IVA
+     */
     public void setTotal(double total) {
         if (!Double.isFinite(total) || total < 0) {
             throw new IllegalArgumentException("El total debe ser válido y no negativo.");

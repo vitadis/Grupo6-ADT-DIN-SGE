@@ -13,6 +13,9 @@ import java.util.Map;
  */
 public class InterpretePermisos {
 
+    private InterpretePermisos() {
+    }
+
     /**
      * Mapa de navegación: texto del botón del menú -> clave base de permiso. Se
      * usa {@link LinkedHashMap} para conservar el orden de aparición en el

@@ -25,10 +25,18 @@ import static util.Alertas.mostrarError;
 import util.AppLogger;
 
 /**
+ * FXML Controller class del diálogo para dar de alta un producto nuevo o añadir stock a uno
+ * existente.
  *
  * @author Hodei.Torres
  */
 public class AñadirProductoController implements Initializable {
+
+    /**
+     * Constructor vacío usado por el FXMLLoader.
+     */
+    public AñadirProductoController() {
+    }
 
     @FXML
     private CheckBox chkNuevo;
@@ -89,6 +97,11 @@ public class AñadirProductoController implements Initializable {
         modoCambiado();
     }
 
+    /**
+     * Selecciona de antemano un producto existente en el desplegable.
+     *
+     * @param p producto que se selecciona (si es {@code null} no se hace nada)
+     */
     public void setProductoInicial(Producto p) {
         if (p == null) {
             return;
@@ -149,6 +162,11 @@ public class AñadirProductoController implements Initializable {
         cerrar();
     }
 
+    /**
+     * Indica si se guardaron los cambios antes de cerrar el diálogo.
+     *
+     * @return {@code true} si se guardó el producto o el stock
+     */
     public boolean isGuardado() {
         return guardado;
     }

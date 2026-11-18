@@ -40,14 +40,29 @@ public class ProductoSugerido {
         this.paraRecetas = paraRecetas == null ? new ArrayList<String>() : new ArrayList<>(paraRecetas);
     }
 
+    /**
+     * Devuelve el producto que hay que comprar.
+     *
+     * @return producto sugerido
+     */
     public Producto getProducto() {
         return producto;
     }
 
+    /**
+     * Devuelve las unidades que hay que pedir.
+     *
+     * @return cantidad sugerida
+     */
     public int getCantidad() {
         return cantidad;
     }
 
+    /**
+     * Devuelve los nombres de los productos con receta que necesitan este ingrediente.
+     *
+     * @return copia de la lista de recetas (puede estar vacía)
+     */
     public List<String> getParaRecetas() {
         return new ArrayList<>(paraRecetas);
     }
