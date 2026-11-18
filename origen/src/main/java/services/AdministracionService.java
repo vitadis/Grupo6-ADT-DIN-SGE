@@ -165,6 +165,14 @@ public class AdministracionService {
         usuarioDao.eliminarUsuario(existente);
     }
 
+    /**
+     * Devuelve los permisos que se asignan por defecto a un rol al dar de alta un usuario.
+     *
+     * @param rol rol del usuario: «administrador» o «trabajador» (sin distinguir mayúsculas)
+     * @return lista de permisos por defecto del rol (vacía si no hay ninguno definido)
+     * @throws IllegalArgumentException si el rol es nulo o no es uno de los dos válidos
+     * @throws exceptions.DaoException si falla el acceso a la base de datos
+     */
     public List<String> listarPermisosPorRol(String rol) {
         if (rol == null || (!rol.equalsIgnoreCase("administrador")
                 && !rol.equalsIgnoreCase("trabajador"))) {
