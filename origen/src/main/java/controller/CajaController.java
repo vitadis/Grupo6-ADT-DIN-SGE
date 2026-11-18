@@ -37,7 +37,7 @@ import util.AppLogger;
  *
  * @author Joel
  */
-public class CajaController implements UsuarioImplementacion {
+public class CajaController implements UsuarioImplementacion, ActualizarDatos {
 
     /**
      * Constructor vacío usado por el FXMLLoader.
@@ -429,5 +429,11 @@ public class CajaController implements UsuarioImplementacion {
         if (usuario != null) {
             logger.setUser(usuario.getUsername());
         }
+    }
+
+    @Override
+    public void actualizarDatos() {
+        cargarProductos();
+        actualizarPedido();
     }
 }

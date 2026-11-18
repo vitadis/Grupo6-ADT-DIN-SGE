@@ -1,0 +1,156 @@
+[{
+  "_id": {
+    "$oid": "6ae99d764d92490d3488a456"
+  },
+  "cantidad": 20,
+  "fecha": {
+    "$date": "2026-11-03T08:38:14.343Z"
+  },
+  "nombreProducto": "Coca-Cola",
+  "nota": "Se ha caido una caja encima y se ha roto.",
+  "productoId": 1,
+  "tipo": "PERDIDA"
+},
+{
+  "_id": {
+    "$oid": "6ae9bcc0b9eb934cc7c5d5fa"
+  },
+  "cantidad": 5,
+  "fecha": {
+    "$date": "2026-11-03T10:51:44.230Z"
+  },
+  "nombreProducto": "Coca-Cola",
+  "nota": "Botellas dañadas al recolocar la mercancía del pedido F-2026-0311.",
+  "productoId": 1,
+  "tipo": "PERDIDA"
+},
+{
+  "_id": {
+    "$oid": "6aec3d1a799da7346af97f7f"
+  },
+  "cantidad": 6,
+  "fecha": {
+    "$date": "2026-11-05T08:23:54.623Z"
+  },
+  "nombreProducto": "Coca-Cola Zero",
+  "nota": "Latas de la misma caja caída del 03/11, detectadas en mal estado al revisar el almacén.",
+  "productoId": 2,
+  "tipo": "PERDIDA"
+},
+{
+  "_id": {
+    "$oid": "6aec40835e5cc97f10290360"
+  },
+  "cantidad": 0.4,
+  "fecha": {
+    "$date": "2026-11-05T08:38:27.891Z"
+  },
+  "nombreProducto": "Café en grano",
+  "nota": "Bolsa rota al abrirla, café derramado y no aprovechable.",
+  "productoId": 15,
+  "tipo": "PERDIDA"
+},
+{
+  "_id": {
+    "$oid": "6aec420d7205570edc4b5e6d"
+  },
+  "cantidad": 20,
+  "fecha": {
+    "$date": "2026-11-05T08:45:01.616Z"
+  },
+  "nombreProducto": "Croissant",
+  "nota": "Lote caducado el 24/10/2026 (compra F-2026-1020). Se retira del almacén.",
+  "productoId": 8,
+  "tipo": "PERDIDA"
+},
+{
+  "_id": {
+    "$oid": "6aec43ceee719b6af64d0a12"
+  },
+  "cantidad": 8,
+  "fecha": {
+    "$date": "2026-11-05T08:52:30.120Z"
+  },
+  "nombreProducto": "Tortilla de patata por ración",
+  "nota": "Raciones caducadas el 23/10/2026. Se retiran de la vitrina.",
+  "productoId": 10,
+  "tipo": "PERDIDA"
+},
+{
+  "_id": {
+    "$oid": "6aec45fbee719b6af64d0a13"
+  },
+  "cantidad": 25,
+  "fecha": {
+    "$date": "2026-11-05T09:01:47.905Z"
+  },
+  "nombreProducto": "Barra de pan",
+  "nota": "Lote caducado el 24/10/2026 (compra F-2026-1020).",
+  "productoId": 19,
+  "tipo": "PERDIDA"
+},
+{
+  "_id": {
+    "$oid": "6aec47f1ee719b6af64d0a14"
+  },
+  "cantidad": 5,
+  "fecha": {
+    "$date": "2026-11-05T09:10:09.377Z"
+  },
+  "nombreProducto": "Jamón cocido",
+  "nota": "Lote caducado el 29/10/2026 (compra F-2026-1008).",
+  "productoId": 14,
+  "tipo": "PERDIDA"
+},
+{
+  "_id": {
+    "$oid": "6aec4884ee719b6af64d0a15"
+  },
+  "cantidad": 4,
+  "fecha": {
+    "$date": "2026-11-05T09:12:36.554Z"
+  },
+  "nombreProducto": "Jamón serrano",
+  "nota": "Lote caducado el 30/10/2026. Quedaban 4 kg de la compra F-2026-1008 tras el consumo en bocadillos.",
+  "productoId": 20,
+  "tipo": "PERDIDA"
+},
+{
+  "_id": {
+    "$oid": "6aed8555ee719b6af64d0a16"
+  },
+  "cantidad": 60,
+  "fecha": {
+    "$date": "2026-11-06T07:44:21.218Z"
+  },
+  "nombreProducto": "Huevos",
+  "nota": "Lote caducado el 05/11/2026 (compra F-2026-1002). Sin uso desde que se dejó de preparar tortilla.",
+  "productoId": 12,
+  "tipo": "PERDIDA"
+},
+{
+  "_id": {
+    "$oid": "6aed85f2ee719b6af64d0a17"
+  },
+  "cantidad": 24,
+  "fecha": {
+    "$date": "2026-11-06T07:46:58.703Z"
+  },
+  "nombreProducto": "Leche entera",
+  "nota": "Lote caducado el 05/11/2026.",
+  "productoId": 16,
+  "tipo": "PERDIDA"
+},
+{
+  "_id": {
+    "$oid": "6af42107ee719b6af64d0a18"
+  },
+  "cantidad": 20,
+  "fecha": {
+    "$date": "2026-11-11T08:02:15.640Z"
+  },
+  "nombreProducto": "Patatas",
+  "nota": "Lote caducado el 10/11/2026 (compra F-2026-1007).",
+  "productoId": 11,
+  "tipo": "PERDIDA"
+}]

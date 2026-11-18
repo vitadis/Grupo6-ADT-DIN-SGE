@@ -1,0 +1,27 @@
+[{
+  "_id": 1,
+  "todos": [
+    "total",
+    "inicio",
+    "caja",
+    "gestion",
+    "stock",
+    "compras",
+    "informes",
+    "administracion"
+  ]
+},
+{
+  "_id": 2,
+  "default": {
+    "administrador": [
+      "total"
+    ],
+    "trabajador": [
+      "inicio",
+      "caja",
+      "stock",
+      "compras"
+    ]
+  }
+}]

@@ -61,4 +61,5 @@ public interface UsuarioDao {
      */
     public List<String> listarPermisos();
 
+    List<String> listarPermisosPorRol(String rol);
 }
