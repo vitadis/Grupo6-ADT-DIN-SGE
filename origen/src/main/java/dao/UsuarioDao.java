@@ -23,4 +23,5 @@ public interface UsuarioDao {
 
     public List<String> listarPermisos(); // listaPermisos
 
+    List<String> listarPermisosPorRol(String rol);
 }

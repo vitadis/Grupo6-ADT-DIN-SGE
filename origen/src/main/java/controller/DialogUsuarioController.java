@@ -20,6 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.Empleado;
 import model.Usuario;
+import services.AdministracionService;
 
 /**
  * FXML Controller class para el diálogo de alta, consulta y edición de
@@ -34,6 +35,7 @@ public class DialogUsuarioController {
     private List<String> permisosCatalogo = new ArrayList<String>();
     private final Set<String> permisosSeleccionados = new LinkedHashSet<String>();
     private final List<String> permisosDisponibles = new ArrayList<String>();
+    private boolean modoAlta;
 
     private Consumer<Usuario> alCrear;
     private Consumer<Usuario> alModificar;
@@ -91,6 +93,24 @@ public class DialogUsuarioController {
     @FXML
     private void initialize() {
         mostrarBotones(false);
+
+        tfRol.textProperty().addListener((obs, anterior, actual) -> {
+            if (!modoAlta || actual == null) {
+                return;
+            }
+
+            String rol = actual.trim().toLowerCase();
+
+            if (rol.equals("administrador") || rol.equals("trabajador")) {
+                List<String> permisos = AdministracionService.getInstance()
+                        .listarPermisosPorRol(rol);
+
+                Usuario usuario = new Usuario();
+                usuario.setPermisos(permisos);
+
+                cargarPermisos(usuario);
+            }
+        });
     }
 
     /**
@@ -139,6 +159,7 @@ public class DialogUsuarioController {
      * @param usuario usuario a consultar o editar
      */
     public void setUsuario(Usuario usuario) {
+        this.modoAlta = false;
         this.usuarioGestionado = usuario;
 
         tfUsername.setEditable(false);
@@ -163,6 +184,7 @@ public class DialogUsuarioController {
      * nuevo usuario.
      */
     public void setModoAlta() {
+        this.modoAlta = true;
         this.usuarioGestionado = null;
         mostrarBotones(true);
 
@@ -373,4 +395,5 @@ public class DialogUsuarioController {
         tfEmpleadoTelefono.setEditable(false);
         mbPermisos.setDisable(true);
     }
+
 }
