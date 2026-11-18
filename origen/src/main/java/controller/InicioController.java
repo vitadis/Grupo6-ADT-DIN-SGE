@@ -35,6 +35,7 @@ import model.Compra;
 import model.EstadoPedido;
 import model.Producto;
 import model.Proveedor;
+import model.Usuario;
 import model.VentaPedido;
 import services.CajaService;
 import services.PedidoService;
@@ -45,10 +46,12 @@ import util.AppLogger;
  *
  * @author Hodei.Torres
  */
-public class InicioController implements Initializable, ActualizarDatos {
+public class InicioController implements Initializable, ActualizarDatos, UsuarioImplementacion {
 
     private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yy");
     private static final int MAX_COMPRAS = 8;
+    // private
+    private Usuario usuario;
 
     @FXML
     private GridPane gridInfoStock;
@@ -101,59 +104,54 @@ public class InicioController implements Initializable, ActualizarDatos {
         registrarPerdida.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                abrir("/view/gestionStock/registrarPerdida.fxml", "Registrar pérdida");
+                abrir("/view/gestionStock/registrarPerdida.fxml", "Registrar pérdida", null);
             }
         });
         anadirProducto.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                abrir("/view/gestionStock/añadirProducto.fxml", "Añadir producto");
+                abrir("/view/gestionStock/añadirProducto.fxml", "Añadir producto", null);
             }
         });
         registrarCompra.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                abrir("/view/compra/registrarCompra.fxml", "Registrar compra");
+                abrir("/view/compra/registrarCompra.fxml", "Registrar compra", InicioController.this::cargarCompras);
             }
         });
         historialVentas.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                abrirHistorial();
+                abrir("/view/caja/historialView.fxml", "Historial de pedidos", InicioController.this::cargarHistorial);
+
             }
         });
 
     }
 
     /* Abre la vista que le mandes por parametro*/
-    private void abrir(String ruta, String titulo) {
-    try {
-        InstanciarEscena.createNewStage(ruta, titulo, null);
-        cargarDatos();
-    } catch (Exception e) {
-        e.printStackTrace();
-        Alertas.mostrarError("No se pudo abrir la ventana: " + e.getMessage());
-        logger.log(Level.SEVERE, "No se pudo abrir la ventana " + ruta, e);
-    }
-}
-
-    private void abrirHistorial() {
+    private void abrir(String ruta, String titulo, Consumer<Object> configurador) {
         try {
-            InstanciarEscena.<HistorialController>createNewStage(
-                    "/view/caja/historialView.fxml", "Historial de Ventas",
-                    new Consumer<HistorialController>() {
-                @Override
-                public void accept(HistorialController controlador) {
-                    controlador.setCajaService(
-                            new CajaService(ProductoDaoImp.getInstance(), PedidoDaoImp.getInstance(), MovimientoDaoImpl.getInstance()));
-                }
-            });
+            InstanciarEscena.createNewStage(ruta, titulo, configurador);
             cargarDatos();
         } catch (Exception e) {
             e.printStackTrace();
             Alertas.mostrarError("No se pudo abrir la ventana: " + e.getMessage());
-            logger.log(Level.SEVERE, "No se pudo abrir el historial de ventas", e);
+            logger.log(Level.SEVERE, "No se pudo abrir la ventana " + ruta, e);
         }
+    }
+
+    // Metodos para cargar los sets a los dialogs
+    private void cargarHistorial(Object controller) {
+        HistorialController controladorHistorial = (HistorialController) controller;
+        controladorHistorial.setCajaService(
+                new CajaService(ProductoDaoImp.getInstance(), PedidoDaoImp.getInstance(), MovimientoDaoImpl.getInstance()));
+        logger.info("Se abrio el historial");
+    }
+
+    private void cargarCompras(Object controller) {
+        RegistrarCompraController contolladorCompras = (RegistrarCompraController) controller;
+        contolladorCompras.setUsuarioId(usuario.getId());
     }
 
     private void cargarDatos() {
@@ -297,5 +295,11 @@ public class InicioController implements Initializable, ActualizarDatos {
         Label lbl = new Label(texto);
         lbl.setPrefWidth(ancho);
         return lbl;
+    }
+
+    @Override
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+        logger.setUser(usuario.getUsername());
     }
 }
