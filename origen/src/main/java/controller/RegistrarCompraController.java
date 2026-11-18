@@ -84,6 +84,11 @@ public class RegistrarCompraController implements Initializable {
     private TextField txtCantidad;
     @FXML
     private TextField txtPrecioUnidad;
+    /**
+     * Fecha de caducidad del lote que entra con la línea.
+     */
+    @FXML
+    private DatePicker dpCaducidad;
     @FXML
     private Button btnAnadirLinea;
     @FXML
@@ -226,6 +231,9 @@ public class RegistrarCompraController implements Initializable {
             lblError.setText(e.getMessage());
             return;
         }
+        if (dpCaducidad.getValue() != null) {
+            linea.setFecha_caducidad(dpCaducidad.getValue().toString());
+        }
 
         for (int i = 0; i < lineas.size(); i++) {
             if (lineas.get(i).getProducto_id() == producto.getId()) {
@@ -259,6 +267,16 @@ public class RegistrarCompraController implements Initializable {
         }
         if (dpFecha.getValue() != null) {
             compra.setFecha(dpFecha.getValue().toString());
+        }
+        // Las líneas sin caducidad (p. ej. las de la lista sugerida) toman la fecha elegida
+        // en el selector de caducidad, si hay una.
+        if (dpCaducidad.getValue() != null) {
+            for (LineaCompra l : lineas) {
+                if (l.getFecha_caducidad() == null) {
+                    l.setFecha_caducidad(dpCaducidad.getValue().toString());
+                }
+            }
+            pintarLineas();
         }
         compra.setUsuario_id(usuarioId);
         compra.setNumero_factura(txtNumeroFactura.getText().trim());
@@ -346,12 +364,14 @@ public class RegistrarCompraController implements Initializable {
             }
         });
 
+        String caducidad = l.getFecha_caducidad() == null ? "—" : l.getFecha_caducidad();
         HBox fila = new HBox(
-                celda(l.getNombre(), 220),
-                celda(String.valueOf(l.getCantidad()), 80),
+                celda(l.getNombre(), 170),
+                celda(String.valueOf(l.getCantidad()), 70),
                 celda(String.format("%.2f €", l.getPrecio_unidad()), 100),
-                celda(Math.round(l.getIva() * 100) + " %", 60),
-                celda(String.format("%.2f €", l.getSubtotal()), 100),
+                celda(Math.round(l.getIva() * 100) + " %", 50),
+                celda(String.format("%.2f €", l.getSubtotal()), 90),
+                celda(caducidad, 100),
                 btnQuitar
         );
         fila.setAlignment(Pos.CENTER_LEFT);

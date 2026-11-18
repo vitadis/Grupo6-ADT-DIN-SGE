@@ -161,7 +161,7 @@ public class ComprasTest extends ApplicationTest {
         int sugeridas = contenedor("#contenedorSugerencias").getChildren().size();
 
         if (sugeridas == 0) {
-            assertEquals("No hay productos con stock bajo o agotados.", texto("#lblSubtituloSugerencias"));
+            assertEquals("No hay productos que reponer.", texto("#lblSubtituloSugerencias"));
             assertTrue(boton("#btnCrearCompra").isDisabled(), "Sin sugerencias no se puede crear la compra");
         } else {
             assertTrue(texto("#lblSubtituloSugerencias").startsWith("Generada con " + sugeridas));

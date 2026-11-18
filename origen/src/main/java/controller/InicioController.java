@@ -151,7 +151,10 @@ public class InicioController implements Initializable, ActualizarDatos, Usuario
 
     private void cargarCompras(Object controller) {
         RegistrarCompraController contolladorCompras = (RegistrarCompraController) controller;
-        contolladorCompras.setUsuarioId(usuario.getId());
+        // Sin sesión (p. ej. en los tests de la vista) la ventana se abre igual, sin usuario
+        if (usuario != null && usuario.getId() != null) {
+            contolladorCompras.setUsuarioId(usuario.getId());
+        }
     }
 
     private void cargarDatos() {

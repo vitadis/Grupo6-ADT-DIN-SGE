@@ -498,6 +498,29 @@ public class Producto {
         return stock_actual > 0 && stock_actual <= stock_minimo;
     }
 
+    /**
+     * Indica si el producto debe ir a la lista de compra: está agotado o tiene stock bajo
+     * (mismo criterio que las alertas, {@code stock_actual <= stock_minimo}).
+     *
+     * @return {@code true} si hay que reponerlo
+     */
+    public boolean necesitaReposicion() {
+        return stock_actual <= stock_minimo;
+    }
+
+    /**
+     * Cantidad que hay que pedir para dejar el stock en el doble del mínimo. Así, después de
+     * reponer, el stock queda por encima del mínimo y la alerta de stock bajo desaparece.
+     *
+     * @return unidades a pedir (al menos 1), o 0 si no hace falta reponer
+     */
+    public int cantidadAReponer() {
+        if (!necesitaReposicion()) {
+            return 0;
+        }
+        return Math.max(1, stock_minimo * 2 - stock_actual);
+    }
+
     @Override
     public String toString() {
         return "Producto{" + "id=" + id + ", nombre=" + nombre + ", tipo=" + tipo + ", categoria=" + categoria + ", precio_venta=" + precio_venta + ", iva=" + iva + ", stock_actual=" + stock_actual + ", stock_minimo=" + stock_minimo + ", lotes=" + lotes + ", receta=" + receta + ", proveedores_id=" + proveedores_id + ", activo=" + activo + ", imagen=" + imagen + '}';
