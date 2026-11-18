@@ -33,7 +33,7 @@ Importar los siguientes ficheros desde MongoDB Compass mediante **Add Data → I
 | productos | [origen.productos.json](./datos/origen.productos.json) |
 | proveedores | [origen.proveedores.json](./datos/origen.proveedores.json) |
 | registros_economicos | [origen.registros_economicos.json](./datos/origen.registros_economicos.json) |
-| usuarios | [origen.usuarios.json](./datos/origen.usuarios.json) |
+| usuarios | [origen.usuarios.js](./datos/origen.usuarios.js) |
 
 > **Nota:** Respetar los nombres de las colecciones indicados.
 
