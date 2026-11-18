@@ -113,13 +113,13 @@ public class ProductoComponentController {
         if (producto.getStock_actual() <= 0) {
 
             lblStock.setText("Agotado");
-            lblStock.getStyleClass().setAll("estado-agotado");
+            lblStock.getStyleClass().setAll("estado-error");   // Agotado
             btnAnadir.setDisable(true);
 
         } else if (producto.tieneStockBajo()) {
 
             lblStock.setText("Stock bajo");
-            lblStock.getStyleClass().setAll("estado-bajo");
+            lblStock.getStyleClass().setAll("estado-aviso");   // Stock bajo
             btnAnadir.setDisable(false);
 
         } else {

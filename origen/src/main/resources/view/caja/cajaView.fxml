@@ -24,14 +24,14 @@
                 <Insets bottom="24" left="28" right="24" top="8" />
             </padding>
 
-            <VBox spacing="16" styleClass="columna-productos" HBox.hgrow="ALWAYS">
+            <VBox minWidth="0.0" spacing="16" styleClass="columna-productos" HBox.hgrow="ALWAYS">
 
                 <HBox alignment="TOP_LEFT" styleClass="cabecera">
-                    <VBox spacing="4" HBox.hgrow="ALWAYS">
+                    <VBox spacing="4">
                         <Label styleClass="titulo" text="Caja y pedidos" />
                     </VBox>
                     <Region HBox.hgrow="ALWAYS" />
-                    <Button onAction="#onHistorialVentas" styleClass="btn-historial" text="Historial de ventas" />
+                    <Button onAction="#onHistorialVentas" styleClass="btn-secundario" text="Historial de ventas" />
                 </HBox>
 
                 <FlowPane fx:id="contenedorCategorias" hgap="10" styleClass="categorias" vgap="10">
@@ -41,23 +41,23 @@
                   </toggleGroup></RadioButton>
                 </FlowPane>
 
-                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="scroll-productos" VBox.vgrow="ALWAYS">
+                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" minWidth="0.0" styleClass="scroll-productos" VBox.vgrow="ALWAYS">
                     <FlowPane fx:id="contenedorProductos" alignment="CENTER" hgap="12" styleClass="contenedor-productos" vgap="12" />
                 </ScrollPane>
             </VBox>
 
-            <VBox maxWidth="360" minWidth="360.0" prefWidth="360.0" spacing="12" styleClass="panel-pedido">
+            <VBox maxWidth="460.0" minWidth="360.0" prefWidth="400.0" spacing="12" styleClass="panel-pedido">
                 <padding>
                     <Insets bottom="16" left="16" right="16" top="18" />
                 </padding>
                 <Label styleClass="pedido-titulo" text="Pedido actual" />
-                <Label fx:id="lblAyuda" styleClass="texto-secundario" text="Pulsa «Añadir» en un producto para empezar el pedido." wrapText="true" />
+                <Label fx:id="lblAyuda" maxWidth="1.7976931348623157E308" styleClass="texto-secundario" text="Pulsa «Añadir» en un producto para empezar el pedido." wrapText="true" />
 
-                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="scroll-lineas" VBox.vgrow="ALWAYS">
-                    <VBox fx:id="contenedorLineasPedido" spacing="8" styleClass="lineas-pedido" />
+                <ScrollPane fitToWidth="true" hbarPolicy="NEVER" maxWidth="1.7976931348623157E308" minWidth="0.0" styleClass="scroll-lineas" VBox.vgrow="ALWAYS">
+                    <VBox fx:id="contenedorLineasPedido" maxWidth="1.7976931348623157E308" minWidth="0.0" spacing="8" styleClass="lineas-pedido" />
                 </ScrollPane>
 
-                <VBox spacing="10" styleClass="pedido-resumen">
+                <VBox maxWidth="1.7976931348623157E308" spacing="10" styleClass="pedido-resumen">
                     <padding>
                         <Insets bottom="14" left="14" right="14" top="14" />
                     </padding>
@@ -76,8 +76,8 @@
                     </HBox>
 
                     <HBox spacing="10" styleClass="acciones-pedido">
-                        <Button onAction="#onCancelar" styleClass="btn-cancelar" text="Cancelar" />
-                        <Button maxWidth="Infinity" onAction="#onCobrar" styleClass="btn-cobrar" text="Cobrar" HBox.hgrow="ALWAYS" />
+                        <Button onAction="#onCancelar" styleClass="btn-secundario" text="Cancelar" />
+                        <Button maxWidth="1.7976931348623157E308" onAction="#onCobrar" styleClass="btn-primario" text="Cobrar" HBox.hgrow="ALWAYS" />
                     </HBox>
                 </VBox>
             </VBox>
