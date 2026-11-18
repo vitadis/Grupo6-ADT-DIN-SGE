@@ -257,7 +257,7 @@ public class AdministracionTest extends ApplicationTest {
         Usuario existente = primerUsuarioConEmpleado();
         abrirDialogAlta();
 
-        rellenar("#tfRol", "CAJERO");
+        rellenar("#tfRol", "trabajador");
         rellenar("#pfPassword", "Pass1234!");
         rellenar("#tfEmpleadoNombre", existente.getEmpleado().getNombre());
         rellenar("#tfEmpleadoApellido", existente.getEmpleado().getApellido());
