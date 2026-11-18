@@ -35,6 +35,7 @@ import model.Compra;
 import model.EstadoPedido;
 import model.Producto;
 import model.Proveedor;
+import model.Usuario;
 import model.VentaPedido;
 import services.CajaService;
 import services.PedidoService;
@@ -45,7 +46,7 @@ import util.AppLogger;
  *
  * @author Hodei.Torres
  */
-public class InicioController implements Initializable, ActualizarDatos {
+public class InicioController implements Initializable, UsuarioImplementacion, ActualizarDatos {
 
     private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yy");
     private static final int MAX_COMPRAS = 8;
@@ -85,6 +86,8 @@ public class InicioController implements Initializable, ActualizarDatos {
 
     private double gastosMes = 0;
 
+    private Usuario usuario;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         configurarBotones();
@@ -94,6 +97,11 @@ public class InicioController implements Initializable, ActualizarDatos {
     @Override
     public void actualizarDatos() {
         cargarDatos();
+    }
+
+    @Override
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
     /*Abre la ventana correspondiente a cada boton*/
@@ -298,4 +306,6 @@ public class InicioController implements Initializable, ActualizarDatos {
         lbl.setPrefWidth(ancho);
         return lbl;
     }
+
+    
 }
