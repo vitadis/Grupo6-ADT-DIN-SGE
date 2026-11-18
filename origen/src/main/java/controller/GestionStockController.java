@@ -196,6 +196,7 @@ public class GestionStockController implements Initializable, UsuarioImplementac
     @Override
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+        logger.setUser(usuario.getUsername());
     }
 
     @FXML
