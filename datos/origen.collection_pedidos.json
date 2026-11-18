@@ -1,0 +1,2688 @@
+[
+  {
+    "_id": 1,
+    "usuario_id": 2,
+    "fecha": "2026-10-10",
+    "estado": "COBRADO",
+    "metodo_pago": "BIZUM",
+    "detalle": [
+      {
+        "producto_id": 1,
+        "nombre": "Coca-Cola",
+        "cantidad": 2,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 5
+      },
+      {
+        "producto_id": 2,
+        "nombre": "Coca-Cola Zero",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 6,
+        "nombre": "Café con leche",
+        "cantidad": 1,
+        "precio_unitario": 1.8,
+        "iva": 0.1,
+        "subtotal": 1.8
+      },
+      {
+        "producto_id": 7,
+        "nombre": "Té con hielo",
+        "cantidad": 2,
+        "precio_unitario": 2,
+        "iva": 0.1,
+        "subtotal": 4
+      },
+      {
+        "producto_id": 9,
+        "nombre": "Bocadillo de jamón",
+        "cantidad": 1,
+        "precio_unitario": 5.5,
+        "iva": 0.1,
+        "subtotal": 5.5
+      }
+    ],
+    "total": 18.8
+  },
+  {
+    "_id": 2,
+    "usuario_id": 1,
+    "fecha": "2026-10-10",
+    "estado": "COBRADO",
+    "metodo_pago": "BIZUM",
+    "detalle": [
+      {
+        "producto_id": 2,
+        "nombre": "Coca-Cola Zero",
+        "cantidad": 2,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 5
+      },
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 8,
+        "nombre": "Croissant",
+        "cantidad": 1,
+        "precio_unitario": 1.7,
+        "iva": 0.1,
+        "subtotal": 1.7
+      },
+      {
+        "producto_id": 10,
+        "nombre": "Tortilla de patata por ración",
+        "cantidad": 1,
+        "precio_unitario": 3.5,
+        "iva": 0.1,
+        "subtotal": 3.5
+      }
+    ],
+    "total": 11.7
+  },
+  {
+    "_id": 3,
+    "usuario_id": 1,
+    "fecha": "2026-10-10",
+    "estado": "COBRADO",
+    "metodo_pago": "EFECTIVO",
+    "detalle": [
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 2,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 3
+      },
+      {
+        "producto_id": 4,
+        "nombre": "Cerveza rubia",
+        "cantidad": 2,
+        "precio_unitario": 2.8,
+        "iva": 0.21,
+        "subtotal": 5.6
+      },
+      {
+        "producto_id": 7,
+        "nombre": "Té con hielo",
+        "cantidad": 1,
+        "precio_unitario": 2,
+        "iva": 0.1,
+        "subtotal": 2
+      }
+    ],
+    "total": 10.6
+  },
+  {
+    "_id": 4,
+    "usuario_id": 1,
+    "fecha": "2026-10-11",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 8,
+        "nombre": "Croissant",
+        "cantidad": 1,
+        "precio_unitario": 1.7,
+        "iva": 0.1,
+        "subtotal": 1.7
+      },
+      {
+        "producto_id": 9,
+        "nombre": "Bocadillo de jamón",
+        "cantidad": 1,
+        "precio_unitario": 5.5,
+        "iva": 0.1,
+        "subtotal": 5.5
+      }
+    ],
+    "total": 7.2
+  },
+  {
+    "_id": 5,
+    "usuario_id": 2,
+    "fecha": "2026-10-11",
+    "estado": "COBRADO",
+    "metodo_pago": "EFECTIVO",
+    "detalle": [
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 3,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 4.5
+      }
+    ],
+    "total": 4.5
+  },
+  {
+    "_id": 6,
+    "usuario_id": 1,
+    "fecha": "2026-10-11",
+    "estado": "COBRADO",
+    "metodo_pago": "EFECTIVO",
+    "detalle": [
+      {
+        "producto_id": 6,
+        "nombre": "Café con leche",
+        "cantidad": 1,
+        "precio_unitario": 1.8,
+        "iva": 0.1,
+        "subtotal": 1.8
+      },
+      {
+        "producto_id": 9,
+        "nombre": "Bocadillo de jamón",
+        "cantidad": 1,
+        "precio_unitario": 5.5,
+        "iva": 0.1,
+        "subtotal": 5.5
+      }
+    ],
+    "total": 7.3
+  },
+  {
+    "_id": 7,
+    "usuario_id": 2,
+    "fecha": "2026-10-11",
+    "estado": "COBRADO",
+    "metodo_pago": "BIZUM",
+    "detalle": [
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 8,
+        "nombre": "Croissant",
+        "cantidad": 1,
+        "precio_unitario": 1.7,
+        "iva": 0.1,
+        "subtotal": 1.7
+      },
+      {
+        "producto_id": 9,
+        "nombre": "Bocadillo de jamón",
+        "cantidad": 1,
+        "precio_unitario": 5.5,
+        "iva": 0.1,
+        "subtotal": 5.5
+      }
+    ],
+    "total": 8.7
+  },
+  {
+    "_id": 8,
+    "usuario_id": 1,
+    "fecha": "2026-10-12",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 2,
+        "nombre": "Coca-Cola Zero",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 2,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 3
+      },
+      {
+        "producto_id": 7,
+        "nombre": "Té con hielo",
+        "cantidad": 1,
+        "precio_unitario": 2,
+        "iva": 0.1,
+        "subtotal": 2
+      },
+      {
+        "producto_id": 8,
+        "nombre": "Croissant",
+        "cantidad": 1,
+        "precio_unitario": 1.7,
+        "iva": 0.1,
+        "subtotal": 1.7
+      },
+      {
+        "producto_id": 9,
+        "nombre": "Bocadillo de jamón",
+        "cantidad": 1,
+        "precio_unitario": 5.5,
+        "iva": 0.1,
+        "subtotal": 5.5
+      }
+    ],
+    "total": 16.2
+  },
+  {
+    "_id": 9,
+    "usuario_id": 1,
+    "fecha": "2026-10-12",
+    "estado": "COBRADO",
+    "metodo_pago": "EFECTIVO",
+    "detalle": [
+      {
+        "producto_id": 4,
+        "nombre": "Cerveza rubia",
+        "cantidad": 1,
+        "precio_unitario": 2.8,
+        "iva": 0.21,
+        "subtotal": 2.8
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 2,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 3
+      }
+    ],
+    "total": 5.8
+  },
+  {
+    "_id": 10,
+    "usuario_id": 2,
+    "fecha": "2026-10-12",
+    "estado": "COBRADO",
+    "metodo_pago": "EFECTIVO",
+    "detalle": [
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 6,
+        "nombre": "Café con leche",
+        "cantidad": 1,
+        "precio_unitario": 1.8,
+        "iva": 0.1,
+        "subtotal": 1.8
+      },
+      {
+        "producto_id": 8,
+        "nombre": "Croissant",
+        "cantidad": 2,
+        "precio_unitario": 1.7,
+        "iva": 0.1,
+        "subtotal": 3.4
+      },
+      {
+        "producto_id": 9,
+        "nombre": "Bocadillo de jamón",
+        "cantidad": 1,
+        "precio_unitario": 5.5,
+        "iva": 0.1,
+        "subtotal": 5.5
+      }
+    ],
+    "total": 12.2
+  },
+  {
+    "_id": 11,
+    "usuario_id": 2,
+    "fecha": "2026-10-12",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 1,
+        "nombre": "Coca-Cola",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 8,
+        "nombre": "Croissant",
+        "cantidad": 1,
+        "precio_unitario": 1.7,
+        "iva": 0.1,
+        "subtotal": 1.7
+      }
+    ],
+    "total": 5.7
+  },
+  {
+    "_id": 12,
+    "usuario_id": 1,
+    "fecha": "2026-10-12",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 3,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 4.5
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 6,
+        "nombre": "Café con leche",
+        "cantidad": 1,
+        "precio_unitario": 1.8,
+        "iva": 0.1,
+        "subtotal": 1.8
+      },
+      {
+        "producto_id": 8,
+        "nombre": "Croissant",
+        "cantidad": 1,
+        "precio_unitario": 1.7,
+        "iva": 0.1,
+        "subtotal": 1.7
+      },
+      {
+        "producto_id": 9,
+        "nombre": "Bocadillo de jamón",
+        "cantidad": 1,
+        "precio_unitario": 5.5,
+        "iva": 0.1,
+        "subtotal": 5.5
+      }
+    ],
+    "total": 15
+  },
+  {
+    "_id": 13,
+    "usuario_id": 1,
+    "fecha": "2026-10-12",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 4,
+        "nombre": "Cerveza rubia",
+        "cantidad": 1,
+        "precio_unitario": 2.8,
+        "iva": 0.21,
+        "subtotal": 2.8
+      }
+    ],
+    "total": 2.8
+  },
+  {
+    "_id": 14,
+    "usuario_id": 1,
+    "fecha": "2026-10-12",
+    "estado": "COBRADO",
+    "metodo_pago": "EFECTIVO",
+    "detalle": [
+      {
+        "producto_id": 4,
+        "nombre": "Cerveza rubia",
+        "cantidad": 1,
+        "precio_unitario": 2.8,
+        "iva": 0.21,
+        "subtotal": 2.8
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 4,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 6
+      },
+      {
+        "producto_id": 6,
+        "nombre": "Café con leche",
+        "cantidad": 1,
+        "precio_unitario": 1.8,
+        "iva": 0.1,
+        "subtotal": 1.8
+      },
+      {
+        "producto_id": 7,
+        "nombre": "Té con hielo",
+        "cantidad": 1,
+        "precio_unitario": 2,
+        "iva": 0.1,
+        "subtotal": 2
+      }
+    ],
+    "total": 12.6
+  },
+  {
+    "_id": 15,
+    "usuario_id": 1,
+    "fecha": "2026-10-12",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 1,
+        "nombre": "Coca-Cola",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 2,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 3
+      },
+      {
+        "producto_id": 7,
+        "nombre": "Té con hielo",
+        "cantidad": 1,
+        "precio_unitario": 2,
+        "iva": 0.1,
+        "subtotal": 2
+      },
+      {
+        "producto_id": 10,
+        "nombre": "Tortilla de patata por ración",
+        "cantidad": 1,
+        "precio_unitario": 3.5,
+        "iva": 0.1,
+        "subtotal": 3.5
+      }
+    ],
+    "total": 11
+  },
+  {
+    "_id": 16,
+    "usuario_id": 1,
+    "fecha": "2026-10-13",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 1,
+        "nombre": "Coca-Cola",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      }
+    ],
+    "total": 4
+  },
+  {
+    "_id": 17,
+    "usuario_id": 1,
+    "fecha": "2026-10-13",
+    "estado": "COBRADO",
+    "metodo_pago": "EFECTIVO",
+    "detalle": [
+      {
+        "producto_id": 4,
+        "nombre": "Cerveza rubia",
+        "cantidad": 1,
+        "precio_unitario": 2.8,
+        "iva": 0.21,
+        "subtotal": 2.8
+      },
+      {
+        "producto_id": 9,
+        "nombre": "Bocadillo de jamón",
+        "cantidad": 1,
+        "precio_unitario": 5.5,
+        "iva": 0.1,
+        "subtotal": 5.5
+      }
+    ],
+    "total": 8.3
+  },
+  {
+    "_id": 18,
+    "usuario_id": 1,
+    "fecha": "2026-10-13",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 1,
+        "nombre": "Coca-Cola",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 4,
+        "nombre": "Cerveza rubia",
+        "cantidad": 3,
+        "precio_unitario": 2.8,
+        "iva": 0.21,
+        "subtotal": 8.4
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 6,
+        "nombre": "Café con leche",
+        "cantidad": 1,
+        "precio_unitario": 1.8,
+        "iva": 0.1,
+        "subtotal": 1.8
+      }
+    ],
+    "total": 14.2
+  },
+  {
+    "_id": 19,
+    "usuario_id": 2,
+    "fecha": "2026-10-13",
+    "estado": "COBRADO",
+    "metodo_pago": "BIZUM",
+    "detalle": [
+      {
+        "producto_id": 7,
+        "nombre": "Té con hielo",
+        "cantidad": 1,
+        "precio_unitario": 2,
+        "iva": 0.1,
+        "subtotal": 2
+      },
+      {
+        "producto_id": 8,
+        "nombre": "Croissant",
+        "cantidad": 1,
+        "precio_unitario": 1.7,
+        "iva": 0.1,
+        "subtotal": 1.7
+      },
+      {
+        "producto_id": 9,
+        "nombre": "Bocadillo de jamón",
+        "cantidad": 1,
+        "precio_unitario": 5.5,
+        "iva": 0.1,
+        "subtotal": 5.5
+      }
+    ],
+    "total": 9.2
+  },
+  {
+    "_id": 20,
+    "usuario_id": 2,
+    "fecha": "2026-10-13",
+    "estado": "COBRADO",
+    "metodo_pago": "EFECTIVO",
+    "detalle": [
+      {
+        "producto_id": 1,
+        "nombre": "Coca-Cola",
+        "cantidad": 3,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 7.5
+      },
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 2,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 3
+      },
+      {
+        "producto_id": 9,
+        "nombre": "Bocadillo de jamón",
+        "cantidad": 2,
+        "precio_unitario": 5.5,
+        "iva": 0.1,
+        "subtotal": 11
+      }
+    ],
+    "total": 21.5
+  },
+  {
+    "_id": 21,
+    "usuario_id": 1,
+    "fecha": "2026-10-14",
+    "estado": "COBRADO",
+    "metodo_pago": "EFECTIVO",
+    "detalle": [
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      }
+    ],
+    "total": 3
+  },
+  {
+    "_id": 22,
+    "usuario_id": 1,
+    "fecha": "2026-10-14",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 1,
+        "nombre": "Coca-Cola",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 2,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 3
+      },
+      {
+        "producto_id": 4,
+        "nombre": "Cerveza rubia",
+        "cantidad": 1,
+        "precio_unitario": 2.8,
+        "iva": 0.21,
+        "subtotal": 2.8
+      },
+      {
+        "producto_id": 8,
+        "nombre": "Croissant",
+        "cantidad": 2,
+        "precio_unitario": 1.7,
+        "iva": 0.1,
+        "subtotal": 3.4
+      }
+    ],
+    "total": 11.7
+  },
+  {
+    "_id": 23,
+    "usuario_id": 1,
+    "fecha": "2026-10-14",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 3,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 4.5
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 2,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 3
+      }
+    ],
+    "total": 7.5
+  },
+  {
+    "_id": 24,
+    "usuario_id": 1,
+    "fecha": "2026-10-15",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      }
+    ],
+    "total": 3
+  },
+  {
+    "_id": 25,
+    "usuario_id": 2,
+    "fecha": "2026-10-15",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 3,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 4.5
+      },
+      {
+        "producto_id": 6,
+        "nombre": "Café con leche",
+        "cantidad": 1,
+        "precio_unitario": 1.8,
+        "iva": 0.1,
+        "subtotal": 1.8
+      },
+      {
+        "producto_id": 7,
+        "nombre": "Té con hielo",
+        "cantidad": 1,
+        "precio_unitario": 2,
+        "iva": 0.1,
+        "subtotal": 2
+      },
+      {
+        "producto_id": 10,
+        "nombre": "Tortilla de patata por ración",
+        "cantidad": 1,
+        "precio_unitario": 3.5,
+        "iva": 0.1,
+        "subtotal": 3.5
+      }
+    ],
+    "total": 11.8
+  },
+  {
+    "_id": 26,
+    "usuario_id": 1,
+    "fecha": "2026-10-15",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 1,
+        "nombre": "Coca-Cola",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 6,
+        "nombre": "Café con leche",
+        "cantidad": 2,
+        "precio_unitario": 1.8,
+        "iva": 0.1,
+        "subtotal": 3.6
+      },
+      {
+        "producto_id": 7,
+        "nombre": "Té con hielo",
+        "cantidad": 1,
+        "precio_unitario": 2,
+        "iva": 0.1,
+        "subtotal": 2
+      },
+      {
+        "producto_id": 9,
+        "nombre": "Bocadillo de jamón",
+        "cantidad": 1,
+        "precio_unitario": 5.5,
+        "iva": 0.1,
+        "subtotal": 5.5
+      }
+    ],
+    "total": 16.6
+  },
+  {
+    "_id": 27,
+    "usuario_id": 2,
+    "fecha": "2026-10-16",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 1,
+        "nombre": "Coca-Cola",
+        "cantidad": 2,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 5
+      },
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 7,
+        "nombre": "Té con hielo",
+        "cantidad": 1,
+        "precio_unitario": 2,
+        "iva": 0.1,
+        "subtotal": 2
+      },
+      {
+        "producto_id": 8,
+        "nombre": "Croissant",
+        "cantidad": 1,
+        "precio_unitario": 1.7,
+        "iva": 0.1,
+        "subtotal": 1.7
+      }
+    ],
+    "total": 11.7
+  },
+  {
+    "_id": 28,
+    "usuario_id": 1,
+    "fecha": "2026-10-16",
+    "estado": "COBRADO",
+    "metodo_pago": "EFECTIVO",
+    "detalle": [
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 2,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 3
+      }
+    ],
+    "total": 3
+  },
+  {
+    "_id": 29,
+    "usuario_id": 1,
+    "fecha": "2026-10-17",
+    "estado": "COBRADO",
+    "metodo_pago": "BIZUM",
+    "detalle": [
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 7,
+        "nombre": "Té con hielo",
+        "cantidad": 1,
+        "precio_unitario": 2,
+        "iva": 0.1,
+        "subtotal": 2
+      }
+    ],
+    "total": 3.5
+  },
+  {
+    "_id": 30,
+    "usuario_id": 1,
+    "fecha": "2026-10-17",
+    "estado": "COBRADO",
+    "metodo_pago": "EFECTIVO",
+    "detalle": [
+      {
+        "producto_id": 4,
+        "nombre": "Cerveza rubia",
+        "cantidad": 1,
+        "precio_unitario": 2.8,
+        "iva": 0.21,
+        "subtotal": 2.8
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      }
+    ],
+    "total": 4.3
+  },
+  {
+    "_id": 31,
+    "usuario_id": 2,
+    "fecha": "2026-10-17",
+    "estado": "COBRADO",
+    "metodo_pago": "BIZUM",
+    "detalle": [
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 6,
+        "nombre": "Café con leche",
+        "cantidad": 1,
+        "precio_unitario": 1.8,
+        "iva": 0.1,
+        "subtotal": 1.8
+      }
+    ],
+    "total": 3.3
+  },
+  {
+    "_id": 32,
+    "usuario_id": 1,
+    "fecha": "2026-10-17",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 4,
+        "nombre": "Cerveza rubia",
+        "cantidad": 1,
+        "precio_unitario": 2.8,
+        "iva": 0.21,
+        "subtotal": 2.8
+      }
+    ],
+    "total": 2.8
+  },
+  {
+    "_id": 33,
+    "usuario_id": 1,
+    "fecha": "2026-10-17",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 4,
+        "nombre": "Cerveza rubia",
+        "cantidad": 1,
+        "precio_unitario": 2.8,
+        "iva": 0.21,
+        "subtotal": 2.8
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      }
+    ],
+    "total": 4.3
+  },
+  {
+    "_id": 34,
+    "usuario_id": 1,
+    "fecha": "2026-10-18",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 4,
+        "nombre": "Cerveza rubia",
+        "cantidad": 1,
+        "precio_unitario": 2.8,
+        "iva": 0.21,
+        "subtotal": 2.8
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 4,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 6
+      },
+      {
+        "producto_id": 9,
+        "nombre": "Bocadillo de jamón",
+        "cantidad": 1,
+        "precio_unitario": 5.5,
+        "iva": 0.1,
+        "subtotal": 5.5
+      }
+    ],
+    "total": 15.8
+  },
+  {
+    "_id": 35,
+    "usuario_id": 1,
+    "fecha": "2026-10-18",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 4,
+        "nombre": "Cerveza rubia",
+        "cantidad": 1,
+        "precio_unitario": 2.8,
+        "iva": 0.21,
+        "subtotal": 2.8
+      },
+      {
+        "producto_id": 9,
+        "nombre": "Bocadillo de jamón",
+        "cantidad": 1,
+        "precio_unitario": 5.5,
+        "iva": 0.1,
+        "subtotal": 5.5
+      }
+    ],
+    "total": 8.3
+  },
+  {
+    "_id": 36,
+    "usuario_id": 1,
+    "fecha": "2026-10-18",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 2,
+        "nombre": "Coca-Cola Zero",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 2,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 3
+      },
+      {
+        "producto_id": 6,
+        "nombre": "Café con leche",
+        "cantidad": 1,
+        "precio_unitario": 1.8,
+        "iva": 0.1,
+        "subtotal": 1.8
+      },
+      {
+        "producto_id": 10,
+        "nombre": "Tortilla de patata por ración",
+        "cantidad": 2,
+        "precio_unitario": 3.5,
+        "iva": 0.1,
+        "subtotal": 7
+      }
+    ],
+    "total": 15.8
+  },
+  {
+    "_id": 37,
+    "usuario_id": 1,
+    "fecha": "2026-10-18",
+    "estado": "COBRADO",
+    "metodo_pago": "EFECTIVO",
+    "detalle": [
+      {
+        "producto_id": 1,
+        "nombre": "Coca-Cola",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 3,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 4.5
+      },
+      {
+        "producto_id": 4,
+        "nombre": "Cerveza rubia",
+        "cantidad": 1,
+        "precio_unitario": 2.8,
+        "iva": 0.21,
+        "subtotal": 2.8
+      }
+    ],
+    "total": 9.8
+  },
+  {
+    "_id": 38,
+    "usuario_id": 2,
+    "fecha": "2026-10-18",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 4,
+        "nombre": "Cerveza rubia",
+        "cantidad": 1,
+        "precio_unitario": 2.8,
+        "iva": 0.21,
+        "subtotal": 2.8
+      }
+    ],
+    "total": 4.3
+  },
+  {
+    "_id": 39,
+    "usuario_id": 1,
+    "fecha": "2026-10-19",
+    "estado": "COBRADO",
+    "metodo_pago": "BIZUM",
+    "detalle": [
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 2,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 3
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 2,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 3
+      },
+      {
+        "producto_id": 6,
+        "nombre": "Café con leche",
+        "cantidad": 1,
+        "precio_unitario": 1.8,
+        "iva": 0.1,
+        "subtotal": 1.8
+      },
+      {
+        "producto_id": 8,
+        "nombre": "Croissant",
+        "cantidad": 1,
+        "precio_unitario": 1.7,
+        "iva": 0.1,
+        "subtotal": 1.7
+      },
+      {
+        "producto_id": 9,
+        "nombre": "Bocadillo de jamón",
+        "cantidad": 2,
+        "precio_unitario": 5.5,
+        "iva": 0.1,
+        "subtotal": 11
+      }
+    ],
+    "total": 20.5
+  },
+  {
+    "_id": 40,
+    "usuario_id": 2,
+    "fecha": "2026-10-20",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 1,
+        "nombre": "Coca-Cola",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 2,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 3
+      },
+      {
+        "producto_id": 6,
+        "nombre": "Café con leche",
+        "cantidad": 2,
+        "precio_unitario": 1.8,
+        "iva": 0.1,
+        "subtotal": 3.6
+      },
+      {
+        "producto_id": 7,
+        "nombre": "Té con hielo",
+        "cantidad": 1,
+        "precio_unitario": 2,
+        "iva": 0.1,
+        "subtotal": 2
+      },
+      {
+        "producto_id": 10,
+        "nombre": "Tortilla de patata por ración",
+        "cantidad": 1,
+        "precio_unitario": 3.5,
+        "iva": 0.1,
+        "subtotal": 3.5
+      }
+    ],
+    "total": 16.1
+  },
+  {
+    "_id": 41,
+    "usuario_id": 1,
+    "fecha": "2026-10-20",
+    "estado": "COBRADO",
+    "metodo_pago": "EFECTIVO",
+    "detalle": [
+      {
+        "producto_id": 7,
+        "nombre": "Té con hielo",
+        "cantidad": 2,
+        "precio_unitario": 2,
+        "iva": 0.1,
+        "subtotal": 4
+      }
+    ],
+    "total": 4
+  },
+  {
+    "_id": 42,
+    "usuario_id": 1,
+    "fecha": "2026-10-20",
+    "estado": "COBRADO",
+    "metodo_pago": "EFECTIVO",
+    "detalle": [
+      {
+        "producto_id": 10,
+        "nombre": "Tortilla de patata por ración",
+        "cantidad": 1,
+        "precio_unitario": 3.5,
+        "iva": 0.1,
+        "subtotal": 3.5
+      }
+    ],
+    "total": 3.5
+  },
+  {
+    "_id": 43,
+    "usuario_id": 1,
+    "fecha": "2026-10-20",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      }
+    ],
+    "total": 1.5
+  },
+  {
+    "_id": 44,
+    "usuario_id": 1,
+    "fecha": "2026-10-21",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 1,
+        "nombre": "Coca-Cola",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      }
+    ],
+    "total": 4
+  },
+  {
+    "_id": 45,
+    "usuario_id": 2,
+    "fecha": "2026-10-21",
+    "estado": "COBRADO",
+    "metodo_pago": "BIZUM",
+    "detalle": [
+      {
+        "producto_id": 1,
+        "nombre": "Coca-Cola",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 2,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 3
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 7,
+        "nombre": "Té con hielo",
+        "cantidad": 2,
+        "precio_unitario": 2,
+        "iva": 0.1,
+        "subtotal": 4
+      },
+      {
+        "producto_id": 8,
+        "nombre": "Croissant",
+        "cantidad": 2,
+        "precio_unitario": 1.7,
+        "iva": 0.1,
+        "subtotal": 3.4
+      }
+    ],
+    "total": 14.4
+  },
+  {
+    "_id": 46,
+    "usuario_id": 1,
+    "fecha": "2026-10-21",
+    "estado": "COBRADO",
+    "metodo_pago": "BIZUM",
+    "detalle": [
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      }
+    ],
+    "total": 3
+  },
+  {
+    "_id": 47,
+    "usuario_id": 1,
+    "fecha": "2026-10-22",
+    "estado": "COBRADO",
+    "metodo_pago": "BIZUM",
+    "detalle": [
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 4,
+        "nombre": "Cerveza rubia",
+        "cantidad": 1,
+        "precio_unitario": 2.8,
+        "iva": 0.21,
+        "subtotal": 2.8
+      },
+      {
+        "producto_id": 6,
+        "nombre": "Café con leche",
+        "cantidad": 1,
+        "precio_unitario": 1.8,
+        "iva": 0.1,
+        "subtotal": 1.8
+      },
+      {
+        "producto_id": 8,
+        "nombre": "Croissant",
+        "cantidad": 2,
+        "precio_unitario": 1.7,
+        "iva": 0.1,
+        "subtotal": 3.4
+      },
+      {
+        "producto_id": 9,
+        "nombre": "Bocadillo de jamón",
+        "cantidad": 1,
+        "precio_unitario": 5.5,
+        "iva": 0.1,
+        "subtotal": 5.5
+      }
+    ],
+    "total": 15
+  },
+  {
+    "_id": 48,
+    "usuario_id": 2,
+    "fecha": "2026-10-22",
+    "estado": "COBRADO",
+    "metodo_pago": "BIZUM",
+    "detalle": [
+      {
+        "producto_id": 1,
+        "nombre": "Coca-Cola",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      }
+    ],
+    "total": 5.5
+  },
+  {
+    "_id": 49,
+    "usuario_id": 2,
+    "fecha": "2026-10-23",
+    "estado": "COBRADO",
+    "metodo_pago": "BIZUM",
+    "detalle": [
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 2,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 3
+      },
+      {
+        "producto_id": 7,
+        "nombre": "Té con hielo",
+        "cantidad": 1,
+        "precio_unitario": 2,
+        "iva": 0.1,
+        "subtotal": 2
+      }
+    ],
+    "total": 5
+  },
+  {
+    "_id": 50,
+    "usuario_id": 2,
+    "fecha": "2026-10-23",
+    "estado": "COBRADO",
+    "metodo_pago": "EFECTIVO",
+    "detalle": [
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      }
+    ],
+    "total": 1.5
+  },
+  {
+    "_id": 51,
+    "usuario_id": 2,
+    "fecha": "2026-10-23",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 4,
+        "nombre": "Cerveza rubia",
+        "cantidad": 2,
+        "precio_unitario": 2.8,
+        "iva": 0.21,
+        "subtotal": 5.6
+      },
+      {
+        "producto_id": 9,
+        "nombre": "Bocadillo de jamón",
+        "cantidad": 1,
+        "precio_unitario": 5.5,
+        "iva": 0.1,
+        "subtotal": 5.5
+      }
+    ],
+    "total": 12.6
+  },
+  {
+    "_id": 52,
+    "usuario_id": 1,
+    "fecha": "2026-10-23",
+    "estado": "COBRADO",
+    "metodo_pago": "EFECTIVO",
+    "detalle": [
+      {
+        "producto_id": 6,
+        "nombre": "Café con leche",
+        "cantidad": 1,
+        "precio_unitario": 1.8,
+        "iva": 0.1,
+        "subtotal": 1.8
+      },
+      {
+        "producto_id": 8,
+        "nombre": "Croissant",
+        "cantidad": 1,
+        "precio_unitario": 1.7,
+        "iva": 0.1,
+        "subtotal": 1.7
+      },
+      {
+        "producto_id": 10,
+        "nombre": "Tortilla de patata por ración",
+        "cantidad": 1,
+        "precio_unitario": 3.5,
+        "iva": 0.1,
+        "subtotal": 3.5
+      }
+    ],
+    "total": 7
+  },
+  {
+    "_id": 53,
+    "usuario_id": 1,
+    "fecha": "2026-10-23",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 8,
+        "nombre": "Croissant",
+        "cantidad": 1,
+        "precio_unitario": 1.7,
+        "iva": 0.1,
+        "subtotal": 1.7
+      },
+      {
+        "producto_id": 9,
+        "nombre": "Bocadillo de jamón",
+        "cantidad": 1,
+        "precio_unitario": 5.5,
+        "iva": 0.1,
+        "subtotal": 5.5
+      }
+    ],
+    "total": 10.2
+  },
+  {
+    "_id": 54,
+    "usuario_id": 1,
+    "fecha": "2026-10-24",
+    "estado": "COBRADO",
+    "metodo_pago": "EFECTIVO",
+    "detalle": [
+      {
+        "producto_id": 1,
+        "nombre": "Coca-Cola",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 2,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 3
+      },
+      {
+        "producto_id": 9,
+        "nombre": "Bocadillo de jamón",
+        "cantidad": 2,
+        "precio_unitario": 5.5,
+        "iva": 0.1,
+        "subtotal": 11
+      },
+      {
+        "producto_id": 10,
+        "nombre": "Tortilla de patata por ración",
+        "cantidad": 2,
+        "precio_unitario": 3.5,
+        "iva": 0.1,
+        "subtotal": 7
+      }
+    ],
+    "total": 25
+  },
+  {
+    "_id": 55,
+    "usuario_id": 1,
+    "fecha": "2026-10-24",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 2,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 3
+      },
+      {
+        "producto_id": 7,
+        "nombre": "Té con hielo",
+        "cantidad": 1,
+        "precio_unitario": 2,
+        "iva": 0.1,
+        "subtotal": 2
+      }
+    ],
+    "total": 5
+  },
+  {
+    "_id": 56,
+    "usuario_id": 1,
+    "fecha": "2026-10-24",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 2,
+        "nombre": "Coca-Cola Zero",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 2,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 3
+      },
+      {
+        "producto_id": 6,
+        "nombre": "Café con leche",
+        "cantidad": 1,
+        "precio_unitario": 1.8,
+        "iva": 0.1,
+        "subtotal": 1.8
+      }
+    ],
+    "total": 8.8
+  },
+  {
+    "_id": 57,
+    "usuario_id": 2,
+    "fecha": "2026-10-24",
+    "estado": "COBRADO",
+    "metodo_pago": "EFECTIVO",
+    "detalle": [
+      {
+        "producto_id": 2,
+        "nombre": "Coca-Cola Zero",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 8,
+        "nombre": "Croissant",
+        "cantidad": 1,
+        "precio_unitario": 1.7,
+        "iva": 0.1,
+        "subtotal": 1.7
+      }
+    ],
+    "total": 7.2
+  },
+  {
+    "_id": 58,
+    "usuario_id": 1,
+    "fecha": "2026-10-25",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 1,
+        "nombre": "Coca-Cola",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 2,
+        "nombre": "Coca-Cola Zero",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 3,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 4.5
+      },
+      {
+        "producto_id": 4,
+        "nombre": "Cerveza rubia",
+        "cantidad": 1,
+        "precio_unitario": 2.8,
+        "iva": 0.21,
+        "subtotal": 2.8
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 7,
+        "nombre": "Té con hielo",
+        "cantidad": 1,
+        "precio_unitario": 2,
+        "iva": 0.1,
+        "subtotal": 2
+      }
+    ],
+    "total": 15.8
+  },
+  {
+    "_id": 59,
+    "usuario_id": 1,
+    "fecha": "2026-10-25",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 1,
+        "nombre": "Coca-Cola",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 4,
+        "nombre": "Cerveza rubia",
+        "cantidad": 1,
+        "precio_unitario": 2.8,
+        "iva": 0.21,
+        "subtotal": 2.8
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 2,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 3
+      },
+      {
+        "producto_id": 9,
+        "nombre": "Bocadillo de jamón",
+        "cantidad": 2,
+        "precio_unitario": 5.5,
+        "iva": 0.1,
+        "subtotal": 11
+      }
+    ],
+    "total": 19.3
+  },
+  {
+    "_id": 60,
+    "usuario_id": 2,
+    "fecha": "2026-10-25",
+    "estado": "COBRADO",
+    "metodo_pago": "BIZUM",
+    "detalle": [
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 2,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 3
+      }
+    ],
+    "total": 3
+  },
+  {
+    "_id": 61,
+    "usuario_id": 2,
+    "fecha": "2026-10-25",
+    "estado": "COBRADO",
+    "metodo_pago": "EFECTIVO",
+    "detalle": [
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      }
+    ],
+    "total": 1.5
+  },
+  {
+    "_id": 62,
+    "usuario_id": 2,
+    "fecha": "2026-10-25",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 1,
+        "nombre": "Coca-Cola",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 2,
+        "nombre": "Coca-Cola Zero",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 6,
+        "nombre": "Café con leche",
+        "cantidad": 1,
+        "precio_unitario": 1.8,
+        "iva": 0.1,
+        "subtotal": 1.8
+      },
+      {
+        "producto_id": 9,
+        "nombre": "Bocadillo de jamón",
+        "cantidad": 1,
+        "precio_unitario": 5.5,
+        "iva": 0.1,
+        "subtotal": 5.5
+      }
+    ],
+    "total": 13.8
+  },
+  {
+    "_id": 63,
+    "usuario_id": 2,
+    "fecha": "2026-10-25",
+    "estado": "COBRADO",
+    "metodo_pago": "EFECTIVO",
+    "detalle": [
+      {
+        "producto_id": 1,
+        "nombre": "Coca-Cola",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 2,
+        "nombre": "Coca-Cola Zero",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 4,
+        "nombre": "Cerveza rubia",
+        "cantidad": 1,
+        "precio_unitario": 2.8,
+        "iva": 0.21,
+        "subtotal": 2.8
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 6,
+        "nombre": "Café con leche",
+        "cantidad": 1,
+        "precio_unitario": 1.8,
+        "iva": 0.1,
+        "subtotal": 1.8
+      },
+      {
+        "producto_id": 7,
+        "nombre": "Té con hielo",
+        "cantidad": 1,
+        "precio_unitario": 2,
+        "iva": 0.1,
+        "subtotal": 2
+      }
+    ],
+    "total": 14.6
+  },
+  {
+    "_id": 64,
+    "usuario_id": 1,
+    "fecha": "2026-10-25",
+    "estado": "COBRADO",
+    "metodo_pago": "BIZUM",
+    "detalle": [
+      {
+        "producto_id": 1,
+        "nombre": "Coca-Cola",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 2,
+        "nombre": "Coca-Cola Zero",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 3,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 4.5
+      },
+      {
+        "producto_id": 4,
+        "nombre": "Cerveza rubia",
+        "cantidad": 1,
+        "precio_unitario": 2.8,
+        "iva": 0.21,
+        "subtotal": 2.8
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 9,
+        "nombre": "Bocadillo de jamón",
+        "cantidad": 1,
+        "precio_unitario": 5.5,
+        "iva": 0.1,
+        "subtotal": 5.5
+      }
+    ],
+    "total": 19.3
+  },
+  {
+    "_id": 65,
+    "usuario_id": 1,
+    "fecha": "2026-10-26",
+    "estado": "COBRADO",
+    "metodo_pago": "TARJETA",
+    "detalle": [
+      {
+        "producto_id": 2,
+        "nombre": "Coca-Cola Zero",
+        "cantidad": 1,
+        "precio_unitario": 2.5,
+        "iva": 0.21,
+        "subtotal": 2.5
+      },
+      {
+        "producto_id": 3,
+        "nombre": "Agua mineral 500 ml",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 5,
+        "nombre": "Café solo",
+        "cantidad": 1,
+        "precio_unitario": 1.5,
+        "iva": 0.1,
+        "subtotal": 1.5
+      },
+      {
+        "producto_id": 6,
+        "nombre": "Café con leche",
+        "cantidad": 1,
+        "precio_unitario": 1.8,
+        "iva": 0.1,
+        "subtotal": 1.8
+      }
+    ],
+    "total": 7.3
+  },
+  {
+    "_id": 66,
+    "detalle": [
+      {
+        "cantidad": 1,
+        "iva": 0.1,
+        "nombre": "Agua mineral 500 ml",
+        "precio_unitario": 1.5,
+        "producto_id": 3,
+        "subtotal": 1.5
+      },
+      {
+        "cantidad": 1,
+        "iva": 0.21,
+        "nombre": "Coca-Cola Zero",
+        "precio_unitario": 2.5,
+        "producto_id": 2,
+        "subtotal": 2.5
+      }
+    ],
+    "estado": "COBRADO",
+    "fecha": "2026-10-29",
+    "metodo_pago": "TARJETA",
+    "total": 4,
+    "usuario_id": 1
+  },
+  {
+    "_id": 67,
+    "detalle": [
+      {
+        "cantidad": 13,
+        "iva": 0.21,
+        "nombre": "Coca-Cola",
+        "precio_unitario": 2.5,
+        "producto_id": 1,
+        "subtotal": 32.5
+      }
+    ],
+    "estado": "COBRADO",
+    "fecha": "2026-10-29",
+    "metodo_pago": "TARJETA",
+    "total": 32.5,
+    "usuario_id": 1
+  },
+  {
+    "_id": 68,
+    "detalle": [
+      {
+        "cantidad": 10,
+        "iva": 0.21,
+        "nombre": "Cerveza rubia",
+        "precio_unitario": 2.8,
+        "producto_id": 4,
+        "subtotal": 28
+      }
+    ],
+    "estado": "COBRADO",
+    "fecha": "2026-10-29",
+    "metodo_pago": "EFECTIVO",
+    "total": 28,
+    "usuario_id": 1
+  },
+  {
+    "_id": 69,
+    "detalle": [
+      {
+        "cantidad": 24,
+        "iva": 0.21,
+        "nombre": "Cerveza rubia",
+        "precio_unitario": 2.8,
+        "producto_id": 4,
+        "subtotal": 67.2
+      }
+    ],
+    "estado": "COBRADO",
+    "fecha": "2026-10-29",
+    "metodo_pago": "EFECTIVO",
+    "total": 67.2,
+    "usuario_id": 1
+  },
+  {
+    "_id": 70,
+    "detalle": [
+      {
+        "cantidad": 14,
+        "iva": 0.21,
+        "nombre": "Cerveza rubia",
+        "precio_unitario": 2.8,
+        "producto_id": 4,
+        "subtotal": 39.2
+      }
+    ],
+    "estado": "COBRADO",
+    "fecha": "2026-10-29",
+    "metodo_pago": "EFECTIVO",
+    "total": 39.2,
+    "usuario_id": 1
+  },
+  {
+    "_id": 71,
+    "detalle": [
+      {
+        "cantidad": 6,
+        "iva": 0.1,
+        "nombre": "Agua mineral 500 ml",
+        "precio_unitario": 1.5,
+        "producto_id": 3,
+        "subtotal": 9
+      }
+    ],
+    "estado": "COBRADO",
+    "fecha": "2026-10-29",
+    "metodo_pago": "EFECTIVO",
+    "total": 9,
+    "usuario_id": 1
+  },
+  {
+    "_id": 72,
+    "detalle": [
+      {
+        "cantidad": 8,
+        "iva": 0.1,
+        "nombre": "Agua mineral 500 ml",
+        "precio_unitario": 1.5,
+        "producto_id": 3,
+        "subtotal": 12
+      },
+      {
+        "cantidad": 5,
+        "iva": 0.21,
+        "nombre": "Coca-Cola Zero",
+        "precio_unitario": 2.5,
+        "producto_id": 2,
+        "subtotal": 12.5
+      }
+    ],
+    "estado": "COBRADO",
+    "fecha": "2026-10-29",
+    "metodo_pago": "BIZUM",
+    "total": 24.5,
+    "usuario_id": 1
+  },
+  {
+    "_id": 73,
+    "detalle": [
+      {
+        "cantidad": 3,
+        "iva": 0.1,
+        "nombre": "Agua mineral 500 ml",
+        "precio_unitario": 1.5,
+        "producto_id": 3,
+        "subtotal": 4.5
+      }
+    ],
+    "estado": "COBRADO",
+    "fecha": "2026-10-30",
+    "metodo_pago": "EFECTIVO",
+    "total": 4.5,
+    "usuario_id": 1
+  },
+  {
+    "_id": 74,
+    "detalle": [
+      {
+        "cantidad": 3,
+        "iva": 0.1,
+        "nombre": "Agua mineral 500 ml",
+        "precio_unitario": 1.5,
+        "producto_id": 3,
+        "subtotal": 4.5
+      },
+      {
+        "cantidad": 3,
+        "iva": 0.1,
+        "nombre": "Café con leche",
+        "precio_unitario": 1.8,
+        "producto_id": 6,
+        "subtotal": 5.4
+      }
+    ],
+    "estado": "COBRADO",
+    "fecha": "2026-10-30",
+    "metodo_pago": "EFECTIVO",
+    "total": 9.9,
+    "usuario_id": 1
+  },
+  {
+    "_id": 75,
+    "detalle": [
+      {
+        "cantidad": 1,
+        "iva": 0.1,
+        "nombre": "Agua mineral 500 ml",
+        "precio_unitario": 1.5,
+        "producto_id": 3,
+        "subtotal": 1.5
+      },
+      {
+        "cantidad": 1,
+        "iva": 0.1,
+        "nombre": "Café con leche",
+        "precio_unitario": 1.8,
+        "producto_id": 6,
+        "subtotal": 1.8
+      },
+      {
+        "cantidad": 1,
+        "iva": 0.1,
+        "nombre": "Café solo",
+        "precio_unitario": 1.5,
+        "producto_id": 5,
+        "subtotal": 1.5
+      },
+      {
+        "cantidad": 4,
+        "iva": 0.21,
+        "nombre": "Coca-Cola Zero",
+        "precio_unitario": 2.5,
+        "producto_id": 2,
+        "subtotal": 10
+      }
+    ],
+    "estado": "COBRADO",
+    "fecha": "2026-10-30",
+    "metodo_pago": "BIZUM",
+    "total": 14.8,
+    "usuario_id": 1
+  },
+  {
+    "_id": 76,
+    "detalle": [
+      {
+        "cantidad": 3,
+        "iva": 0.21,
+        "nombre": "Coca-Cola Zero",
+        "precio_unitario": 2.5,
+        "producto_id": 2,
+        "subtotal": 7.5
+      }
+    ],
+    "estado": "COBRADO",
+    "fecha": "2026-11-02",
+    "metodo_pago": "EFECTIVO",
+    "total": 7.5,
+    "usuario_id": 1
+  },
+  {
+    "_id": 77,
+    "detalle": [
+      {
+        "cantidad": 1,
+        "iva": 0.21,
+        "nombre": "Coca-Cola Zero",
+        "precio_unitario": 2.5,
+        "producto_id": 2,
+        "subtotal": 2.5
+      },
+      {
+        "cantidad": 1,
+        "iva": 0.21,
+        "nombre": "Coca-Cola",
+        "precio_unitario": 2.5,
+        "producto_id": 1,
+        "subtotal": 2.5
+      }
+    ],
+    "estado": "COBRADO",
+    "fecha": "2026-11-02",
+    "metodo_pago": "BIZUM",
+    "total": 5,
+    "usuario_id": 1
+  },
+  {
+    "_id": 78,
+    "detalle": [
+      {
+        "cantidad": 34,
+        "iva": 0.21,
+        "nombre": "Coca-Cola",
+        "precio_unitario": 2.5,
+        "producto_id": 1,
+        "subtotal": 85
+      }
+    ],
+    "estado": "COBRADO",
+    "fecha": "2026-11-02",
+    "metodo_pago": "TARJETA",
+    "total": 85,
+    "usuario_id": 1
+  },
+  {
+    "_id": 79,
+    "detalle": [
+      {
+        "cantidad": 18,
+        "iva": 0.21,
+        "nombre": "Coca-Cola Zero",
+        "precio_unitario": 2.5,
+        "producto_id": 2,
+        "subtotal": 45
+      }
+    ],
+    "estado": "COBRADO",
+    "fecha": "2026-11-02",
+    "metodo_pago": "EFECTIVO",
+    "total": 45,
+    "usuario_id": 1
+  },
+  {
+    "_id": 80,
+    "detalle": [
+      {
+        "cantidad": 61,
+        "iva": 0.1,
+        "nombre": "Café con leche",
+        "precio_unitario": 1.8,
+        "producto_id": 6,
+        "subtotal": 109.8
+      }
+    ],
+    "estado": "COBRADO",
+    "fecha": "2026-11-02",
+    "metodo_pago": "EFECTIVO",
+    "total": 109.8,
+    "usuario_id": 1
+  },
+  {
+    "_id": 81,
+    "detalle": [
+      {
+        "cantidad": 5,
+        "iva": 0.1,
+        "nombre": "Café con leche",
+        "precio_unitario": 1.8,
+        "producto_id": 6,
+        "subtotal": 9
+      }
+    ],
+    "estado": "COBRADO",
+    "fecha": "2026-11-02",
+    "metodo_pago": "EFECTIVO",
+    "total": 9,
+    "usuario_id": 1
+  },
+  {
+    "_id": 82,
+    "detalle": [
+      {
+        "cantidad": 27,
+        "iva": 0.1,
+        "nombre": "Agua mineral 500 ml",
+        "precio_unitario": 1.5,
+        "producto_id": 3,
+        "subtotal": 40.5
+      }
+    ],
+    "estado": "COBRADO",
+    "fecha": "2026-11-02",
+    "metodo_pago": "EFECTIVO",
+    "total": 40.5,
+    "usuario_id": 1
+  },
+  {
+    "_id": 83,
+    "detalle": [
+      {
+        "cantidad": 5,
+        "iva": 0.1,
+        "nombre": "Agua mineral 500 ml",
+        "precio_unitario": 1.5,
+        "producto_id": 3,
+        "subtotal": 7.5
+      }
+    ],
+    "estado": "COBRADO",
+    "fecha": "2026-11-02",
+    "metodo_pago": "EFECTIVO",
+    "total": 7.5,
+    "usuario_id": 1
+  }
+]

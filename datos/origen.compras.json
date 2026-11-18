@@ -1,0 +1,332 @@
+[{
+  "_id": 1,
+  "proveedor_id": 1,
+  "usuario_id": 1,
+  "fecha": "2026-10-01",
+  "numero_factura": "F-2026-1001",
+  "detalle": [
+    {
+      "producto_id": 1,
+      "nombre": "Coca-Cola",
+      "cantidad": 48,
+      "precio_unidad": 0.85,
+      "iva": 0.21,
+      "subtotal": 40.8
+    },
+    {
+      "producto_id": 2,
+      "nombre": "Coca-Cola Zero",
+      "cantidad": 48,
+      "precio_unidad": 0.85,
+      "iva": 0.21,
+      "subtotal": 40.8
+    },
+    {
+      "producto_id": 3,
+      "nombre": "Agua mineral 500 ml",
+      "cantidad": 60,
+      "precio_unidad": 0.35,
+      "iva": 0.1,
+      "subtotal": 21
+    },
+    {
+      "producto_id": 4,
+      "nombre": "Cerveza rubia",
+      "cantidad": 48,
+      "precio_unidad": 0.95,
+      "iva": 0.21,
+      "subtotal": 45.6
+    }
+  ],
+  "base": 148.2,
+  "total_iva": 28.81,
+  "total": 177.01
+},
+{
+  "_id": 2,
+  "proveedor_id": 2,
+  "usuario_id": 2,
+  "fecha": "2026-10-02",
+  "numero_factura": "F-2026-1002",
+  "detalle": [
+    {
+      "producto_id": 12,
+      "nombre": "Huevos",
+      "cantidad": 80,
+      "precio_unidad": 0.18,
+      "iva": 0.04,
+      "subtotal": 14.4
+    },
+    {
+      "producto_id": 13,
+      "nombre": "Aceite de oliva",
+      "cantidad": 5.3,
+      "precio_unidad": 6.8,
+      "iva": 0.04,
+      "subtotal": 36.04
+    },
+    {
+      "producto_id": 3,
+      "nombre": "Agua mineral 500 ml",
+      "cantidad": 24,
+      "precio_unidad": 0.33,
+      "iva": 0.1,
+      "subtotal": 7.92
+    }
+  ],
+  "base": 58.36,
+  "total_iva": 2.81,
+  "total": 61.17
+},
+{
+  "_id": 3,
+  "proveedor_id": 3,
+  "usuario_id": 3,
+  "fecha": "2026-10-03",
+  "numero_factura": "F-2026-1003",
+  "detalle": [
+    {
+      "producto_id": 15,
+      "nombre": "Café en grano",
+      "cantidad": 15.6,
+      "precio_unidad": 11.5,
+      "iva": 0.1,
+      "subtotal": 179.4
+    },
+    {
+      "producto_id": 17,
+      "nombre": "Té negro",
+      "cantidad": 2.1,
+      "precio_unidad": 18,
+      "iva": 0.1,
+      "subtotal": 37.8
+    }
+  ],
+  "base": 217.2,
+  "total_iva": 21.72,
+  "total": 238.92
+},
+{
+  "_id": 4,
+  "proveedor_id": 4,
+  "usuario_id": 4,
+  "fecha": "2026-10-05",
+  "numero_factura": "F-2026-1005",
+  "detalle": [
+    {
+      "producto_id": 8,
+      "nombre": "Croissant",
+      "cantidad": 20,
+      "precio_unidad": 0.7,
+      "iva": 0.1,
+      "subtotal": 14
+    },
+    {
+      "producto_id": 19,
+      "nombre": "Barra de pan",
+      "cantidad": 25,
+      "precio_unidad": 0.55,
+      "iva": 0.04,
+      "subtotal": 13.75
+    }
+  ],
+  "base": 27.75,
+  "total_iva": 1.95,
+  "total": 29.7
+},
+{
+  "_id": 5,
+  "proveedor_id": 5,
+  "usuario_id": 5,
+  "fecha": "2026-10-06",
+  "numero_factura": "F-2026-1006",
+  "detalle": [
+    {
+      "producto_id": 16,
+      "nombre": "Leche entera",
+      "cantidad": 27,
+      "precio_unidad": 0.82,
+      "iva": 0.04,
+      "subtotal": 22.14
+    }
+  ],
+  "base": 22.14,
+  "total_iva": 0.89,
+  "total": 23.03
+},
+{
+  "_id": 6,
+  "proveedor_id": 7,
+  "usuario_id": 1,
+  "fecha": "2026-10-07",
+  "numero_factura": "F-2026-1007",
+  "detalle": [
+    {
+      "producto_id": 11,
+      "nombre": "Patatas",
+      "cantidad": 22,
+      "precio_unidad": 0.65,
+      "iva": 0.04,
+      "subtotal": 14.3
+    }
+  ],
+  "base": 14.3,
+  "total_iva": 0.57,
+  "total": 14.87
+},
+{
+  "_id": 7,
+  "proveedor_id": 8,
+  "usuario_id": 2,
+  "fecha": "2026-10-08",
+  "numero_factura": "F-2026-1008",
+  "detalle": [
+    {
+      "producto_id": 14,
+      "nombre": "Jamón cocido",
+      "cantidad": 5,
+      "precio_unidad": 9.2,
+      "iva": 0.1,
+      "subtotal": 46
+    },
+    {
+      "producto_id": 20,
+      "nombre": "Jamón serrano",
+      "cantidad": 6,
+      "precio_unidad": 16.5,
+      "iva": 0.1,
+      "subtotal": 99
+    }
+  ],
+  "base": 145,
+  "total_iva": 14.5,
+  "total": 159.5
+},
+{
+  "_id": 8,
+  "proveedor_id": 10,
+  "usuario_id": 1,
+  "fecha": "2026-10-09",
+  "numero_factura": "F-2026-1009",
+  "detalle": [
+    {
+      "producto_id": 18,
+      "nombre": "Hielo",
+      "cantidad": 14,
+      "precio_unidad": 1.8,
+      "iva": 0.1,
+      "subtotal": 25.2
+    }
+  ],
+  "base": 25.2,
+  "total_iva": 2.52,
+  "total": 27.72
+},
+{
+  "_id": 9,
+  "proveedor_id": 1,
+  "usuario_id": 1,
+  "fecha": "2026-10-15",
+  "numero_factura": "F-2026-1015",
+  "detalle": [
+    {
+      "producto_id": 1,
+      "nombre": "Coca-Cola",
+      "cantidad": 24,
+      "precio_unidad": 0.85,
+      "iva": 0.21,
+      "subtotal": 20.4
+    },
+    {
+      "producto_id": 4,
+      "nombre": "Cerveza rubia",
+      "cantidad": 24,
+      "precio_unidad": 0.95,
+      "iva": 0.21,
+      "subtotal": 22.8
+    },
+    {
+      "producto_id": 3,
+      "nombre": "Agua mineral 500 ml",
+      "cantidad": 36,
+      "precio_unidad": 0.35,
+      "iva": 0.1,
+      "subtotal": 12.6
+    }
+  ],
+  "base": 55.8,
+  "total_iva": 10.33,
+  "total": 66.13
+},
+{
+  "_id": 10,
+  "proveedor_id": 4,
+  "usuario_id": 2,
+  "fecha": "2026-10-20",
+  "numero_factura": "F-2026-1020",
+  "detalle": [
+    {
+      "producto_id": 8,
+      "nombre": "Croissant",
+      "cantidad": 20,
+      "precio_unidad": 0.7,
+      "iva": 0.1,
+      "subtotal": 14
+    },
+    {
+      "producto_id": 19,
+      "nombre": "Barra de pan",
+      "cantidad": 25,
+      "precio_unidad": 0.55,
+      "iva": 0.04,
+      "subtotal": 13.75
+    }
+  ],
+  "base": 27.75,
+  "total_iva": 1.95,
+  "total": 29.7
+},
+{
+  "_id": 11,
+  "base": 66.9,
+  "detalle": [
+    {
+      "cantidad": 24,
+      "iva": 0.21,
+      "nombre": "Coca-Cola",
+      "precio_unidad": 0.85,
+      "producto_id": 1,
+      "subtotal": 20.4
+    },
+    {
+      "cantidad": 18,
+      "iva": 0.21,
+      "nombre": "Coca-Cola Zero",
+      "precio_unidad": 0.85,
+      "producto_id": 2,
+      "subtotal": 15.3
+    },
+    {
+      "cantidad": 24,
+      "iva": 0.1,
+      "nombre": "Agua mineral 500 ml",
+      "precio_unidad": 0.35,
+      "producto_id": 3,
+      "subtotal": 8.4
+    },
+    {
+      "cantidad": 24,
+      "iva": 0.21,
+      "nombre": "Cerveza rubia",
+      "precio_unidad": 0.95,
+      "producto_id": 4,
+      "subtotal": 22.8
+    }
+  ],
+  "fecha": "2026-11-03",
+  "numero_factura": "F-2026-0311",
+  "proveedor_id": 1,
+  "total": 80.03,
+  "total_iva": 13.13,
+  "usuario_id": 1
+}]
