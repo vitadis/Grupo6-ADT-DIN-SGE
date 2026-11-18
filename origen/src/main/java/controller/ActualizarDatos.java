@@ -5,9 +5,14 @@
 package controller;
 
 /**
+ * Interfaz de los controladores que pueden recargar los datos que muestran.
  *
  * @author Hodei.Torres
  */
 public interface ActualizarDatos {
+
+    /**
+     * Vuelve a cargar los datos de la vista.
+     */
     void actualizarDatos();
 }

@@ -30,6 +30,8 @@ public class UsuarioDaoImp extends AccesoMongoDB implements dao.UsuarioDao {
 
     /**
      * Obtiene la única instancia de UsuarioDaoImp (patrón Singleton).
+     *
+     * @return instancia del DAO
      */
     public static synchronized UsuarioDaoImp getInstance() {
         if (instance == null) {
@@ -170,6 +172,34 @@ public class UsuarioDaoImp extends AccesoMongoDB implements dao.UsuarioDao {
 
         } catch (MongoException e) {
             throw new DaoException("Error al eliminar el usuario.", e);
+        }
+    }
+
+    @Override
+    public List<String> listarPermisosPorRol(String rol) {
+        try {
+            MongoClient client = getClient();
+            MongoCollection<Document> coleccion
+                    = getCollection(client, COLECCION_PERMISOS, Document.class);
+
+            Document doc = coleccion.find(Filters.eq("_id", 2)).first();
+
+            if (doc == null) {
+                return new ArrayList<>();
+            }
+
+            Document permisosDefault = doc.get("default", Document.class);
+
+            if (permisosDefault == null) {
+                return new ArrayList<>();
+            }
+
+            List<String> permisos = permisosDefault.getList(rol, String.class);
+
+            return permisos != null ? new ArrayList<>(permisos) : new ArrayList<>();
+
+        } catch (MongoException e) {
+            throw new DaoException("Error al consultar los permisos por rol.", e);
         }
     }
 }

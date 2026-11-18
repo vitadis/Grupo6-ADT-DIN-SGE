@@ -24,6 +24,8 @@ import model.TipoProducto;
 import org.bson.Document;
 
 /**
+ * Lógica de negocio de la gestión de stock: listados, pérdidas, entradas de stock, alta de
+ * productos y estadísticas del inventario.
  *
  * @author Hodei.Torres
  */
@@ -33,14 +35,38 @@ public class GestionStockService {
     private final RegistrarPerdidaDao perdidaDao = RegistrarPerdidaDaoImp.getInstance();
     private final AñadirProductoDao añadirDao = AnadirProductoDaoImp.getInstance();
 
+    /**
+     * Crea el servicio usando los DAO de stock, pérdidas y alta de productos.
+     */
+    public GestionStockService() {
+    }
+
+    /**
+     * Devuelve todos los productos del inventario.
+     *
+     * @return lista de productos
+     * @throws DaoException si falla el acceso a la base de datos
+     */
     public List<Producto> listarProductos() throws DaoException {
         return stockDao.listarProductos();
     }
 
+    /**
+     * Devuelve los proveedores activos.
+     *
+     * @return lista de proveedores activos
+     * @throws DaoException si falla el acceso a la base de datos
+     */
     public List<Proveedor> listarProveedoresActivos() throws DaoException {
         return stockDao.listarActivos();
     }
 
+    /**
+     * Devuelve las categorías que pertenecen a un tipo de producto.
+     *
+     * @param tipo tipo de producto
+     * @return lista de categorías (vacía si el tipo es {@code null})
+     */
     public List<CategoriaProducto> categoriasDeTipo(TipoProducto tipo) {
         List<CategoriaProducto> filtradas = new ArrayList<>();
         if (tipo != null) {
@@ -53,6 +79,15 @@ public class GestionStockService {
         return filtradas;
     }
 
+    /**
+     * Valida y registra una pérdida de stock de un producto.
+     *
+     * @param producto producto afectado
+     * @param cantidad unidades perdidas (entre 1 y el stock actual)
+     * @param nota nota explicativa (puede ser {@code null})
+     * @throws IllegalArgumentException si los datos no son válidos
+     * @throws DaoException si falla el acceso a la base de datos
+     */
     public void registrarPerdida(Producto producto, int cantidad, String nota) throws DaoException {
         if (producto == null) {
             throw new IllegalArgumentException("Selecciona un producto.");
@@ -71,6 +106,15 @@ public class GestionStockService {
         perdidaDao.registrarPerdida(mov, producto);
     }
 
+    /**
+     * Valida y añade stock a un producto existente como un lote nuevo.
+     *
+     * @param producto producto al que se añade stock
+     * @param cantidad unidades que entran (mayor que 0)
+     * @param caducidad fecha de caducidad del lote
+     * @throws IllegalArgumentException si los datos no son válidos
+     * @throws DaoException si falla el acceso a la base de datos
+     */
     public void anadirStock(Producto producto, int cantidad, LocalDate caducidad) throws DaoException {
         if (producto == null) {
             throw new IllegalArgumentException("Selecciona un producto.");
@@ -87,6 +131,19 @@ public class GestionStockService {
     /**
      * Valida y crea un producto nuevo. El IVA llega en porcentaje (0-100) y se
      * guarda de 0 a 1. Devuelve el producto insertado.
+     *
+     * @param nombre nombre del producto (no puede repetirse)
+     * @param tipo tipo del producto
+     * @param categoria categoría del producto
+     * @param proveedor proveedor del producto
+     * @param precio precio de venta sin IVA
+     * @param ivaPorcentaje IVA en porcentaje (0-100)
+     * @param stockMinimo stock mínimo
+     * @param cantidadInicial stock inicial (0 si no hay)
+     * @param caducidad fecha de caducidad del stock inicial (obligatoria si hay stock inicial)
+     * @return el producto insertado
+     * @throws IllegalArgumentException si los datos no son válidos o el nombre ya existe
+     * @throws DaoException si falla el acceso a la base de datos
      */
     public Producto crearProducto(String nombre, TipoProducto tipo, CategoriaProducto categoria,
             Proveedor proveedor, double precio, double ivaPorcentaje, int stockMinimo,
@@ -139,6 +196,12 @@ public class GestionStockService {
         return p;
     }
 
+    /**
+     * Calcula el valor total del stock (unidades por precio de venta).
+     *
+     * @param productos productos que se suman
+     * @return valor total en euros
+     */
     public double valorTotal(List<Producto> productos) {
         double total = 0;
         for (Producto p : productos) {
@@ -147,6 +210,12 @@ public class GestionStockService {
         return total;
     }
 
+    /**
+     * Cuenta los productos sin stock.
+     *
+     * @param productos productos que se revisan
+     * @return número de productos agotados
+     */
     public int contarAgotados(List<Producto> productos) {
         int n = 0;
         for (Producto p : productos) {
@@ -157,6 +226,12 @@ public class GestionStockService {
         return n;
     }
 
+    /**
+     * Cuenta los productos con stock bajo (sin estar agotados).
+     *
+     * @param productos productos que se revisan
+     * @return número de productos con stock bajo
+     */
     public int contarStockBajo(List<Producto> productos) {
         int n = 0;
         for (Producto p : productos) {
@@ -167,6 +242,14 @@ public class GestionStockService {
         return n;
     }
 
+    /**
+     * Cuenta los productos que tienen algún lote que caduca entre hoy y dentro de
+     * {@code dias} días.
+     *
+     * @param productos productos que se revisan
+     * @param dias número de días hacia delante
+     * @return número de productos que caducan pronto
+     */
     public int contarCaducan(List<Producto> productos, int dias) {
         int n = 0;
         for (Producto p : productos) {

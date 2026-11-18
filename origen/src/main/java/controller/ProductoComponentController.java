@@ -18,6 +18,12 @@ import util.AppLogger;
  */
 public class ProductoComponentController {
 
+    /**
+     * Constructor vacío usado por el FXMLLoader.
+     */
+    public ProductoComponentController() {
+    }
+
     // ---- Componentes FXML ----
     @FXML
     private ImageView imgProducto;
@@ -107,13 +113,13 @@ public class ProductoComponentController {
         if (producto.getStock_actual() <= 0) {
 
             lblStock.setText("Agotado");
-            lblStock.getStyleClass().setAll("estado-agotado");
+            lblStock.getStyleClass().setAll("estado-error");   // Agotado
             btnAnadir.setDisable(true);
 
         } else if (producto.tieneStockBajo()) {
 
             lblStock.setText("Stock bajo");
-            lblStock.getStyleClass().setAll("estado-bajo");
+            lblStock.getStyleClass().setAll("estado-aviso");   // Stock bajo
             btnAnadir.setDisable(false);
 
         } else {

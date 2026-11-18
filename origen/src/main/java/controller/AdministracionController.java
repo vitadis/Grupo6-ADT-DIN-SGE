@@ -51,6 +51,12 @@ import util.AppLogger;
  */
 public class AdministracionController implements UsuarioImplementacion {
 
+    /**
+     * Constructor vacío usado por el FXMLLoader.
+     */
+    public AdministracionController() {
+    }
+
     private static final int CLICKS_PARA_ABRIR = 2;
 
     // ---- Cabecera ----

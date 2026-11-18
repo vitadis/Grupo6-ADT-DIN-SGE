@@ -20,6 +20,9 @@ import java.util.logging.Logger;
 import model.RegistroLog;
 
 /**
+ * Logger de la aplicación (singleton). Guarda cada registro como un {@link RegistroLog}
+ * serializado en {@code logs/app.log}, junto con el usuario que tiene la sesión iniciada.
+ *
  * @author Joel
  */
 public class AppLogger extends Logger {
@@ -40,6 +43,11 @@ public class AppLogger extends Logger {
         setUseParentHandlers(false);
     }
 
+    /**
+     * Devuelve la única instancia del logger.
+     *
+     * @return instancia del logger
+     */
     public static AppLogger getInstance() {
         return INSTANCIA;
     }
@@ -76,7 +84,11 @@ public class AppLogger extends Logger {
         }
     }
 
-    // LECTURA
+    /**
+     * Lee todos los registros guardados en el fichero de log.
+     *
+     * @return lista de registros (vacía si el fichero no existe o está vacío)
+     */
     public List<RegistroLog> leer() {
         List<RegistroLog> registros = new ArrayList<>();
 
@@ -110,6 +122,11 @@ public class AppLogger extends Logger {
         }
     }
 
+    /**
+     * Asigna el usuario que aparecerá en los siguientes registros.
+     *
+     * @param user nombre del usuario con la sesión iniciada
+     */
     public void setUser(String user) {
         this.user = user;
     }

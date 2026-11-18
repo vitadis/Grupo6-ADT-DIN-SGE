@@ -7,18 +7,27 @@ import java.util.List;
 
 import org.bson.Document;
 
+/**
+ * Producto del inventario, ya sea de venta o ingrediente. Guarda su precio, IVA, stock, lotes
+ * con fecha de caducidad, receta (si se elabora con otros productos) y proveedores.
+ */
 public class Producto {
 
     // =========================================================================
     // ============================= CLAVES BSON ===============================
     // =========================================================================
     // Claves de los documentos de lotes
+    /** Clave de la cantidad en un documento de lote. */
     public static final String LOTE_CANTIDAD = "cantidad";
+    /** Clave de la fecha de caducidad en un documento de lote. */
     public static final String LOTE_FECHA_CADUCIDAD = "fecha_caducidad";
 
     // Claves de los documentos de receta
+    /** Clave del id del ingrediente en un documento de receta. */
     public static final String RECETA_PRODUCTO_ID = "producto_id";
+    /** Clave de la cantidad del ingrediente en un documento de receta. */
     public static final String RECETA_CANTIDAD = "cantidad";
+    /** Clave de la unidad de medida del ingrediente en un documento de receta. */
     public static final String RECETA_UNIDAD = "unidad";
 
     // =======================================================================
@@ -48,12 +57,33 @@ public class Producto {
     // =========================================================================
     // =============================== CONSTRUCTORES ===========================
     // =========================================================================
+    /**
+     * Constructor vacío, necesario para el codec POJO de MongoDB. Inicializa las listas de
+     * lotes, receta y proveedores vacías.
+     */
     public Producto() {
         this.lotes = new ArrayList<>();
         this.receta = new ArrayList<>();
         this.proveedores_id = new ArrayList<>();
     }
 
+    /**
+     * Crea un producto con todos sus datos y lo valida.
+     *
+     * @param id identificador del producto
+     * @param nombre nombre del producto
+     * @param tipo tipo del producto
+     * @param categoria categoría (debe corresponder al tipo)
+     * @param precio_venta precio de venta sin IVA
+     * @param iva IVA entre 0 y 1
+     * @param stock_actual unidades en stock
+     * @param stock_minimo stock mínimo
+     * @param lotes lotes con cantidad y fecha de caducidad
+     * @param receta ingredientes de la receta
+     * @param proveedores_id identificadores de los proveedores
+     * @param activo si el producto está activo
+     * @throws IllegalArgumentException si algún dato no es válido
+     */
     public Producto(
             int id,
             String nombre,
@@ -89,6 +119,13 @@ public class Producto {
     // =========================================================================
     // =============================== REGLAS DE NEGOCIO =======================
     // =========================================================================
+    /**
+     * Comprueba todas las reglas de negocio del producto: datos obligatorios, que la categoría
+     * corresponde al tipo, precios, IVA y stock no negativos, y que los lotes, la receta y los
+     * proveedores son válidos.
+     *
+     * @throws IllegalArgumentException si algún dato no es válido
+     */
     public void validar() {
 
         if (id <= 0) {
@@ -144,6 +181,13 @@ public class Producto {
     // =========================================================================
     // =============================== GESTIÓN DE LOTES ========================
     // =========================================================================
+    /**
+     * Añade un lote al producto.
+     *
+     * @param cantidad unidades del lote (positiva)
+     * @param fecha_caducidad fecha de caducidad con formato yyyy-MM-dd
+     * @throws IllegalArgumentException si la cantidad o la fecha no son válidas
+     */
     public void agregarLote(int cantidad, String fecha_caducidad) {
 
         if (cantidad <= 0) {
@@ -206,6 +250,14 @@ public class Producto {
     // =========================================================================
     // =============================== GESTIÓN DE RECETAS ======================
     // =========================================================================
+    /**
+     * Añade un ingrediente a la receta del producto.
+     *
+     * @param producto_id identificador del producto ingrediente
+     * @param cantidad cantidad necesaria (positiva)
+     * @param unidad unidad de medida de la cantidad
+     * @throws IllegalArgumentException si algún dato no es válido
+     */
     public void agregarIngredienteReceta(
             int producto_id,
             double cantidad,
@@ -319,10 +371,20 @@ public class Producto {
     // =========================================================================
     // =============================== GETTERS Y SETTERS =======================
     // =========================================================================
+    /**
+     * Devuelve el identificador del producto.
+     *
+     * @return el identificador del producto
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Asigna el identificador del producto.
+     *
+     * @param id el identificador del producto
+     */
     public void setId(int id) {
         if (id <= 0) {
             throw new IllegalArgumentException(
@@ -331,10 +393,20 @@ public class Producto {
         this.id = id;
     }
 
+    /**
+     * Devuelve el nombre del producto.
+     *
+     * @return el nombre del producto
+     */
     public String getNombre() {
         return nombre;
     }
 
+    /**
+     * Asigna el nombre del producto.
+     *
+     * @param nombre el nombre del producto
+     */
     public void setNombre(String nombre) {
         if (nombre == null || nombre.isBlank()) {
             throw new IllegalArgumentException(
@@ -343,10 +415,20 @@ public class Producto {
         this.nombre = nombre;
     }
 
+    /**
+     * Devuelve el tipo del producto.
+     *
+     * @return el tipo del producto
+     */
     public TipoProducto getTipo() {
         return tipo;
     }
 
+    /**
+     * Asigna el tipo del producto.
+     *
+     * @param tipo el tipo del producto
+     */
     public void setTipo(TipoProducto tipo) {
         if (tipo == null) {
             throw new IllegalArgumentException(
@@ -361,10 +443,20 @@ public class Producto {
         this.tipo = tipo;
     }
 
+    /**
+     * Devuelve la categoría del producto.
+     *
+     * @return la categoría del producto
+     */
     public CategoriaProducto getCategoria() {
         return categoria;
     }
 
+    /**
+     * Asigna la categoría del producto.
+     *
+     * @param categoria la categoría del producto
+     */
     public void setCategoria(CategoriaProducto categoria) {
         if (categoria == null) {
             throw new IllegalArgumentException(
@@ -379,10 +471,20 @@ public class Producto {
         this.categoria = categoria;
     }
 
+    /**
+     * Devuelve el precio de venta sin IVA.
+     *
+     * @return el precio de venta sin IVA
+     */
     public double getPrecio_venta() {
         return precio_venta;
     }
 
+    /**
+     * Asigna el precio de venta sin IVA.
+     *
+     * @param precio_venta el precio de venta sin IVA
+     */
     public void setPrecio_venta(double precio_venta) {
         if (!Double.isFinite(precio_venta) || precio_venta < 0) {
             throw new IllegalArgumentException(
@@ -391,10 +493,20 @@ public class Producto {
         this.precio_venta = precio_venta;
     }
 
+    /**
+     * Devuelve el IVA del producto (entre 0 y 1).
+     *
+     * @return el IVA del producto (entre 0 y 1)
+     */
     public double getIva() {
         return iva;
     }
 
+    /**
+     * Asigna el IVA del producto (entre 0 y 1).
+     *
+     * @param iva el IVA del producto (entre 0 y 1)
+     */
     public void setIva(double iva) {
         if (!Double.isFinite(iva) || iva < 0 || iva > 1) {
             throw new IllegalArgumentException(
@@ -403,10 +515,20 @@ public class Producto {
         this.iva = iva;
     }
 
+    /**
+     * Devuelve las unidades en stock.
+     *
+     * @return las unidades en stock
+     */
     public int getStock_actual() {
         return stock_actual;
     }
 
+    /**
+     * Asigna las unidades en stock.
+     *
+     * @param stock_actual las unidades en stock
+     */
     public void setStock_actual(int stock_actual) {
         if (stock_actual < 0) {
             throw new IllegalArgumentException(
@@ -415,10 +537,20 @@ public class Producto {
         this.stock_actual = stock_actual;
     }
 
+    /**
+     * Devuelve el stock mínimo antes de avisar de reposición.
+     *
+     * @return el stock mínimo antes de avisar de reposición
+     */
     public int getStock_minimo() {
         return stock_minimo;
     }
 
+    /**
+     * Asigna el stock mínimo antes de avisar de reposición.
+     *
+     * @param stock_minimo el stock mínimo antes de avisar de reposición
+     */
     public void setStock_minimo(int stock_minimo) {
         if (stock_minimo < 0) {
             throw new IllegalArgumentException(
@@ -427,28 +559,58 @@ public class Producto {
         this.stock_minimo = stock_minimo;
     }
 
+    /**
+     * Devuelve la lista de lotes (cantidad y fecha de caducidad).
+     *
+     * @return la lista de lotes (cantidad y fecha de caducidad)
+     */
     public List<Document> getLotes() {
         return new ArrayList<>(lotes);
     }
 
+    /**
+     * Asigna la lista de lotes (cantidad y fecha de caducidad).
+     *
+     * @param lotes la lista de lotes (cantidad y fecha de caducidad)
+     */
     public void setLotes(List<Document> lotes) {
         this.lotes = copiarDocumentos(lotes);
         validarLotes();
     }
 
+    /**
+     * Devuelve la lista de ingredientes de la receta.
+     *
+     * @return la lista de ingredientes de la receta
+     */
     public List<Document> getReceta() {
         return new ArrayList<>(receta);
     }
 
+    /**
+     * Asigna la lista de ingredientes de la receta.
+     *
+     * @param receta la lista de ingredientes de la receta
+     */
     public void setReceta(List<Document> receta) {
         this.receta = copiarDocumentos(receta);
         validarReceta();
     }
 
+    /**
+     * Devuelve los identificadores de los proveedores del producto.
+     *
+     * @return los identificadores de los proveedores del producto
+     */
     public List<Integer> getProveedores_id() {
         return new ArrayList<>(proveedores_id);
     }
 
+    /**
+     * Asigna los identificadores de los proveedores del producto.
+     *
+     * @param proveedores_id los identificadores de los proveedores del producto
+     */
     public void setProveedores_id(List<Integer> proveedores_id) {
         this.proveedores_id = proveedores_id != null
                 ? new ArrayList<>(proveedores_id)
@@ -457,10 +619,20 @@ public class Producto {
         validarProveedores();
     }
 
+    /**
+     * Devuelve si el producto está activo.
+     *
+     * @return si el producto está activo
+     */
     public boolean isActivo() {
         return activo;
     }
 
+    /**
+     * Asigna si el producto está activo.
+     *
+     * @param activo si el producto está activo
+     */
     public void setActivo(boolean activo) {
         this.activo = activo;
     }
@@ -482,20 +654,74 @@ public class Producto {
         return copia;
     }
 
+    /**
+     * Devuelve la ruta de la imagen del producto.
+     *
+     * @return la ruta de la imagen del producto
+     */
     public String getImagen() {
         return imagen;
     }
 
+    /**
+     * Calcula el precio de venta con el IVA aplicado.
+     *
+     * @return precio de venta con IVA
+     */
     public double productoIvaAplicado() {
         return precio_venta + (iva * precio_venta);
     }
 
+    /**
+     * Asigna la ruta de la imagen del producto.
+     *
+     * @param imagen la ruta de la imagen del producto
+     */
     public void setImagen(String imagen) {
         this.imagen = imagen;
     }
 
+    /**
+     * Indica si al producto le queda poco stock: no está agotado pero no supera el mínimo.
+     *
+     * @return {@code true} si el stock es mayor que 0 y menor o igual que el mínimo
+     */
     public boolean tieneStockBajo() {
         return stock_actual > 0 && stock_actual <= stock_minimo;
+    }
+
+    /**
+     * Indica si el producto debe ir a la lista de compra: está agotado o tiene stock bajo
+     * (mismo criterio que las alertas, {@code stock_actual <= stock_minimo}).
+     *
+     * @return {@code true} si hay que reponerlo
+     */
+    public boolean necesitaReposicion() {
+        return stock_actual <= stock_minimo;
+    }
+
+    /**
+     * Cantidad que hay que pedir para dejar el stock en el doble del mínimo. Así, después de
+     * reponer, el stock queda por encima del mínimo y la alerta de stock bajo desaparece.
+     *
+     * @return unidades a pedir (al menos 1), o 0 si no hace falta reponer
+     */
+    public int cantidadAReponer() {
+        if (!necesitaReposicion()) {
+            return 0;
+        }
+        return Math.max(1, stock_minimo * 2 - stock_actual);
+    }
+
+    /**
+     * Indica si el producto se elabora en casa (bocadillos, cafés, tortilla...): es así cuando
+     * tiene receta. Estos productos no se compran a un proveedor, se reponen sin coste desde
+     * «Añadir stock».
+     *
+     * @return {@code true} si el producto tiene receta
+     */
+    public boolean esElaboracionPropia() {
+        return !receta.isEmpty();
     }
 
     @Override

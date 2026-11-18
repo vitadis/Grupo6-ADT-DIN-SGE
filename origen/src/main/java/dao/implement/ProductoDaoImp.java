@@ -9,8 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import model.Producto;
 import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+import com.mongodb.client.result.UpdateResult;
+import org.bson.BsonDocument;
+import org.bson.BsonDocumentWrapper;
+import org.bson.Document;
 
 /**
+ * Implementación con MongoDB de {@link dao.ProductoDao}. Es un singleton.
  *
  * @author Joel
  */
@@ -24,6 +30,11 @@ public class ProductoDaoImp extends AccesoMongoDB implements dao.ProductoDao {
     private ProductoDaoImp() {
     }
 
+    /**
+     * Devuelve la única instancia del DAO (patrón Singleton).
+     *
+     * @return instancia del DAO
+     */
     public static synchronized ProductoDaoImp getInstance() {
         if (instance == null) {
             instance = new ProductoDaoImp();
@@ -45,25 +56,61 @@ public class ProductoDaoImp extends AccesoMongoDB implements dao.ProductoDao {
         }
     }
 
+    /**
+     * {@inheritDoc} Actualiza con {@code $set} todos los campos del producto salvo
+     * {@code _id} y {@code lotes}. Los lotes no se tocan aquí porque el producto que llega
+     * puede ser una copia antigua (p. ej. la que tiene cargada la caja) y reescribirlos
+     * borraría los lotes añadidos después; los lotes se añaden con {@link #anadirLote}.
+     */
     @Override
     public void modificarProducto(Producto producto) {
 
         try {
             MongoClient client = getClient();
 
-            MongoCollection<Producto> coleccion = getCollection(client, COLECCION, Producto.class);
+            MongoCollection<Document> coleccion = getCollection(client, COLECCION, Document.class);
 
-            Producto usuarioExistente = coleccion.find(Filters.eq("_id", producto.getId())).first();
+            BsonDocument campos = BsonDocumentWrapper.asBsonDocument(producto, POJO_CODEC_REGISTRY).clone();
+            campos.remove("_id");
+            campos.remove("lotes");
 
-            if (usuarioExistente == null) {
-                throw new IllegalArgumentException("No existe ningún usuario con el id " + producto.getId() + ".");
+            UpdateResult resultado = coleccion.updateOne(
+                    Filters.eq("_id", producto.getId()), new BsonDocument("$set", campos));
+
+            if (resultado.getMatchedCount() == 0) {
+                throw new IllegalArgumentException("No existe ningún producto con el id " + producto.getId() + ".");
             }
-
-            coleccion.replaceOne(Filters.eq("_id", producto.getId()), producto);
 
         } catch (MongoException e) {
             throw new DaoException(
                     "Error al modificar producto.", e);
+        }
+    }
+
+    /**
+     * {@inheritDoc} Usa {@code $inc} y {@code $push} en una sola operación, así no se
+     * reescribe el documento entero y los lotes existentes se conservan.
+     */
+    @Override
+    public void anadirLote(int productoId, int cantidad, String fechaCaducidad) {
+        try {
+            MongoClient client = getClient();
+            MongoCollection<Document> coleccion = getCollection(client, COLECCION, Document.class);
+
+            Document lote = new Document(Producto.LOTE_CANTIDAD, cantidad)
+                    .append(Producto.LOTE_FECHA_CADUCIDAD, fechaCaducidad);
+
+            UpdateResult resultado = coleccion.updateOne(
+                    Filters.eq("_id", productoId),
+                    Updates.combine(
+                            Updates.inc("stock_actual", cantidad),
+                            Updates.push("lotes", lote)));
+
+            if (resultado.getMatchedCount() == 0) {
+                throw new IllegalArgumentException("No existe ningún producto con el id " + productoId + ".");
+            }
+        } catch (MongoException e) {
+            throw new DaoException("Error al añadir el lote al producto.", e);
         }
     }
 

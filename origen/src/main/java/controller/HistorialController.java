@@ -33,6 +33,12 @@ import util.AppLogger;
  */
 public class HistorialController implements Initializable {
 
+    /**
+     * Constructor vacío usado por el FXMLLoader.
+     */
+    public HistorialController() {
+    }
+
     // ---- Servicios y estado ----
     private CajaService cajaService;
     private final AppLogger logger = AppLogger.getInstance();

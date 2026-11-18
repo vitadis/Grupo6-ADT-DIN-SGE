@@ -5,12 +5,16 @@
 package model;
 
 /**
+ * Métodos de pago aceptados al cobrar un pedido.
  *
  * @author Joel
  */
 public enum MetodoPago {
+    /** Pago en efectivo. */
     EFECTIVO("Efectivo"),
+    /** Pago con tarjeta. */
     TARJETA("Tarjeta"),
+    /** Pago por Bizum. */
     BIZUM("Bizum");
 
     private final String etiqueta;
@@ -19,6 +23,11 @@ public enum MetodoPago {
         this.etiqueta = etiqueta;
     }
 
+    /**
+     * Devuelve el texto que se muestra en pantalla para el método de pago.
+     *
+     * @return etiqueta legible del método de pago
+     */
     public String getEtiqueta() {
         return etiqueta;
     }
