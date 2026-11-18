@@ -1,4 +1,4 @@
-package view.gestionStock;
+package view;
 
 import java.util.List;
 import javafx.fxml.FXMLLoader;
