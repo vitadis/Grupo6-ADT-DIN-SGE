@@ -35,7 +35,6 @@ import javafx.scene.layout.VBox;
 import model.Compra;
 import model.LineaCompra;
 import model.Producto;
-import model.ProductoSugerido;
 import model.Proveedor;
 import dao.implement.ComprasDaoImpl;
 import dao.implement.MovimientoDaoImpl;
@@ -381,10 +380,10 @@ public class ComprasController implements Initializable, UsuarioImplementacion, 
     }
 
     /**
-     * Genera la lista de compra sugerida con {@link ComprasService#calcularListaSugerida()}:
-     * los productos que se compran con stock bajo o agotados, y los ingredientes de los productos
-     * con receta que hay que reponer (p. ej. barras de pan para los bocadillos). Para cada uno
-     * pone su proveedor habitual (el primero de su lista) y el precio de su última compra.
+     * Genera la lista de compra sugerida con {@link ComprasService#listarProductosAReponer()}:
+     * los productos que se compran (sin receta) agotados o con stock bajo. Para cada uno calcula
+     * la cantidad a pedir ({@link Producto#cantidadAReponer()}), su proveedor habitual (el
+     * primero de su lista) y el precio de su última compra.
      */
     private void generarListaSugerida() {
         Map<Integer, Double> ultimosPrecios = obtenerUltimosPrecios();
@@ -394,9 +393,8 @@ public class ComprasController implements Initializable, UsuarioImplementacion, 
         proveedoresSugeridos.clear();
         checksSugeridos.clear();
 
-        for (ProductoSugerido s : comprasService.calcularListaSugerida()) {
-            Producto p = s.getProducto();
-            int cantidad = s.getCantidad();
+        for (Producto p : comprasService.listarProductosAReponer()) {
+            int cantidad = p.cantidadAReponer();
 
             double precio = 0;
             if (ultimosPrecios.containsKey(p.getId())) {
@@ -411,7 +409,7 @@ public class ComprasController implements Initializable, UsuarioImplementacion, 
             lineasSugeridas.add(new LineaCompra(p.getId(), p.getNombre(), cantidad, precio,
                     p.getIva(), Math.round(cantidad * precio * 100) / 100.0));
             proveedoresSugeridos.add(idProveedor);
-            contenedorSugerencias.getChildren().add(crearTarjetaSugerencia(s));
+            contenedorSugerencias.getChildren().add(crearTarjetaSugerencia(p));
         }
 
         if (lineasSugeridas.isEmpty()) {
@@ -628,16 +626,14 @@ public class ComprasController implements Initializable, UsuarioImplementacion, 
 
     /**
      * Crea la tarjeta de un producto de la lista sugerida, con su CheckBox, nombre, proveedor
-     * habitual, cantidad a pedir, para qué recetas se pide (si es un ingrediente) y estado
-     * («Agotado», «Stock bajo» o «Para recetas»).
+     * habitual, cantidad a pedir y estado («Agotado» o «Stock bajo»).
      * El CheckBox se guarda en {@link #checksSugeridos}.
      *
-     * @param s producto sugerido con su cantidad
+     * @param p producto que hay que reponer
      * @return la tarjeta lista para añadir a {@link #contenedorSugerencias}
      */
-    private HBox crearTarjetaSugerencia(ProductoSugerido s) {
-        Producto p = s.getProducto();
-        int cantidad = s.getCantidad();
+    private HBox crearTarjetaSugerencia(Producto p) {
+        int cantidad = p.cantidadAReponer();
         String nombreProveedor = "Sin proveedor";
         if (!p.getProveedores_id().isEmpty()) {
             Proveedor habitual = proveedores.get(p.getProveedores_id().get(0));
@@ -652,11 +648,6 @@ public class ComprasController implements Initializable, UsuarioImplementacion, 
         lblProveedor.getStyleClass().add("texto-secundario");
 
         VBox izquierda = new VBox(2, lblNombre, lblProveedor);
-        if (!s.getParaRecetas().isEmpty()) {
-            Label lblRecetas = new Label("Para: " + String.join(", ", s.getParaRecetas()));
-            lblRecetas.getStyleClass().add("texto-secundario");
-            izquierda.getChildren().add(lblRecetas);
-        }
 
         Label lblCantidad = new Label(cantidad + " uds");
         lblCantidad.getStyleClass().add("compra-dato-destacado");
@@ -665,11 +656,8 @@ public class ComprasController implements Initializable, UsuarioImplementacion, 
         if (p.getStock_actual() == 0) {
             lblEstado.setText("Agotado");
             lblEstado.getStyleClass().add("estado-error");
-        } else if (p.necesitaReposicion()) {
-            lblEstado.setText("Stock bajo");
-            lblEstado.getStyleClass().add("estado-aviso");
         } else {
-            lblEstado.setText("Para recetas");
+            lblEstado.setText("Stock bajo");
             lblEstado.getStyleClass().add("estado-aviso");
         }
 

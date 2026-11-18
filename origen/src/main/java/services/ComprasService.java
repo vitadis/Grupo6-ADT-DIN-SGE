@@ -10,16 +10,12 @@ import dao.implement.ProductoDaoImp;
 import dao.implement.ProveedorDaoImpl;
 import exceptions.DaoException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import model.Compra;
 import model.LineaCompra;
 import model.Movimiento;
 import model.Producto;
-import model.ProductoSugerido;
 import model.Proveedor;
-import org.bson.Document;
 
 /**
  * Lógica de negocio de compras y proveedores.
@@ -124,9 +120,14 @@ public class ComprasService {
         // sin su entrada de stock.
         List<Producto> productos = productoDao.listarProductos();
         for (LineaCompra l : compra.getDetalle()) {
-            if (buscarProducto(productos, l.getProducto_id()) == null) {
+            Producto producto = buscarProducto(productos, l.getProducto_id());
+            if (producto == null) {
                 throw new IllegalArgumentException(
                         "No existe el producto " + l.getNombre() + ".");
+            }
+            if (producto.esElaboracionPropia()) {
+                throw new IllegalArgumentException(
+                        l.getNombre() + " se elabora en casa: repónlo desde «Añadir stock».");
             }
             if (l.getFecha_caducidad() == null || l.getFecha_caducidad().isBlank()) {
                 throw new IllegalArgumentException(
@@ -149,68 +150,22 @@ public class ComprasService {
     }
 
     /**
-     * Calcula la lista de compra sugerida.
-     *
-     * <ul>
-     * <li>Los productos con receta (bocadillos, cafés, tortilla...) no se compran: se elaboran.
-     * Si necesitan reposición, se calcula cuántos hay que elaborar ({@link Producto#cantidadAReponer()})
-     * y se piden sus ingredientes (por ejemplo, 1 barra de pan por bocadillo).</li>
-     * <li>Los productos sin receta se piden hasta el doble de su mínimo, sumando lo que hace falta
-     * para las recetas. Si un ingrediente tiene stock suficiente para las recetas y le sigue
-     * quedando por encima del doble del mínimo, no se pide.</li>
-     * </ul>
-     * Las cantidades se redondean hacia arriba porque el stock es entero.
+     * Devuelve los productos de la lista de compra sugerida: los que se compran (activos y sin
+     * receta) que están agotados o con stock bajo. Los productos con receta (bocadillos,
+     * cafés...) no salen porque no se compran: se reponen sin coste desde «Añadir stock».
+     * La cantidad a pedir de cada uno es {@link Producto#cantidadAReponer()}.
      *
      * @return productos que hay que comprar, ordenados por identificador
      * @throws DaoException si falla la base de datos
      */
-    public List<ProductoSugerido> calcularListaSugerida() {
-        List<Producto> productos = productoDao.listarProductos();
-
-        // Cantidad de cada ingrediente que hace falta para elaborar los productos con receta
-        Map<Integer, Double> demanda = new HashMap<>();
-        Map<Integer, List<String>> paraRecetas = new HashMap<>();
-
-        for (Producto p : productos) {
-            if (!p.isActivo() || p.getReceta().isEmpty() || !p.necesitaReposicion()) {
-                continue;
-            }
-            int aElaborar = p.cantidadAReponer();
-            for (Document ingrediente : p.getReceta()) {
-                int idIngrediente = ((Number) ingrediente.get(Producto.RECETA_PRODUCTO_ID)).intValue();
-                double porUnidad = ((Number) ingrediente.get(Producto.RECETA_CANTIDAD)).doubleValue();
-
-                Double actual = demanda.get(idIngrediente);
-                demanda.put(idIngrediente, (actual == null ? 0 : actual) + aElaborar * porUnidad);
-
-                if (!paraRecetas.containsKey(idIngrediente)) {
-                    paraRecetas.put(idIngrediente, new ArrayList<String>());
-                }
-                paraRecetas.get(idIngrediente).add(p.getNombre());
+    public List<Producto> listarProductosAReponer() {
+        List<Producto> aReponer = new ArrayList<>();
+        for (Producto p : listarProductosComprables()) {
+            if (p.necesitaReposicion()) {
+                aReponer.add(p);
             }
         }
-
-        List<ProductoSugerido> sugeridos = new ArrayList<>();
-        for (Producto p : productos) {
-            if (!p.isActivo() || !p.getReceta().isEmpty()) {
-                continue;
-            }
-
-            int cantidad;
-            Double paraElaborar = demanda.get(p.getId());
-            if (paraElaborar == null) {
-                cantidad = p.cantidadAReponer();
-            } else {
-                double objetivo = p.getStock_minimo() * 2 + paraElaborar;
-                // el -1e-9 evita que errores de decimales (0.48000000001) sumen una unidad de más
-                cantidad = (int) Math.max(0, Math.ceil(objetivo - p.getStock_actual() - 1e-9));
-            }
-
-            if (cantidad > 0) {
-                sugeridos.add(new ProductoSugerido(p, cantidad, paraRecetas.get(p.getId())));
-            }
-        }
-        return sugeridos;
+        return aReponer;
     }
 
     /**
@@ -289,29 +244,22 @@ public class ComprasService {
     }
 
     /**
-     * Devuelve todos los productos, para la lista sugerida.
+     * Devuelve los productos que se pueden comprar, para el desplegable de la ventana de
+     * compra y la lista sugerida: los activos sin receta. Los que tienen receta (bocadillos,
+     * cafés...) se elaboran en casa, así que no se compran: se reponen sin coste desde
+     * «Añadir stock».
      *
-     * @return la lista de productos
+     * @return la lista de productos que se compran
      * @throws DaoException si falla la base de datos
      */
-    public List<Producto> listarProductos() {
-        return productoDao.listarProductos();
-    }
-
-    /**
-     * Devuelve solo los productos activos, para el desplegable de la ventana de compra.
-     *
-     * @return la lista de productos activos
-     * @throws DaoException si falla la base de datos
-     */
-    public List<Producto> listarProductosActivos() {
-        List<Producto> activos = new ArrayList<>();
+    public List<Producto> listarProductosComprables() {
+        List<Producto> comprables = new ArrayList<>();
         for (Producto p : productoDao.listarProductos()) {
-            if (p.isActivo()) {
-                activos.add(p);
+            if (p.isActivo() && !p.esElaboracionPropia()) {
+                comprables.add(p);
             }
         }
-        return activos;
+        return comprables;
     }
 
 }

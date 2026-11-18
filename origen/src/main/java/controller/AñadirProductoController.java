@@ -75,7 +75,11 @@ public class AñadirProductoController implements Initializable {
         comboExistente.setConverter(new StringConverter<Producto>() {
             @Override
             public String toString(Producto p) {
-                return p == null ? "" : p.getNombre();
+                if (p == null) {
+                    return "";
+                }
+                // Los productos con receta no se compran: se reponen desde aquí, sin coste
+                return p.esElaboracionPropia() ? p.getNombre() + " (elaboración propia)" : p.getNombre();
             }
 
             @Override

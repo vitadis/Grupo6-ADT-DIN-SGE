@@ -150,7 +150,7 @@ public class RegistrarCompraController implements Initializable {
     private void cargarCombos() {
         try {
             cbProveedor.getItems().addAll(comprasService.listarProveedoresActivos());
-            cbProducto.getItems().addAll(comprasService.listarProductosActivos());
+            cbProducto.getItems().addAll(comprasService.listarProductosComprables());
         } catch (DaoException e) {
             lblError.setText(e.getMessage());
             logger.log(Level.SEVERE, e.getMessage(), e);

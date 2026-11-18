@@ -713,6 +713,17 @@ public class Producto {
         return Math.max(1, stock_minimo * 2 - stock_actual);
     }
 
+    /**
+     * Indica si el producto se elabora en casa (bocadillos, cafés, tortilla...): es así cuando
+     * tiene receta. Estos productos no se compran a un proveedor, se reponen sin coste desde
+     * «Añadir stock».
+     *
+     * @return {@code true} si el producto tiene receta
+     */
+    public boolean esElaboracionPropia() {
+        return !receta.isEmpty();
+    }
+
     @Override
     public String toString() {
         return "Producto{" + "id=" + id + ", nombre=" + nombre + ", tipo=" + tipo + ", categoria=" + categoria + ", precio_venta=" + precio_venta + ", iva=" + iva + ", stock_actual=" + stock_actual + ", stock_minimo=" + stock_minimo + ", lotes=" + lotes + ", receta=" + receta + ", proveedores_id=" + proveedores_id + ", activo=" + activo + ", imagen=" + imagen + '}';
