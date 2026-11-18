@@ -36,7 +36,6 @@ import model.EstadoPedido;
 import model.Producto;
 import model.Proveedor;
 import model.Usuario;
-import model.Usuario;
 import model.VentaPedido;
 import services.CajaService;
 import services.PedidoService;
@@ -47,10 +46,12 @@ import util.AppLogger;
  *
  * @author Hodei.Torres
  */
-public class InicioController implements Initializable, UsuarioImplementacion, ActualizarDatos {
+public class InicioController implements Initializable, ActualizarDatos, UsuarioImplementacion {
 
     private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yy");
     private static final int MAX_COMPRAS = 8;
+    // private
+    private Usuario usuario;
 
     @FXML
     private GridPane gridInfoStock;
@@ -87,8 +88,6 @@ public class InicioController implements Initializable, UsuarioImplementacion, A
 
     private double gastosMes = 0;
 
-    private Usuario usuario;
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         configurarBotones();
@@ -98,11 +97,6 @@ public class InicioController implements Initializable, UsuarioImplementacion, A
     @Override
     public void actualizarDatos() {
         cargarDatos();
-    }
-
-    @Override
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
     }
 
     /*Abre la ventana correspondiente a cada boton*/
@@ -303,5 +297,9 @@ public class InicioController implements Initializable, UsuarioImplementacion, A
         return lbl;
     }
 
-    
+    @Override
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+        logger.setUser(usuario.getUsername());
+    }
 }
