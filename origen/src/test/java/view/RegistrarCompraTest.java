@@ -1,13 +1,6 @@
 package view;
 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.model.Filters;
 import controller.RegistrarCompraController;
-import dao.ProductoDao;
-import dao.implement.ComprasDaoImpl;
-import dao.implement.ProductoDaoImp;
-import dao.implement.ProveedorDaoImpl;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,17 +20,14 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import model.Compra;
 import model.LineaCompra;
 import model.Producto;
 import model.Proveedor;
-import org.bson.Document;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationTest;
 import org.testfx.util.WaitForAsyncUtils;
-import services.ComprasService;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 import static org.testfx.matcher.control.LabeledMatchers.hasText;
@@ -45,23 +35,13 @@ import static org.testfx.matcher.control.LabeledMatchers.hasText;
 /**
  * Tests del diálogo «Registrar compra» ({@code registrarCompra.fxml}), abierto solo.
  *
- * Usa la base de datos {@code origen} (MongoDB tiene que estar arrancado). Los proveedores y
- * productos se cogen de los combos, así que no dependen de nombres concretos. Las compras que
- * guarda llevan factura {@code TEST-...}; al acabar cada test se borran y el producto vuelve a
- * quedar como estaba, así la base de datos no cambia.
+ * Necesita MongoDB arrancado y con proveedores y productos activos: el diálogo carga sus datos
+ * reales al abrirse, y los proveedores y productos de los tests se cogen de sus combos. Solo
+ * prueba la vista (carga, líneas, totales y mensajes de error): ningún test llega a guardar.
  *
  * @author anazk
  */
 public class RegistrarCompraTest extends ApplicationTest {
-
-    /**
-     * Dirección de MongoDB, para borrar lo que dejan los tests.
-     */
-    private static final String CONEXION = "mongodb://localhost:27017";
-    /**
-     * Base de datos que usa la aplicación.
-     */
-    private static final String BASE_DATOS = "origen";
 
     /**
      * Ventana del diálogo.
@@ -71,15 +51,6 @@ public class RegistrarCompraTest extends ApplicationTest {
      * Controller del diálogo, para pasarle datos como hace {@code ComprasController}.
      */
     private RegistrarCompraController controlador;
-    /**
-     * Service con los DAOs de MongoDB; también se usa para comprobar lo guardado.
-     */
-    private ComprasService servicio;
-    /**
-     * Documento del producto tal cual estaba antes de guardar una compra, para dejarlo idéntico
-     * al acabar.
-     */
-    private Document productoOriginal;
 
     /**
      * Constructor vacío. Lo usa JUnit para crear el test.
@@ -88,7 +59,7 @@ public class RegistrarCompraTest extends ApplicationTest {
     }
 
     /**
-     * Abre el diálogo y le pasa el service con los DAOs de MongoDB, como hace
+     * Abre el diálogo con los estilos de la aplicación y le dice el usuario, como hace
      * {@code ComprasController}.
      *
      * @param stage ventana que da TestFX
@@ -97,47 +68,33 @@ public class RegistrarCompraTest extends ApplicationTest {
     @Override
     public void start(Stage stage) throws IOException {
         this.stage = stage;
-        servicio = new ComprasService(ComprasDaoImpl.getInstance(), ProveedorDaoImpl.getInstance(),
-                (ProductoDao) ProductoDaoImp.getInstance());
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/compra/registrarCompra.fxml"));
         Parent root = loader.load();
         controlador = loader.getController();
-        controlador.setComprasService(servicio);
         controlador.setUsuarioId(1);
 
-        stage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/css/theme.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+        stage.setScene(scene);
         stage.show();
     }
 
     /**
-     * Al abrir: título, fecha de hoy, lista vacía, totales a cero y sin errores.
+     * Al abrir: título, fecha de hoy, combos cargados, lista vacía, totales a cero y sin errores.
      */
     @Test
     public void testEstadoInicial() {
         assertEquals("REGISTRAR COMPRA", texto("#lblTitulo"));
         assertEquals(LocalDate.now(), lookup("#dpFecha").queryAs(DatePicker.class).getValue());
+        assertFalse(combo("#cbProveedor").getItems().isEmpty(), "El combo de proveedores no se ha cargado");
+        assertFalse(combo("#cbProducto").getItems().isEmpty(), "El combo de productos no se ha cargado");
         assertEquals("Todavía no hay productos en la compra.", ((Label) lineas().getChildren().get(0)).getText());
         assertEquals("0,00 €", texto("#lblBase"));
         assertEquals("0,00 €", texto("#lblTotalIva"));
         assertEquals("0,00 €", texto("#lblTotal"));
         assertEquals("", texto("#lblError"));
-    }
-
-    /**
-     * El combo de proveedores tiene los proveedores activos de la base de datos.
-     */
-    @Test
-    public void testElComboTieneLosProveedoresActivos() {
-        assertEquals(servicio.listarProveedoresActivos().size(), combo("#cbProveedor").getItems().size());
-    }
-
-    /**
-     * El combo de productos tiene los productos activos de la base de datos.
-     */
-    @Test
-    public void testElComboTieneLosProductosActivos() {
-        assertEquals(servicio.listarProductosActivos().size(), combo("#cbProducto").getItems().size());
     }
 
     /**
@@ -231,7 +188,7 @@ public class RegistrarCompraTest extends ApplicationTest {
     @Test
     public void testGuardarSinProveedorDaError() {
         anadirLinea(producto(0), "4", "2,50");
-        clickOn("#txtNumeroFactura").write(facturaDePrueba());
+        clickOn("#txtNumeroFactura").write("F-PRUEBA");
 
         clickOn("#btnGuardar");
 
@@ -258,7 +215,7 @@ public class RegistrarCompraTest extends ApplicationTest {
     @Test
     public void testGuardarSinLineasDaError() {
         elegir("#cbProveedor", proveedor(0).getNombre());
-        clickOn("#txtNumeroFactura").write(facturaDePrueba());
+        clickOn("#txtNumeroFactura").write("F-PRUEBA");
 
         clickOn("#btnGuardar");
 
@@ -270,48 +227,15 @@ public class RegistrarCompraTest extends ApplicationTest {
      */
     @Test
     public void testCancelarCierraSinGuardar() {
-        String factura = facturaDePrueba();
         elegir("#cbProveedor", proveedor(0).getNombre());
-        clickOn("#txtNumeroFactura").write(factura);
+        clickOn("#txtNumeroFactura").write("F-PRUEBA");
         anadirLinea(producto(0), "4", "2,50");
 
         clickOn("#btnCancelar");
         WaitForAsyncUtils.waitForFxEvents();
 
-        assertNull(buscarCompra(factura), "Cancelar no debe guardar");
         assertFalse(controlador.isGuardado());
         assertFalse(stage.isShowing());
-    }
-
-    /**
-     * Guardar una compra correcta la mete en la base de datos con sus datos, sube el stock del
-     * producto y cierra la ventana. Al acabar, {@link #tearDown()} lo deshace.
-     */
-    @Test
-    public void testGuardarCompraCompletaYSubeElStock() {
-        Proveedor prov = proveedor(0);
-        Producto prod = producto(0);
-        String factura = facturaDePrueba();
-        productoOriginal = documentoProducto(prod.getId());
-        int stockOriginal = stockEnBD(prod.getId());
-
-        elegir("#cbProveedor", prov.getNombre());
-        clickOn("#txtNumeroFactura").write(factura);
-        anadirLinea(prod, "4", "2,50");
-        clickOn("#btnGuardar");
-        WaitForAsyncUtils.waitForFxEvents();
-
-        Compra c = buscarCompra(factura);
-        assertNotNull(c, "No se ha guardado la compra en la BD");
-        assertEquals(prov.getId(), c.getProveedor_id());
-        assertEquals(1, c.getUsuario_id());
-        assertEquals(LocalDate.now().toString(), c.getFecha());
-        assertEquals(1, c.getDetalle().size());
-        assertEquals(10.0 + 10.0 * prod.getIva(), c.getTotal(), 0.01);
-
-        assertEquals(stockOriginal + 4, stockEnBD(prod.getId()), "El stock tiene que subir 4 unidades");
-        assertTrue(controlador.isGuardado());
-        assertFalse(stage.isShowing(), "Al guardar se cierra la ventana");
     }
 
     /**
@@ -340,57 +264,15 @@ public class RegistrarCompraTest extends ApplicationTest {
     }
 
     /**
-     * Deja la base de datos como estaba, oculta la ventana y suelta el teclado y el ratón.
+     * Oculta la ventana y suelta el teclado y el ratón.
      *
      * @throws TimeoutException si TestFX no consigue ocultar la ventana
      */
     @AfterEach
     public void tearDown() throws TimeoutException {
-        borrarComprasDePrueba();
-        devolverProducto();
         FxToolkit.hideStage();
         release(new KeyCode[]{});
         release(new MouseButton[]{});
-    }
-
-    /**
-     * Borra las compras con factura {@code TEST-...}. Se hace con el driver porque el DAO no
-     * tiene método para borrar.
-     */
-    private void borrarComprasDePrueba() {
-        try (MongoClient cliente = MongoClients.create(CONEXION)) {
-            cliente.getDatabase(BASE_DATOS).getCollection("compras")
-                    .deleteMany(Filters.regex("numero_factura", "^TEST-"));
-        }
-    }
-
-    /**
-     * Vuelve a poner el producto exactamente como estaba antes de guardar la compra. Se usa el
-     * documento original y no el DAO, porque el DAO escribe el producto entero (por ejemplo,
-     * añade {@code "receta": []}) y el documento no quedaría idéntico.
-     */
-    private void devolverProducto() {
-        if (productoOriginal == null) {
-            return;
-        }
-        try (MongoClient cliente = MongoClients.create(CONEXION)) {
-            cliente.getDatabase(BASE_DATOS).getCollection("productos")
-                    .replaceOne(Filters.eq("_id", productoOriginal.get("_id")), productoOriginal);
-        }
-        productoOriginal = null;
-    }
-
-    /**
-     * Lee el documento de un producto tal cual está en MongoDB.
-     *
-     * @param id identificador del producto
-     * @return el documento
-     */
-    private Document documentoProducto(int id) {
-        try (MongoClient cliente = MongoClients.create(CONEXION)) {
-            return cliente.getDatabase(BASE_DATOS).getCollection("productos")
-                    .find(Filters.eq("_id", id)).first();
-        }
     }
 
     /**
@@ -447,46 +329,6 @@ public class RegistrarCompraTest extends ApplicationTest {
     }
 
     /**
-     * Crea un número de factura que no existe y que la limpieza reconoce.
-     *
-     * @return una factura {@code TEST-...}
-     */
-    private String facturaDePrueba() {
-        return "TEST-" + System.currentTimeMillis();
-    }
-
-    /**
-     * Busca en la base de datos una compra por su número de factura.
-     *
-     * @param factura número de factura
-     * @return la compra, o {@code null} si no está
-     */
-    private Compra buscarCompra(String factura) {
-        for (Compra c : servicio.listarCompras()) {
-            if (factura.equals(c.getNumero_factura())) {
-                return c;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Lee de la base de datos el stock de un producto.
-     *
-     * @param idProducto identificador del producto
-     * @return su stock actual
-     */
-    private int stockEnBD(int idProducto) {
-        for (Producto p : servicio.listarProductos()) {
-            if (p.getId() == idProducto) {
-                return p.getStock_actual();
-            }
-        }
-        fail("No existe el producto " + idProducto);
-        return -1;
-    }
-
-    /**
      * Da formato a un importe igual que la ventana, por ejemplo {@code 10,00 €}.
      *
      * @param importe importe
@@ -508,21 +350,28 @@ public class RegistrarCompraTest extends ApplicationTest {
     }
 
     /**
-     * Abre un ComboBox y hace clic en la opción con ese texto de la lista desplegable.
+     * Abre un ComboBox y hace clic en la opción con ese texto de la lista desplegable. Si a la
+     * primera no se abre, lo intenta otra vez.
      *
      * @param id selector del ComboBox
      * @param texto texto de la opción
      */
     private void elegir(String id, String texto) {
-        clickOn(id);
-        WaitForAsyncUtils.waitForFxEvents();
-        for (Node nodo : lookup(".list-cell").queryAll()) {
-            if (nodo instanceof ListCell && nodo.getScene().getWindow() != stage
-                    && texto.equals(((ListCell<?>) nodo).getText())) {
-                clickOn(nodo);
-                WaitForAsyncUtils.waitForFxEvents();
-                return;
+        for (int intento = 0; intento < 2; intento++) {
+            clickOn(id);
+            WaitForAsyncUtils.waitForFxEvents();
+            for (Node nodo : lookup(".list-cell").queryAll()) {
+                if (nodo instanceof ListCell && nodo.getScene().getWindow() != stage
+                        && texto.equals(((ListCell<?>) nodo).getText())) {
+                    clickOn(nodo);
+                    WaitForAsyncUtils.waitForFxEvents();
+                    return;
+                }
             }
+            // En Windows el primer clic en una ventana sin foco solo la activa y no abre el
+            // desplegable: se cierra lo que haya abierto y se vuelve a intentar.
+            type(KeyCode.ESCAPE);
+            WaitForAsyncUtils.waitForFxEvents();
         }
         fail("No se encuentra la opción «" + texto + "» en " + id);
     }

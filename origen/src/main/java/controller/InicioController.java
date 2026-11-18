@@ -5,6 +5,7 @@ import dao.GestionStockDao;
 import dao.ProveedorDao;
 import dao.implement.ComprasDaoImpl;
 import dao.implement.GestionStockDaoImp;
+import dao.implement.MovimientoDaoImpl;
 import dao.implement.PedidoDaoImp;
 import dao.implement.ProductoDaoImp;
 import dao.implement.ProveedorDaoImpl;
@@ -127,7 +128,11 @@ public class InicioController implements Initializable, ActualizarDatos {
     /* Abre la vista que le mandes por parametro*/
     private void abrir(String ruta, String titulo) {
         try {
-            InstanciarEscena.createNewStage(ruta, titulo, null);
+            InstanciarEscena.createNewStage(ruta, titulo, (c) -> {
+                HistorialController controlador = (HistorialController) c;
+                controlador.setCajaService(new CajaService(ProductoDaoImp.getInstance(), PedidoDaoImp.getInstance(),
+            MovimientoDaoImpl.getInstance()));
+            });
             cargarDatos();
         } catch (Exception e) {
             e.printStackTrace();

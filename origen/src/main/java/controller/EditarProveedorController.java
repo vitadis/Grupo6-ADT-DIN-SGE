@@ -44,10 +44,9 @@ public class EditarProveedorController implements Initializable {
     private static final String[] DIAS = {"lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"};
 
     /**
-     * Service para validar y guardar el proveedor. No se crea aquí: lo pasa
-     * {@link ComprasController} con {@link #setComprasService(ComprasService)}.
+     * Service para validar y guardar el proveedor.
      */
-    private ComprasService comprasService;
+    private final ComprasService comprasService = new ComprasService();
 
     /**
      * Proveedor que se está editando; es {@code null} cuando la ventana se usa para dar de alta uno nuevo.
@@ -119,16 +118,6 @@ public class EditarProveedorController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         checksDias = new CheckBox[]{chkLunes, chkMartes, chkMiercoles, chkJueves, chkViernes, chkSabado, chkDomingo};
         lblTitulo.setText("NUEVO PROVEEDOR");
-    }
-
-    /**
-     * Recibe el service de la pantalla que abre la ventana, para usar el mismo.
-     * Lo llama {@link ComprasController} antes de mostrar la ventana.
-     *
-     * @param comprasService service de compras y proveedores
-     */
-    public void setComprasService(ComprasService comprasService) {
-        this.comprasService = comprasService;
     }
 
     /**

@@ -37,15 +37,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.Compra;
-import model.EstadoPedido;
 import model.Movimiento;
+import model.ProcedenciaMovimiento;
 import model.Proveedor;
 import model.Transaccion;
 import model.Usuario;
-import model.VentaPedido;
 import dao.implement.ComprasDaoImpl;
 import dao.implement.MovimientoDaoImpl;
-import dao.implement.PedidoDaoImp;
 import dao.implement.ProveedorDaoImpl;
 import services.MovimientoService;
 import util.Alertas;
@@ -113,18 +111,13 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
     private CategoryAxis ejeMeses;
     @FXML
     private NumberAxis ejeImporte;
-    @FXML
-    private Label lblTextoAviso;
-    @FXML
-    private Button btnRevisarGastos;
 
     /**
-     * Único service de la pantalla: movimientos, compras, ventas y proveedores. Se le pasan los
-     * DAOs de MongoDB, y la ventana «Registrar movimiento» recibe este mismo service.
+     * Único service de la pantalla: registros económicos, compras y proveedores. Se le pasan los
+     * DAOs de MongoDB. La ventana «Registrar movimiento» crea el suyo y carga sus datos sola.
      */
     private final MovimientoService movimientoService = new MovimientoService(
-            MovimientoDaoImpl.getInstance(), ComprasDaoImpl.getInstance(),
-            PedidoDaoImp.getInstance(), ProveedorDaoImpl.getInstance());
+            MovimientoDaoImpl.getInstance(), ComprasDaoImpl.getInstance(), ProveedorDaoImpl.getInstance());
 
     /**
      * Formato en el que se muestran las fechas en la tabla (dd/MM).
@@ -136,17 +129,15 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
      */
     private final List<Transaccion> todas = new ArrayList<>();
     /**
-     * Compras leídas de la base de datos al abrir la pantalla (los gastos).
-     */
-    private List<Compra> compras = new ArrayList<>();
-    /**
-     * Pedidos leídos de la base de datos al abrir la pantalla (los ingresos).
-     */
-    private List<VentaPedido> pedidos = new ArrayList<>();
-    /**
-     * Movimientos leídos de la base de datos al abrir la pantalla (luz, nóminas, alquiler...).
+     * Registros de {@code registros_economicos} leídos al abrir la pantalla. Las tarjetas, el
+     * gráfico y la tabla salen solo de aquí.
      */
     private List<Movimiento> movimientos = new ArrayList<>();
+    /**
+     * Compras por identificador, solo para escribir el concepto de los registros que vienen de
+     * una compra (proveedor y factura).
+     */
+    private final Map<Integer, Compra> compras = new HashMap<>();
     /**
      * Usuario con la sesión iniciada; lo pasa {@link NavController}.
      */
@@ -203,8 +194,7 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
                             if (usuario != null && usuario.getId() != null) {
                                 usuarioId = usuario.getId();
                             }
-                            ventana.setMovimientoService(movimientoService);
-                            ventana.setDatos(usuarioId, movimientos);
+                            ventana.setUsuarioId(usuarioId);
                         }
                     });
 
@@ -233,43 +223,35 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
     }
 
     /**
-     * Lee las compras, los pedidos y los movimientos una sola vez. Se leen por separado para
-     * que, si falla uno, la pantalla siga mostrando lo de los otros.
+     * Lee los registros económicos y las compras una sola vez. Se leen por separado para que,
+     * si fallan las compras, la pantalla siga mostrando los importes.
      */
     private void cargarDatos() {
         try {
-            compras = movimientoService.listarCompras();
-        } catch (DaoException e) {
-            Alertas.mostrarError("No se pudieron leer las compras: " + e.getMessage());
-            logger.log(Level.SEVERE, e.getMessage(), e);
-        }
-
-        try {
-            pedidos = movimientoService.listarVentas();
-        } catch (DaoException e) {
-            Alertas.mostrarError("No se pudieron leer las ventas: " + e.getMessage());
-            logger.log(Level.SEVERE, e.getMessage(), e);
-        }
-
-        try {
             movimientos = movimientoService.listarMovimientos();
         } catch (DaoException e) {
-            Alertas.mostrarError("No se pudieron leer los movimientos: " + e.getMessage());
+            Alertas.mostrarError("No se pudieron leer los registros económicos: " + e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
+        }
+
+        compras.clear();
+        try {
+            for (Compra c : movimientoService.listarCompras()) {
+                compras.put(c.getId(), c);
+            }
+        } catch (DaoException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
+    /**
+     * Pinta en el gráfico el gasto de cada uno de los seis últimos meses.
+     */
     private void cargarGrafico() {
         Map<YearMonth, Double> gastoPorMes = new LinkedHashMap<>();
         YearMonth actual = YearMonth.now();
         for (int i = 5; i >= 0; i--) {
             gastoPorMes.put(actual.minusMonths(i), 0.0);
-        }
-        for (Compra c : compras) {
-            YearMonth mes = YearMonth.from(LocalDate.parse(c.getFecha()));
-            if (gastoPorMes.containsKey(mes)) {
-                gastoPorMes.put(mes, gastoPorMes.get(mes) + c.getTotal());
-            }
         }
         for (Movimiento m : movimientos) {
             YearMonth mes = YearMonth.from(LocalDate.parse(m.getFecha()));
@@ -289,55 +271,44 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
         graficoGastos.getData().add(serie);
     }
 
-    private double sumarIngresos(YearMonth mes) {
+    /**
+     * Suma los ingresos o los gastos de un mes.
+     *
+     * @param mes mes que se suma
+     * @param ingresos {@code true} para sumar ingresos, {@code false} para gastos
+     * @return la suma
+     */
+    private double sumar(YearMonth mes, boolean ingresos) {
         double suma = 0;
-        for (VentaPedido p : pedidos) {
-            YearMonth mesPedido = YearMonth.from(LocalDate.parse(p.getFecha()));
-            if (mesPedido.equals(mes) && p.getEstado() == EstadoPedido.COBRADO) {
-                suma += p.getTotal();
-            }
-        }
         for (Movimiento m : movimientos) {
             YearMonth mesMovimiento = YearMonth.from(LocalDate.parse(m.getFecha()));
-            if (mesMovimiento.equals(mes) && m.esIngreso()) {
+            if (mesMovimiento.equals(mes) && m.esIngreso() == ingresos) {
                 suma += m.getImporte();
             }
         }
         return suma;
     }
 
-    private double sumarGastos(YearMonth mes) {
-        double suma = 0;
-        for (Compra c : compras) {
-            YearMonth mesCompra = YearMonth.from(LocalDate.parse(c.getFecha()));
-            if (mesCompra.equals(mes)) {
-                suma += c.getTotal();
-            }
-        }
-        for (Movimiento m : movimientos) {
-            YearMonth mesMovimiento = YearMonth.from(LocalDate.parse(m.getFecha()));
-            if (mesMovimiento.equals(mes) && !m.esIngreso()) {
-                suma += m.getImporte();
-            }
-        }
-        return suma;
-    }
-
+    /**
+     * Rellena las tarjetas de ingresos, gastos y beneficio de un mes.
+     *
+     * @param mes mes que se muestra
+     */
     private void cargarResumen(YearMonth mes) {
-        double ingresos = sumarIngresos(mes);
-        double gastos = sumarGastos(mes);
+        double ingresos = sumar(mes, true);
+        double gastos = sumar(mes, false);
         double beneficio = ingresos - gastos;
 
         lblIngresos.setText(String.format("%.2f €", ingresos));
         lblGastos.setText(String.format("%.2f €", gastos));
         lblBeneficio.setText(String.format("%.2f €", beneficio));
-
     }
 
     /**
-     * Monta la lista {@link #todas} con los gastos (una fila por compra) y los ingresos (una
-     * fila por día con la suma de los pedidos cobrados), ordenada de la más nueva a la más
-     * vieja. También rellena el ComboBox de categorías con las que aparecen.
+     * Monta la lista {@link #todas} a partir de los registros económicos, ordenada de la más
+     * nueva a la más vieja. Los registros de pedidos se agrupan en una fila por día («Ventas del
+     * día (TPV)»); los de compras llevan como concepto el proveedor y la factura. También rellena
+     * el ComboBox de categorías con las que aparecen.
      */
     private void cargarTransacciones() {
         todas.clear();
@@ -349,33 +320,30 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
         } catch (DaoException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
         }
-        for (Compra c : compras) {
-            String proveedor = nombresProveedor.get(c.getProveedor_id());
-            if (proveedor == null) {
-                proveedor = "Proveedor " + c.getProveedor_id();
-            }
-            todas.add(new Transaccion(LocalDate.parse(c.getFecha()), proveedor + " · " + c.getNumero_factura(),
-                    "Compras", false, c.getTotal()));
-        }
+
         Map<LocalDate, Double> ventasPorDia = new TreeMap<>();
-        for (VentaPedido p : pedidos) {
-            if (p.getEstado() == EstadoPedido.COBRADO) {
-                LocalDate dia = LocalDate.parse(p.getFecha());
+        for (Movimiento m : movimientos) {
+            LocalDate dia = LocalDate.parse(m.getFecha());
+            ProcedenciaMovimiento origen = m.getOrigen();
+            if (origen != null && ProcedenciaMovimiento.PEDIDOS.equals(origen.getColeccion())) {
                 if (ventasPorDia.containsKey(dia)) {
-                    ventasPorDia.put(dia, ventasPorDia.get(dia) + p.getTotal());
+                    ventasPorDia.put(dia, ventasPorDia.get(dia) + m.getImporte());
                 } else {
-                    ventasPorDia.put(dia, p.getTotal());
+                    ventasPorDia.put(dia, m.getImporte());
                 }
+            } else {
+                todas.add(new Transaccion(dia, concepto(m, nombresProveedor), m.getCategoria(),
+                        m.esIngreso(), m.getImporte()));
             }
         }
         for (LocalDate dia : ventasPorDia.keySet()) {
             double total = Math.round(ventasPorDia.get(dia) * 100) / 100.0;
             todas.add(new Transaccion(dia, "Ventas del día (TPV)", "Ventas", true, total));
         }
-        for (Movimiento m : movimientos) {
-            todas.add(new Transaccion(LocalDate.parse(m.getFecha()), m.getConcepto(), m.getCategoria(),
-                    m.esIngreso(), m.getImporte()));
-        }
+
+        // Los registros llegan del más viejo al más nuevo; se da la vuelta antes de ordenar por
+        // fecha para que, dentro del mismo día, el último registrado también quede arriba.
+        Collections.reverse(todas);
         Collections.sort(todas, new Comparator<Transaccion>() {
             @Override
             public int compare(Transaccion a, Transaccion b) {
@@ -396,6 +364,30 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
     }
 
     /**
+     * Devuelve el concepto que se enseña de un registro. Si viene de una compra es
+     * «proveedor · factura»; si no, su propio concepto.
+     *
+     * @param m registro económico
+     * @param nombresProveedor nombre de cada proveedor por su identificador
+     * @return el concepto
+     */
+    private String concepto(Movimiento m, Map<Integer, String> nombresProveedor) {
+        ProcedenciaMovimiento origen = m.getOrigen();
+        if (origen == null || !ProcedenciaMovimiento.COMPRAS.equals(origen.getColeccion())) {
+            return m.getConcepto();
+        }
+        Compra c = compras.get(origen.getProcedencia_id());
+        if (c == null) {
+            return "Compra " + origen.getProcedencia_id();
+        }
+        String proveedor = nombresProveedor.get(c.getProveedor_id());
+        if (proveedor == null) {
+            proveedor = "Proveedor " + c.getProveedor_id();
+        }
+        return proveedor + " · " + c.getNumero_factura();
+    }
+
+    /**
      * Pinta en la tabla las transacciones recibidas y actualiza el contador.
      *
      * @param lista transacciones que se muestran
@@ -413,6 +405,7 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
         }
 
         lblContador.setText("Mostrando " + lista.size() + " de " + todas.size() + " movimientos");
+        scrollMovimientos.setVvalue(0);
     }
 
     /**
@@ -441,8 +434,8 @@ public class GestionEconomicaController implements Initializable, UsuarioImpleme
 
         HBox fila = new HBox(
                 celda(t.getFecha().format(FORMATO_FECHA), 80),
-                celda(t.getConcepto(), 220),
-                celda(t.getCategoria(), 110),
+                celda(t.getConcepto(), 300),
+                celda(t.getCategoria(), 150),
                 columnaTipo,
                 importe
         );

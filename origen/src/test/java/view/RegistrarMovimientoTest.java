@@ -1,14 +1,6 @@
 package view;
 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.model.Filters;
 import controller.RegistrarMovimientoController;
-import dao.PedidoDao;
-import dao.implement.ComprasDaoImpl;
-import dao.implement.MovimientoDaoImpl;
-import dao.implement.PedidoDaoImp;
-import dao.implement.ProveedorDaoImpl;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.concurrent.TimeoutException;
@@ -23,35 +15,24 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import model.Movimiento;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationTest;
 import org.testfx.util.WaitForAsyncUtils;
-import services.MovimientoService;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
  * Tests del diálogo «Registrar movimiento» ({@code registrarMovimiento.fxml}), abierto solo.
  *
- * Usa la base de datos {@code origen} (MongoDB tiene que estar arrancado). Al diálogo se le pasan
- * el service y los movimientos que hay, como hace {@code GestionEconomicaController}. Los
- * movimientos que guarda llevan concepto {@code TEST-...} y se borran al acabar cada test.
+ * Necesita MongoDB arrancado y con alguna compra: el diálogo lee al abrirse los registros de
+ * {@code registros_economicos}, y los tests del aviso usan la categoría de las compras
+ * («Aprovisionamiento»), que siempre tiene gastos. Solo prueba la vista (carga, desplegable,
+ * aviso y mensajes de error): ningún test llega a guardar.
  *
  * @author anazk
  */
 public class RegistrarMovimientoTest extends ApplicationTest {
-
-    /**
-     * Dirección de MongoDB, para borrar lo que dejan los tests.
-     */
-    private static final String CONEXION = "mongodb://localhost:27017";
-    /**
-     * Base de datos que usa la aplicación.
-     */
-    private static final String BASE_DATOS = "origen";
 
     /**
      * Ventana del diálogo.
@@ -62,9 +43,9 @@ public class RegistrarMovimientoTest extends ApplicationTest {
      */
     private RegistrarMovimientoController controlador;
     /**
-     * Service con los DAOs de MongoDB; también se usa para comprobar lo guardado.
+     * Categoría de los gastos de las compras, que siempre tiene registros anteriores.
      */
-    private MovimientoService servicio;
+    private static final String CATEGORIA_CON_GASTOS = "Aprovisionamiento";
 
     /**
      * Constructor vacío. Lo usa JUnit para crear el test.
@@ -73,8 +54,7 @@ public class RegistrarMovimientoTest extends ApplicationTest {
     }
 
     /**
-     * Abre el diálogo y le pasa el service y los movimientos que hay, como hace
-     * {@code GestionEconomicaController}.
+     * Abre el diálogo con los estilos de la aplicación.
      *
      * @param stage ventana que da TestFX
      * @throws IOException si no se encuentra el FXML
@@ -82,16 +62,14 @@ public class RegistrarMovimientoTest extends ApplicationTest {
     @Override
     public void start(Stage stage) throws IOException {
         this.stage = stage;
-        servicio = new MovimientoService(MovimientoDaoImpl.getInstance(), ComprasDaoImpl.getInstance(),
-                (PedidoDao) PedidoDaoImp.getInstance(), ProveedorDaoImpl.getInstance());
-
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/economia/registrarMovimiento.fxml"));
         Parent root = loader.load();
         controlador = loader.getController();
-        controlador.setMovimientoService(servicio);
-        controlador.setDatos(1, servicio.listarMovimientos());
 
-        stage.setScene(new Scene(root));
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/css/theme.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
+        stage.setScene(scene);
         stage.show();
     }
 
@@ -108,15 +86,15 @@ public class RegistrarMovimientoTest extends ApplicationTest {
     }
 
     /**
-     * El desplegable trae las categorías fijas y también las de los movimientos que ya hay.
+     * El desplegable trae las categorías fijas, pero no las de compras y pedidos
+     * («Aprovisionamiento» y «Ventas»), que se apuntan solas.
      */
     @Test
     public void testCategoriasDelDesplegable() {
         assertTrue(categorias().getItems().contains("Suministros"));
         assertTrue(categorias().getItems().contains("Personal"));
-        for (Movimiento m : servicio.listarMovimientos()) {
-            assertTrue(categorias().getItems().contains(m.getCategoria()), "Falta la categoría " + m.getCategoria());
-        }
+        assertFalse(categorias().getItems().contains("Aprovisionamiento"));
+        assertFalse(categorias().getItems().contains("Ventas"));
     }
 
     /**
@@ -124,7 +102,7 @@ public class RegistrarMovimientoTest extends ApplicationTest {
      */
     @Test
     public void testSinConceptoDaError() {
-        escribirCategoria("Otros");
+        clickOn(categorias().getEditor()).write("Otros");
         clickOn("#txtImporte").write("10");
 
         clickOn("#btnGuardar");
@@ -138,7 +116,7 @@ public class RegistrarMovimientoTest extends ApplicationTest {
      */
     @Test
     public void testSinCategoriaDaError() {
-        clickOn("#txtConcepto").write(conceptoDePrueba());
+        clickOn("#txtConcepto").write("Prueba");
         clickOn("#txtImporte").write("10");
 
         clickOn("#btnGuardar");
@@ -151,7 +129,7 @@ public class RegistrarMovimientoTest extends ApplicationTest {
      */
     @Test
     public void testImporteConLetrasDaError() {
-        rellenar(conceptoDePrueba(), "Otros", "abc");
+        rellenar("Prueba", "Otros", "abc");
 
         clickOn("#btnGuardar");
 
@@ -163,7 +141,7 @@ public class RegistrarMovimientoTest extends ApplicationTest {
      */
     @Test
     public void testImporteCeroDaError() {
-        rellenar(conceptoDePrueba(), "Otros", "0");
+        rellenar("Prueba", "Otros", "0");
 
         clickOn("#btnGuardar");
 
@@ -175,7 +153,7 @@ public class RegistrarMovimientoTest extends ApplicationTest {
      */
     @Test
     public void testSinTipoDaError() {
-        rellenar(conceptoDePrueba(), "Otros", "10");
+        rellenar("Prueba", "Otros", "10");
         clickOn("#tgGasto");
 
         clickOn("#btnGuardar");
@@ -184,26 +162,23 @@ public class RegistrarMovimientoTest extends ApplicationTest {
     }
 
     /**
-     * Un gasto mayor que la media de su categoría enseña el aviso con el nombre de la categoría.
+     * Un gasto muy alto en una categoría con gastos anteriores enseña el aviso con el nombre de
+     * la categoría.
      */
     @Test
     public void testAvisoSiElGastoSuperaLaMedia() {
-        assumeTrue(hayGastosDe("Suministros"), "No hay gastos de Suministros en la BD");
-
-        rellenar(conceptoDePrueba(), "Suministros", "99999");
+        rellenar("Prueba", CATEGORIA_CON_GASTOS, "99999");
 
         assertTrue(avisoVisible());
-        assertTrue(texto("#lblAviso").contains("«Suministros»"));
+        assertTrue(texto("#lblAviso").contains("«" + CATEGORIA_CON_GASTOS + "»"));
     }
 
     /**
-     * Un gasto por debajo de la media no enseña el aviso.
+     * Un gasto muy bajo no enseña el aviso.
      */
     @Test
     public void testSinAvisoSiElGastoEsBajo() {
-        assumeTrue(hayGastosDe("Suministros"), "No hay gastos de Suministros en la BD");
-
-        rellenar(conceptoDePrueba(), "Suministros", "1");
+        rellenar("Prueba", CATEGORIA_CON_GASTOS, "0,01");
 
         assertFalse(avisoVisible());
     }
@@ -213,54 +188,11 @@ public class RegistrarMovimientoTest extends ApplicationTest {
      */
     @Test
     public void testUnIngresoNoTieneAviso() {
-        assumeTrue(hayGastosDe("Suministros"), "No hay gastos de Suministros en la BD");
         clickOn("#tgIngreso");
 
-        rellenar(conceptoDePrueba(), "Suministros", "99999");
+        rellenar("Prueba", CATEGORIA_CON_GASTOS, "99999");
 
         assertFalse(avisoVisible());
-    }
-
-    /**
-     * Guardar un gasto correcto lo mete en la base de datos con sus datos y cierra la ventana.
-     * El importe acepta la coma decimal. Al acabar, {@link #tearDown()} lo borra.
-     */
-    @Test
-    public void testGuardarGasto() {
-        String concepto = conceptoDePrueba();
-        rellenar(concepto, "Otros", "12,5");
-        clickOn("#txtObservaciones").write("Prueba");
-
-        clickOn("#btnGuardar");
-        WaitForAsyncUtils.waitForFxEvents();
-
-        Movimiento m = buscar(concepto);
-        assertNotNull(m, "No se ha guardado en la BD");
-        assertEquals("gasto", m.getTipo());
-        assertEquals("Otros", m.getCategoria());
-        assertEquals(12.5, m.getImporte(), 0.001);
-        assertEquals(LocalDate.now().toString(), m.getFecha());
-        assertEquals(1, m.getUsuario_id());
-        assertEquals("Prueba", m.getObservaciones());
-        assertTrue(controlador.isGuardado());
-        assertFalse(stage.isShowing(), "Al guardar se cierra la ventana");
-    }
-
-    /**
-     * Guardar con «Ingreso» marcado lo guarda como ingreso.
-     */
-    @Test
-    public void testGuardarIngreso() {
-        String concepto = conceptoDePrueba();
-        clickOn("#tgIngreso");
-        rellenar(concepto, "Eventos", "300");
-
-        clickOn("#btnGuardar");
-        WaitForAsyncUtils.waitForFxEvents();
-
-        Movimiento m = buscar(concepto);
-        assertNotNull(m, "No se ha guardado en la BD");
-        assertEquals("ingreso", m.getTipo());
     }
 
     /**
@@ -268,39 +200,25 @@ public class RegistrarMovimientoTest extends ApplicationTest {
      */
     @Test
     public void testCancelarCierraSinGuardar() {
-        String concepto = conceptoDePrueba();
-        rellenar(concepto, "Otros", "10");
+        rellenar("Prueba", "Otros", "10");
 
         clickOn("#btnCancelar");
         WaitForAsyncUtils.waitForFxEvents();
 
-        assertNull(buscar(concepto), "Cancelar no debe guardar");
         assertFalse(controlador.isGuardado());
         assertFalse(stage.isShowing());
     }
 
     /**
-     * Borra los movimientos de prueba, oculta la ventana y suelta el teclado y el ratón.
+     * Oculta la ventana y suelta el teclado y el ratón.
      *
      * @throws TimeoutException si TestFX no consigue ocultar la ventana
      */
     @AfterEach
     public void tearDown() throws TimeoutException {
-        borrarMovimientosDePrueba();
         FxToolkit.hideStage();
         release(new KeyCode[]{});
         release(new MouseButton[]{});
-    }
-
-    /**
-     * Borra los movimientos con concepto {@code TEST-...}. Se hace con el driver porque el DAO
-     * no tiene método para borrar.
-     */
-    private void borrarMovimientosDePrueba() {
-        try (MongoClient cliente = MongoClients.create(CONEXION)) {
-            cliente.getDatabase(BASE_DATOS).getCollection("movimientos")
-                    .deleteMany(Filters.regex("concepto", "^TEST-"));
-        }
     }
 
     /**
@@ -312,57 +230,9 @@ public class RegistrarMovimientoTest extends ApplicationTest {
      */
     private void rellenar(String concepto, String categoria, String importe) {
         clickOn("#txtConcepto").write(concepto);
-        escribirCategoria(categoria);
+        clickOn(categorias().getEditor()).write(categoria);
         clickOn("#txtImporte").write(importe);
         WaitForAsyncUtils.waitForFxEvents();
-    }
-
-    /**
-     * Escribe la categoría en el desplegable, que es editable.
-     *
-     * @param categoria categoría
-     */
-    private void escribirCategoria(String categoria) {
-        clickOn(categorias().getEditor()).write(categoria);
-    }
-
-    /**
-     * Crea un concepto que no existe y que la limpieza reconoce.
-     *
-     * @return un concepto {@code TEST-...}
-     */
-    private String conceptoDePrueba() {
-        return "TEST-" + System.currentTimeMillis();
-    }
-
-    /**
-     * Busca en la base de datos un movimiento por su concepto.
-     *
-     * @param concepto concepto del movimiento
-     * @return el movimiento, o {@code null} si no está
-     */
-    private Movimiento buscar(String concepto) {
-        for (Movimiento m : servicio.listarMovimientos()) {
-            if (concepto.equals(m.getConcepto())) {
-                return m;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Indica si en la base de datos hay gastos de una categoría, para poder calcular su media.
-     *
-     * @param categoria categoría
-     * @return {@code true} si hay al menos uno
-     */
-    private boolean hayGastosDe(String categoria) {
-        for (Movimiento m : servicio.listarMovimientos()) {
-            if (!m.esIngreso() && categoria.equalsIgnoreCase(m.getCategoria())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**

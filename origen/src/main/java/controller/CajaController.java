@@ -1,5 +1,6 @@
 package controller;
 
+import dao.implement.MovimientoDaoImpl;
 import dao.implement.PedidoDaoImp;
 import dao.implement.ProductoDaoImp;
 import exceptions.DaoException;
@@ -62,7 +63,8 @@ public class CajaController implements UsuarioImplementacion {
     private Label lblAyuda;
 
     // ---- Servicios y estado ----
-    private final CajaService cajaService = new CajaService(ProductoDaoImp.getInstance(), PedidoDaoImp.getInstance());
+    private final CajaService cajaService = new CajaService(ProductoDaoImp.getInstance(), PedidoDaoImp.getInstance(),
+            MovimientoDaoImpl.getInstance());
     private List<Producto> productosVenta = new ArrayList<>();
     private final VentaPedido pedido = new VentaPedido();
     private final AppLogger logger = AppLogger.getInstance();

@@ -99,8 +99,8 @@
                     <VBox styleClass="tarjeta" VBox.vgrow="ALWAYS">
                         <HBox alignment="CENTER_LEFT" styleClass="compras-tabla-cabecera">
                             <Label prefWidth="80" styleClass="texto-secundario" text="Fecha" />
-                            <Label prefWidth="220" styleClass="texto-secundario" text="Concepto" />
-                            <Label prefWidth="110" styleClass="texto-secundario" text="Categoría" />
+                            <Label minWidth="300" prefWidth="300" styleClass="texto-secundario" text="Concepto" />
+                            <Label minWidth="150" prefWidth="150" styleClass="texto-secundario" text="Categoría" />
                             <Label prefWidth="100" styleClass="texto-secundario" text="Tipo" />
                             <Label alignment="CENTER_RIGHT" prefWidth="110" styleClass="texto-secundario" text="Importe" />
                         </HBox>
@@ -130,12 +130,6 @@
                                 <NumberAxis fx:id="ejeImporte" side="LEFT" />
                             </yAxis>
                         </BarChart>
-                    </VBox>
-
-                    <VBox spacing="8" styleClass="gestion-tarjeta-aviso">
-                        <Label styleClass="subtitulo" text="▲ Gasto superior a la media" />
-                        <Label fx:id="lblTextoAviso" wrapText="true" />
-                        <Button fx:id="btnRevisarGastos" styleClass="btn-secundario" text="Revisar gastos por categoría" />
                     </VBox>
                 </VBox>
             </HBox>
