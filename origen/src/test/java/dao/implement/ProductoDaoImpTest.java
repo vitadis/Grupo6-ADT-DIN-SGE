@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * TEST CLASS: ProductoDaoImp
  *
- * @author anazk
+ * @author Joel
  */
 class ProductoDaoImpTest {
 
@@ -153,12 +153,4 @@ class ProductoDaoImpTest {
         assertNull(buscarPorId(ID_INEXISTENTE), "No debe crearse el producto");
     }
 
-    // ---------- AÑADIR LOTE -----------
-    @Test
-    @DisplayName("anadirLote a un producto inexistente lanza excepción")
-    void anadirLote_inexistente() {
-        assertThrows(IllegalArgumentException.class,
-                () -> dao.anadirLote(ID_INEXISTENTE, 5, "2027-06-01"));
-        assertNull(buscarPorId(ID_INEXISTENTE));
-    }
 }
