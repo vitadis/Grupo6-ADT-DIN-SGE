@@ -23,7 +23,10 @@ public class AccesoMongoDB {
     private static final String CONNECTION_STRING = "mongodb://localhost:27017";
     private static final String DATABASE = "origen";
 
-    // POJO Automático
+    /**
+     * Registro de codecs con el proveedor POJO automático, para que MongoDB convierta
+     * directamente los documentos en objetos del modelo.
+     */
     protected static final CodecRegistry POJO_CODEC_REGISTRY = fromRegistries(
             MongoClientSettings.getDefaultCodecRegistry(),
             fromProviders(PojoCodecProvider.builder()
@@ -35,8 +38,16 @@ public class AccesoMongoDB {
     private static MongoClient client = null;
 
     /**
+     * Constructor para las subclases (los DAO).
+     */
+    protected AccesoMongoDB() {
+    }
+
+    /**
      * Devuelve el cliente compartido, creándolo si todavía no existe. No hay
      * que cerrarlo en los DAO.
+     *
+     * @return cliente de MongoDB compartido
      */
     protected static synchronized MongoClient getClient() {
         if (client == null) {
@@ -62,7 +73,15 @@ public class AccesoMongoDB {
         }
     }
 
-    // La colección queda vinculada directamente a la clase (POJO)
+    /**
+     * Devuelve una colección de la base de datos vinculada directamente a una clase (POJO).
+     *
+     * @param <T> tipo de los documentos de la colección
+     * @param client cliente de MongoDB
+     * @param nombre nombre de la colección
+     * @param clase clase a la que se convierten los documentos
+     * @return la colección tipada
+     */
     protected <T> MongoCollection<T> getCollection(MongoClient client, String nombre, Class<T> clase) {
         return client.getDatabase(DATABASE).getCollection(nombre, clase);
     }

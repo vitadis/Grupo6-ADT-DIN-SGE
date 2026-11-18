@@ -13,6 +13,7 @@ import model.Producto;
 import util.AppLogger;
 
 /**
+ * Implementación con MongoDB de {@link dao.RegistrarPerdidaDao}. Es un singleton.
  *
  * @author Hodei.Torres
  */
@@ -30,6 +31,11 @@ public class RegistrarPerdidaDaoImp extends AccesoMongoDB implements RegistrarPe
         super();
     }
 
+    /**
+     * Devuelve la única instancia del DAO (patrón Singleton).
+     *
+     * @return instancia del DAO
+     */
     public static synchronized RegistrarPerdidaDao getInstance() {
         if (instance == null) {
             instance = new RegistrarPerdidaDaoImp();

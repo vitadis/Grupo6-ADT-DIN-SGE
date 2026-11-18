@@ -30,6 +30,9 @@ public class ConfirmarPagoDialogController {
     private MetodoPago metodoPagado;
     private final AppLogger logger = AppLogger.getInstance();
 
+    /**
+     * Constructor vacío usado por el FXMLLoader.
+     */
     public ConfirmarPagoDialogController() {
     }
 

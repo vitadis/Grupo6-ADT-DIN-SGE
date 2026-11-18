@@ -6,9 +6,16 @@ package controller;
 import model.Usuario;
 
 /**
+ * Interfaz de los controladores que necesitan conocer el usuario con la sesión iniciada.
  *
  * @author Joel
  */
 public interface UsuarioImplementacion {
+
+    /**
+     * Asigna el usuario con la sesión iniciada.
+     *
+     * @param usuario usuario actual
+     */
     void setUsuario(Usuario usuario);
 }

@@ -11,17 +11,55 @@ import model.Usuario;
  */
 public interface UsuarioDao {
 
-    public Usuario obtenerUsuario(String user, String pw); // obtener el usuario por el username, password
+    /**
+     * Busca un usuario por su nombre de usuario y comprueba la contraseña.
+     *
+     * @param user nombre de usuario
+     * @param pw contraseña
+     * @return el usuario si las credenciales son correctas, o {@code null} si no
+     * @throws exceptions.DaoException si falla el acceso a la base de datos
+     */
+    public Usuario obtenerUsuario(String user, String pw);
 
-    public void altaUsuario(Usuario user); // otorgar el id dentro de este metodo
+    /**
+     * Da de alta un usuario nuevo. El identificador se asigna dentro de este método.
+     *
+     * @param user usuario que se va a guardar
+     * @throws exceptions.DaoException si falla el acceso a la base de datos
+     */
+    public void altaUsuario(Usuario user);
 
-    public void eliminarUsuario(Usuario user); // eliminar con el id
+    /**
+     * Elimina un usuario a partir de su identificador.
+     *
+     * @param user usuario que se va a eliminar
+     * @throws exceptions.DaoException si falla el acceso a la base de datos
+     */
+    public void eliminarUsuario(Usuario user);
 
-    public void modificarUsuario(Usuario user); // modificar por el id
+    /**
+     * Sustituye los datos de un usuario existente, buscándolo por su identificador.
+     *
+     * @param user usuario con los datos nuevos
+     * @throws exceptions.DaoException si falla el acceso a la base de datos
+     */
+    public void modificarUsuario(Usuario user);
 
-    public List<Usuario> listarUsuarios(); // retornar una lista
+    /**
+     * Devuelve todos los usuarios.
+     *
+     * @return lista de usuarios
+     * @throws exceptions.DaoException si falla el acceso a la base de datos
+     */
+    public List<Usuario> listarUsuarios();
 
-    public List<String> listarPermisos(); // listaPermisos
+    /**
+     * Devuelve todos los permisos que se pueden asignar a un usuario.
+     *
+     * @return lista de permisos (vacía si no hay ninguno)
+     * @throws exceptions.DaoException si falla el acceso a la base de datos
+     */
+    public List<String> listarPermisos();
 
     List<String> listarPermisosPorRol(String rol);
 }

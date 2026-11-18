@@ -39,20 +39,22 @@
 
     <Label styleClass="subtitulo" text="Productos" />
     <HBox alignment="CENTER_LEFT" spacing="10">
-        <ComboBox fx:id="cbProducto" prefWidth="240" promptText="Producto" />
-        <TextField fx:id="txtCantidad" prefWidth="90" promptText="Cantidad" />
-        <TextField fx:id="txtPrecioUnidad" prefWidth="110" promptText="Precio unidad" />
+        <ComboBox fx:id="cbProducto" prefWidth="200" promptText="Producto" />
+        <TextField fx:id="txtCantidad" prefWidth="80" promptText="Cantidad" />
+        <TextField fx:id="txtPrecioUnidad" prefWidth="100" promptText="Precio unidad" />
+        <DatePicker fx:id="dpCaducidad" prefWidth="130" promptText="Caducidad" />
         <Region HBox.hgrow="ALWAYS" />
         <Button fx:id="btnAnadirLinea" onAction="#onAnadirLinea" styleClass="btn-secundario" text="+ Añadir" />
     </HBox>
 
     <VBox styleClass="tarjeta" VBox.vgrow="ALWAYS">
         <HBox alignment="CENTER_LEFT" styleClass="compras-tabla-cabecera">
-            <Label prefWidth="220" styleClass="texto-secundario" text="Producto" />
-            <Label prefWidth="80" styleClass="texto-secundario" text="Cantidad" />
+            <Label prefWidth="170" styleClass="texto-secundario" text="Producto" />
+            <Label prefWidth="70" styleClass="texto-secundario" text="Cantidad" />
             <Label prefWidth="100" styleClass="texto-secundario" text="Precio unidad" />
-            <Label prefWidth="60" styleClass="texto-secundario" text="IVA" />
-            <Label prefWidth="100" styleClass="texto-secundario" text="Subtotal" />
+            <Label prefWidth="50" styleClass="texto-secundario" text="IVA" />
+            <Label prefWidth="90" styleClass="texto-secundario" text="Subtotal" />
+            <Label prefWidth="100" styleClass="texto-secundario" text="Caducidad" />
             <Label prefWidth="40" />
         </HBox>
 

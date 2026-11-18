@@ -33,6 +33,12 @@ import util.InterpretePermisos;
  */
 public class NavController {
 
+    /**
+     * Constructor vacío usado por el FXMLLoader.
+     */
+    public NavController() {
+    }
+
     // ---- Variables FXML ----
     @FXML
     private StackPane contenido;

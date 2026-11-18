@@ -15,6 +15,7 @@ import util.AppLogger;
 
 
 /**
+ * Implementación con MongoDB de {@link dao.GestionStockDao}. Es un singleton.
  *
  * @author Hodei.Torres
  */
@@ -31,6 +32,11 @@ public class GestionStockDaoImp extends AccesoMongoDB implements GestionStockDao
         super();
     }
 
+    /**
+     * Devuelve la única instancia del DAO (patrón Singleton).
+     *
+     * @return instancia del DAO
+     */
     public static synchronized GestionStockDao getInstance() {
         if (instance == null) {
             instance = new GestionStockDaoImp();

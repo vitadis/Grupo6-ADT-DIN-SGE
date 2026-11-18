@@ -98,9 +98,10 @@ public class ComprasService {
 
     /**
      * Valida y guarda una compra, apunta su gasto de «Aprovisionamiento» en
-     * {@code registros_economicos} (con origen la compra) y después suma al stock de cada
-     * producto la cantidad comprada. La cantidad se redondea a entero porque el stock de los
-     * productos es entero.
+     * {@code registros_economicos} (con origen la compra) y después, por cada línea, suma al
+     * stock del producto la cantidad comprada y le añade un lote nuevo con su fecha de
+     * caducidad (los lotes anteriores se conservan). La cantidad se redondea a entero porque el
+     * stock de los productos es entero.
      *
      * @param compra compra que se va a registrar
      * @throws IllegalArgumentException si la compra no es válida, la factura está repetida o
@@ -115,19 +116,66 @@ public class ComprasService {
 
         compra.validar();
 
-        comprasDao.insertarCompra(compra);
-        movimientoDao.insertarMovimiento(Movimiento.deCompra(compra));
-
+        // Se comprueba todo antes de guardar nada, para no dejar una compra registrada
+        // sin su entrada de stock.
         List<Producto> productos = productoDao.listarProductos();
         for (LineaCompra l : compra.getDetalle()) {
-            Producto p = buscarProducto(productos, l.getProducto_id());
-            if (p == null) {
+            Producto producto = buscarProducto(productos, l.getProducto_id());
+            if (producto == null) {
                 throw new IllegalArgumentException(
                         "No existe el producto " + l.getNombre() + ".");
             }
-            p.setStock_actual(p.getStock_actual() + (int) Math.round(l.getCantidad()));
-            productoDao.modificarProducto(p);
+            if (producto.esElaboracionPropia()) {
+                throw new IllegalArgumentException(
+                        l.getNombre() + " se elabora en casa: repónlo desde «Añadir stock».");
+            }
+            if (l.getFecha_caducidad() == null || l.getFecha_caducidad().isBlank()) {
+                throw new IllegalArgumentException(
+                        "Indica la fecha de caducidad de " + l.getNombre() + ".");
+            }
+            if (unidades(l) <= 0) {
+                throw new IllegalArgumentException(
+                        "La cantidad de " + l.getNombre() + " debe ser de al menos 1 unidad.");
+            }
         }
+
+        comprasDao.insertarCompra(compra);
+        movimientoDao.insertarMovimiento(Movimiento.deCompra(compra));
+
+        // Cada línea entra como un lote nuevo: se suma al stock y se añade a «lotes»
+        // sin reescribir el producto, así los lotes que ya había no se pierden.
+        for (LineaCompra l : compra.getDetalle()) {
+            productoDao.anadirLote(l.getProducto_id(), unidades(l), l.getFecha_caducidad());
+        }
+    }
+
+    /**
+     * Devuelve los productos de la lista de compra sugerida: los que se compran (activos y sin
+     * receta) que están agotados o con stock bajo. Los productos con receta (bocadillos,
+     * cafés...) no salen porque no se compran: se reponen sin coste desde «Añadir stock».
+     * La cantidad a pedir de cada uno es {@link Producto#cantidadAReponer()}.
+     *
+     * @return productos que hay que comprar, ordenados por identificador
+     * @throws DaoException si falla la base de datos
+     */
+    public List<Producto> listarProductosAReponer() {
+        List<Producto> aReponer = new ArrayList<>();
+        for (Producto p : listarProductosComprables()) {
+            if (p.necesitaReposicion()) {
+                aReponer.add(p);
+            }
+        }
+        return aReponer;
+    }
+
+    /**
+     * Unidades enteras que entran en stock con una línea (el stock de los productos es entero).
+     *
+     * @param l línea de la compra
+     * @return la cantidad redondeada
+     */
+    private int unidades(LineaCompra l) {
+        return (int) Math.round(l.getCantidad());
     }
 
     /**
@@ -196,29 +244,22 @@ public class ComprasService {
     }
 
     /**
-     * Devuelve todos los productos, para la lista sugerida.
+     * Devuelve los productos que se pueden comprar, para el desplegable de la ventana de
+     * compra y la lista sugerida: los activos sin receta. Los que tienen receta (bocadillos,
+     * cafés...) se elaboran en casa, así que no se compran: se reponen sin coste desde
+     * «Añadir stock».
      *
-     * @return la lista de productos
+     * @return la lista de productos que se compran
      * @throws DaoException si falla la base de datos
      */
-    public List<Producto> listarProductos() {
-        return productoDao.listarProductos();
-    }
-
-    /**
-     * Devuelve solo los productos activos, para el desplegable de la ventana de compra.
-     *
-     * @return la lista de productos activos
-     * @throws DaoException si falla la base de datos
-     */
-    public List<Producto> listarProductosActivos() {
-        List<Producto> activos = new ArrayList<>();
+    public List<Producto> listarProductosComprables() {
+        List<Producto> comprables = new ArrayList<>();
         for (Producto p : productoDao.listarProductos()) {
-            if (p.isActivo()) {
-                activos.add(p);
+            if (p.isActivo() && !p.esElaboracionPropia()) {
+                comprables.add(p);
             }
         }
-        return activos;
+        return comprables;
     }
 
 }

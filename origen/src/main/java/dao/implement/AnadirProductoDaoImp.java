@@ -17,6 +17,7 @@ import org.bson.Document;
 import util.AppLogger;
 
 /**
+ * Implementación con MongoDB de {@link dao.AñadirProductoDao}. Es un singleton.
  *
  * @author Hodei.Torres
  */
@@ -33,6 +34,11 @@ public class AnadirProductoDaoImp extends AccesoMongoDB implements AñadirProduc
         super();
     }
 
+    /**
+     * Devuelve la única instancia del DAO (patrón Singleton).
+     *
+     * @return instancia del DAO
+     */
     public static synchronized AñadirProductoDao getInstance() {
         if (instance == null) {
             instance = new AnadirProductoDaoImp();

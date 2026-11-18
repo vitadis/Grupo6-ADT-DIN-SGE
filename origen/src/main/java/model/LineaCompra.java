@@ -34,6 +34,11 @@ public class LineaCompra {
      * El subtotal de la línea sin IVA (cantidad × precio por unidad).
      */
     private double subtotal;
+    /**
+     * Fecha de caducidad (yyyy-MM-dd) del lote que entra con esta línea. Al registrar la compra
+     * se añade como un lote nuevo en el campo {@code lotes} del producto.
+     */
+    private String fecha_caducidad;
 
     /**
      * Constructor vacío.
@@ -95,6 +100,33 @@ public class LineaCompra {
             throw new IllegalArgumentException(
                     "El IVA debe estar entre 0 y 1.");
         }
+
+        if (fecha_caducidad != null) {
+            try {
+                java.time.LocalDate.parse(fecha_caducidad);
+            } catch (java.time.format.DateTimeParseException e) {
+                throw new IllegalArgumentException(
+                        "La fecha de caducidad debe tener formato yyyy-MM-dd.");
+            }
+        }
+    }
+
+    /**
+     * Devuelve la fecha de caducidad (yyyy-MM-dd) del lote de esta línea.
+     *
+     * @return la fecha de caducidad, o {@code null} si todavía no se ha indicado
+     */
+    public String getFecha_caducidad() {
+        return fecha_caducidad;
+    }
+
+    /**
+     * Cambia la fecha de caducidad (yyyy-MM-dd) del lote de esta línea.
+     *
+     * @param fecha_caducidad la fecha de caducidad
+     */
+    public void setFecha_caducidad(String fecha_caducidad) {
+        this.fecha_caducidad = fecha_caducidad;
     }
 
     /**
@@ -212,7 +244,7 @@ public class LineaCompra {
      */
     @Override
     public String toString() {
-        return "LineaCompra{" + "producto_id=" + producto_id + ", nombre=" + nombre + ", cantidad=" + cantidad + ", precio_unidad=" + precio_unidad + ", iva=" + iva + ", subtotal=" + subtotal + '}';
+        return "LineaCompra{" + "producto_id=" + producto_id + ", nombre=" + nombre + ", cantidad=" + cantidad + ", precio_unidad=" + precio_unidad + ", iva=" + iva + ", subtotal=" + subtotal + ", fecha_caducidad=" + fecha_caducidad + '}';
     }
 
 }

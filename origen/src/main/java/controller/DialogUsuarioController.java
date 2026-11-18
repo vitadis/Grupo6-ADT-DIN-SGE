@@ -30,6 +30,12 @@ import services.AdministracionService;
  */
 public class DialogUsuarioController {
 
+    /**
+     * Constructor vacío usado por el FXMLLoader.
+     */
+    public DialogUsuarioController() {
+    }
+
     // ---- Estado y callbacks ----
     private Usuario usuarioGestionado;
     private List<String> permisosCatalogo = new ArrayList<String>();
@@ -376,7 +382,10 @@ public class DialogUsuarioController {
         cerrar();
     }
 
-    // set solo lectura
+    /**
+     * Pone el diálogo en modo solo lectura: oculta los botones de edición y los campos
+     * internos.
+     */
     public void setSoloLectura() {
         ponerVisible(btnModificar, false);
         ponerVisible(btnEliminar, false);
