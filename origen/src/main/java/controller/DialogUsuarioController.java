@@ -117,6 +117,7 @@ public class DialogUsuarioController {
                 cargarPermisos(usuario);
             }
         });
+        mbPermisos.getStyleClass().add("btn-secundario");
     }
 
     /**
