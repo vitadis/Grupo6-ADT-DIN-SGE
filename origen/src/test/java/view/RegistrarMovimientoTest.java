@@ -16,11 +16,11 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit5.ApplicationTest;
 import org.testfx.util.WaitForAsyncUtils;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests del diálogo «Registrar movimiento» ({@code registrarMovimiento.fxml}), abierto solo.
@@ -165,6 +165,8 @@ public class RegistrarMovimientoTest extends ApplicationTest {
      * Un gasto muy alto en una categoría con gastos anteriores enseña el aviso con el nombre de
      * la categoría.
      */
+    
+    //Peta
     @Test
     public void testAvisoSiElGastoSuperaLaMedia() {
         rellenar("Prueba", CATEGORIA_CON_GASTOS, "99999");
