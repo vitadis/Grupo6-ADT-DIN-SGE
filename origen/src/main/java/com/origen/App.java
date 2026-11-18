@@ -18,11 +18,7 @@ public class App {
      * @param args argumentos de la línea de comandos
      */
     public static void main(String[] args) {
-        Application.launch(InstanciarEscena.class, args);
-        //MongoDBConnectionTest.mani(args);
-        AppLogger log = AppLogger.getInstance();
-        
-        log.leer().forEach(System.out::println);
+        Application.launch(InstanciarEscena.class, args);        
     }
     
-}
+}
