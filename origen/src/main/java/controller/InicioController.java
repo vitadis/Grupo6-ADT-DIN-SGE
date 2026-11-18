@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -30,6 +31,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import model.Compra;
+import model.EstadoPedido;
 import model.Producto;
 import model.Proveedor;
 import model.VentaPedido;
@@ -116,7 +118,7 @@ public class InicioController implements Initializable, ActualizarDatos {
         historialVentas.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                abrir("/view/caja/historialView.fxml", "Historial de Ventas");
+                abrirHistorial();
             }
         });
 
@@ -125,16 +127,31 @@ public class InicioController implements Initializable, ActualizarDatos {
     /* Abre la vista que le mandes por parametro*/
     private void abrir(String ruta, String titulo) {
         try {
-            InstanciarEscena.createNewStage(ruta, titulo, (c) -> {
-                HistorialController controlador = (HistorialController) c;
-                controlador.setCajaService(new CajaService(ProductoDaoImp.getInstance(), PedidoDaoImp.getInstance()));
-            });
+            InstanciarEscena.createNewStage(ruta, titulo, null);
             cargarDatos();
         } catch (Exception e) {
             e.printStackTrace();
             Alertas.mostrarError("No se pudo abrir la ventana: " + e.getMessage());
             logger.log(Level.SEVERE, "No se pudo abrir la ventana " + ruta, e);
+        }
+    }
 
+    private void abrirHistorial() {
+        try {
+            InstanciarEscena.<HistorialController>createNewStage(
+                    "/view/caja/historialView.fxml", "Historial de Ventas",
+                    new Consumer<HistorialController>() {
+                @Override
+                public void accept(HistorialController controlador) {
+                    controlador.setCajaService(
+                            new CajaService(ProductoDaoImp.getInstance(), PedidoDaoImp.getInstance()));
+                }
+            });
+            cargarDatos();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Alertas.mostrarError("No se pudo abrir la ventana: " + e.getMessage());
+            logger.log(Level.SEVERE, "No se pudo abrir el historial de ventas", e);
         }
     }
 
@@ -184,6 +201,9 @@ public class InicioController implements Initializable, ActualizarDatos {
         double ingresos = 0;
 
         for (VentaPedido v : pedidoService.listaPedidos()) {
+            if (v.getEstado() != EstadoPedido.COBRADO) {
+                continue;
+            }
             String fechaTexto = v.getFecha();
             if (fechaTexto == null || fechaTexto.length() < 10) {
                 continue;
@@ -256,7 +276,7 @@ public class InicioController implements Initializable, ActualizarDatos {
             vacio.getStyleClass().add("inicio-vacio");
             contenedorCompras.getChildren().add(vacio);
         }
-
+        gastosMes = gastos;
         gastoMes.setText(String.format("%.2f €", gastos));
         lblContador.setText("Mostrando " + mostradas + " de " + compras.size() + " compras");
     }

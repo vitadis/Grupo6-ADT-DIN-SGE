@@ -1,6 +1,5 @@
 package view.inicio;
 
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -75,7 +74,13 @@ public class InicioTest extends ApplicationTest {
 
         assertNotNull(lookup("#tvPedido").tryQuery().orElse(null), "Debería abrirse la ventana del historial de ventas");
 
-        press(javafx.scene.input.KeyCode.ESCAPE).release(javafx.scene.input.KeyCode.ESCAPE);
+        Stage ultima = (Stage) listWindows().get(listWindows().size() - 1);
+        interact(new Runnable() {
+            @Override
+            public void run() {
+                ultima.close();
+            }
+        });
     }
 
     @Test
