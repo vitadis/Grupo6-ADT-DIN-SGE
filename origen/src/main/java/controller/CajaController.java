@@ -37,7 +37,7 @@ import util.AppLogger;
  *
  * @author Joel
  */
-public class CajaController implements UsuarioImplementacion {
+public class CajaController implements UsuarioImplementacion, ActualizarDatos {
 
     private static final String RUTA_TARJETA = "/view/caja/productoComponent.fxml";
     private static final String RUTA_LINEA_PEDIDO = "/view/caja/productoPedidoComponent.fxml";
@@ -423,5 +423,11 @@ public class CajaController implements UsuarioImplementacion {
         if (usuario != null) {
             logger.setUser(usuario.getUsername());
         }
+    }
+
+    @Override
+    public void actualizarDatos() {
+        cargarProductos();
+        actualizarPedido();
     }
 }

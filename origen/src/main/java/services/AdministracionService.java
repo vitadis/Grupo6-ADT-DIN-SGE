@@ -93,6 +93,10 @@ public class AdministracionService {
             }
             user.getEmpleado().validar();
         }
+        if (!"administrador".equalsIgnoreCase(user.getRol())
+                && !"trabajador".equalsIgnoreCase(user.getRol())) {
+            throw new IllegalArgumentException("El rol debe ser administrador o trabajador.");
+        }
 
         user.validar();
 
@@ -159,6 +163,15 @@ public class AdministracionService {
         Usuario existente = consultarUsuario(user.getId());
 
         usuarioDao.eliminarUsuario(existente);
+    }
+
+    public List<String> listarPermisosPorRol(String rol) {
+        if (rol == null || (!rol.equalsIgnoreCase("administrador")
+                && !rol.equalsIgnoreCase("trabajador"))) {
+            throw new IllegalArgumentException("El rol no es válido.");
+        }
+
+        return usuarioDao.listarPermisosPorRol(rol.toLowerCase());
     }
 
     // ---- Auxiliares privados ----
