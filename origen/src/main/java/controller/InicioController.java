@@ -51,8 +51,6 @@ public class InicioController implements Initializable, UsuarioImplementacion, A
 
     private static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yy");
     private static final int MAX_COMPRAS = 8;
-    // private
-    private Usuario usuario;
 
     @FXML
     private GridPane gridInfoStock;
