@@ -151,7 +151,9 @@ public class InicioController implements Initializable, ActualizarDatos, Usuario
 
     private void cargarCompras(Object controller) {
         RegistrarCompraController contolladorCompras = (RegistrarCompraController) controller;
-        contolladorCompras.setUsuarioId(usuario.getId());
+        if (usuario != null) {
+            contolladorCompras.setUsuarioId(usuario.getId());
+        }
     }
 
     private void cargarDatos() {
