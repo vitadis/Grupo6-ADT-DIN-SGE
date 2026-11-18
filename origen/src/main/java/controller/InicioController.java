@@ -300,5 +300,6 @@ public class InicioController implements Initializable, ActualizarDatos, Usuario
     @Override
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+        logger.setUser(usuario.getUsername());
     }
 }
