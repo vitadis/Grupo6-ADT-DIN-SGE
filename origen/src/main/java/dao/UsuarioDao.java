@@ -61,5 +61,13 @@ public interface UsuarioDao {
      */
     public List<String> listarPermisos();
 
+    /**
+     * Devuelve los permisos que se asignan por defecto a un rol, guardados en el
+     * documento «default» de la colección permisos.
+     *
+     * @param rol rol en minúsculas: «administrador» o «trabajador»
+     * @return lista de permisos por defecto del rol (vacía si no hay ninguno definido)
+     * @throws exceptions.DaoException si falla el acceso a la base de datos
+     */
     List<String> listarPermisosPorRol(String rol);
 }
