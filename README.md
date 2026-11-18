@@ -19,7 +19,7 @@ Si no existe, crear la base de datos `origen`.
 ### Validación e importación de pedidos
 
 1. Abrir el [validador](./datos/origen.validator.js) desde MongoDB Shell, conectado a `origen`, y ejecutar su contenido.
-2. Importar los [pedidos](./datos/origen.collection_pedidos.json) en la colección `pedidos` mediante **Add Data → Import JSON or CSV**.
+2. Importar los [pedidos](./datos/origen.pedidos.json) en la colección `pedidos` mediante **Add Data → Import JSON or CSV**.
 
 ### Importación de colecciones
 
