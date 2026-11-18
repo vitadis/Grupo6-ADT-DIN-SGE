@@ -76,7 +76,6 @@ public class GestionStockController implements Initializable, UsuarioImplementac
     private final GestionStockService stockService = new GestionStockService();
     private final AppLogger logger = AppLogger.getInstance();
 
-    // Productos tal cual vienen del service (se usan para el resumen)
     private final ObservableList<Producto> productos = FXCollections.observableArrayList();
 
     private final ObservableList<FilaStock> filas = FXCollections.observableArrayList();
@@ -87,7 +86,6 @@ public class GestionStockController implements Initializable, UsuarioImplementac
         }
     });
 
-    // Un único listener para los cuatro filtros
     private final ChangeListener<Object> alCambiarFiltro = new ChangeListener<Object>() {
         @Override
         public void changed(ObservableValue<? extends Object> obs, Object antes, Object ahora) {
@@ -98,7 +96,6 @@ public class GestionStockController implements Initializable, UsuarioImplementac
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        // Ajustes de ancho de las columnas
         int n = tablaStock.getColumns().size();
         double total = n - 1 + 2.0;
 
@@ -108,7 +105,6 @@ public class GestionStockController implements Initializable, UsuarioImplementac
                     .bind(tablaStock.widthProperty().subtract(20).multiply(peso / total));
         }
 
-        // Se enlazan las columnas con los getters de FilaStock
         colProducto.setCellValueFactory(new PropertyValueFactory<FilaStock, String>("nombre"));
         colCategoria.setCellValueFactory(new PropertyValueFactory<FilaStock, CategoriaProducto>("categoria"));
         colExistencia.setCellValueFactory(new PropertyValueFactory<FilaStock, Number>("existencia"));
@@ -128,13 +124,11 @@ public class GestionStockController implements Initializable, UsuarioImplementac
         estadoDisplay.getItems().addAll("Todos", "OK", "Stock bajo", "Agotado");
         estadoDisplay.setValue("Todos");
 
-        // Cualquier cambio en los filtros recalcula la tabla
         txtBuscar.textProperty().addListener(alCambiarFiltro);
         categoriaDisplay.valueProperty().addListener(alCambiarFiltro);
         estadoDisplay.valueProperty().addListener(alCambiarFiltro);
         soloAlertas.selectedProperty().addListener(alCambiarFiltro);
 
-        // SortedList para mantener el ordenar por columnas
         SortedList<FilaStock> ordenadas = new SortedList<FilaStock>(filasFiltradas);
         ordenadas.comparatorProperty().bind(tablaStock.comparatorProperty());
         tablaStock.setItems(ordenadas);
@@ -172,21 +166,17 @@ public class GestionStockController implements Initializable, UsuarioImplementac
         filasFiltradas.setPredicate(new Predicate<FilaStock>() {
             @Override
             public boolean test(FilaStock f) {
-                // Buscador: el nombre contiene el texto escrito
                 if (!texto.isEmpty() && !f.getNombre().toLowerCase().contains(texto)) {
                     return false;
                 }
-                // Categoría
                 if (categoria != null && !categoria.equals("Todas")
                         && !categoria.equals(f.getCategoria().getEtiqueta())) {
                     return false;
                 }
-                // Estado
                 if (estado != null && !estado.equals("Todos")
                         && !estado.equals(f.getEstado())) {
                     return false;
                 }
-                // Solo alertas: agotado o stock bajo
                 if (soloAl && !(f.getEstado().equals("Agotado") || f.getEstado().equals("Stock bajo"))) {
                     return false;
                 }

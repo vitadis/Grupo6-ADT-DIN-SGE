@@ -4,8 +4,12 @@
  */
 package services;
 
+import dao.AñadirProductoDao;
 import dao.GestionStockDao;
+import dao.RegistrarPerdidaDao;
+import dao.implement.AnadirProductoDaoImp;
 import dao.implement.GestionStockDaoImp;
+import dao.implement.RegistrarPerdidaDaoImp;
 import exceptions.DaoException;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -26,6 +30,8 @@ import org.bson.Document;
 public class GestionStockService {
 
     private final GestionStockDao stockDao = GestionStockDaoImp.getInstance();
+    private final RegistrarPerdidaDao perdidaDao = RegistrarPerdidaDaoImp.getInstance();
+    private final AñadirProductoDao añadirDao = AnadirProductoDaoImp.getInstance();
 
     public List<Producto> listarProductos() throws DaoException {
         return stockDao.listarProductos();
@@ -35,7 +41,6 @@ public class GestionStockService {
         return stockDao.listarActivos();
     }
 
-    /** Categorías que pertenecen a un tipo (Venta / Ingrediente). */
     public List<CategoriaProducto> categoriasDeTipo(TipoProducto tipo) {
         List<CategoriaProducto> filtradas = new ArrayList<>();
         if (tipo != null) {
@@ -63,7 +68,7 @@ public class GestionStockService {
         String texto = (nota == null) ? "" : nota.trim();
         MovimientoStock mov = new MovimientoStock(
                 producto.getId(), producto.getNombre(), "PERDIDA", cantidad, texto);
-        stockDao.registrarPerdida(mov, producto);
+        perdidaDao.registrarPerdida(mov, producto);
     }
 
     public void anadirStock(Producto producto, int cantidad, LocalDate caducidad) throws DaoException {
@@ -76,7 +81,7 @@ public class GestionStockService {
         if (caducidad == null) {
             throw new IllegalArgumentException("Indica la fecha de caducidad.");
         }
-        stockDao.anadirStock(producto.getId(), cantidad, caducidad.toString());
+        añadirDao.anadirStock(producto.getId(), cantidad, caducidad.toString());
     }
 
     /**
@@ -116,7 +121,6 @@ public class GestionStockService {
         List<Integer> proveedores = new ArrayList<>();
         proveedores.add(proveedor.getId());
 
-        // El tipo antes que la categoría (el setter las compara)
         Producto p = new Producto();
         p.setNombre(limpio);
         p.setTipo(tipo);
@@ -131,7 +135,7 @@ public class GestionStockService {
             p.agregarLote(cantidadInicial, caducidad.toString());
         }
 
-        stockDao.insertarProducto(p);
+        añadirDao.insertarProducto(p);
         return p;
     }
 

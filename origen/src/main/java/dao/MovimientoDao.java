@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
 package dao;
 
 import exceptions.DaoException;
@@ -9,8 +5,8 @@ import java.util.List;
 import model.Movimiento;
 
 /**
- * Operaciones de la colección {@code movimientos} (ingresos y gastos que no son compras ni
- * ventas de la caja).
+ * Operaciones de la colección {@code registros_economicos}: todos los ingresos y gastos, tanto
+ * los que salen de compras y pedidos como los que se meten a mano.
  *
  * @author anazk
  */

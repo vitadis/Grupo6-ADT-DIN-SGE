@@ -27,14 +27,12 @@
             </rowConstraints>
             <children>
 
-                <!-- Fila 0: título -->
                 <HBox alignment="CENTER_LEFT" spacing="12.0">
                     <children>
                         <Label styleClass="titulo" text="RESUMEN GENERAL" />
                     </children>
                 </HBox>
 
-                <!-- Fila 1: tarjetas -->
                 <GridPane fx:id="gridInfoStock" styleClass="gridStock" GridPane.rowIndex="1">
                     <columnConstraints>
                         <ColumnConstraints hgrow="ALWAYS" percentWidth="25.0" />
@@ -73,7 +71,6 @@
                     </children>
                 </GridPane>
 
-                <!-- Fila 2: compras + alertas + accesos directos -->
                 <GridPane hgap="20.0" GridPane.rowIndex="2">
                     <columnConstraints>
                         <ColumnConstraints hgrow="ALWAYS" percentWidth="42.0" />
@@ -85,7 +82,6 @@
                     </rowConstraints>
                     <children>
 
-                        <!-- Izquierda: últimas compras -->
                         <VBox styleClass="tarjeta, inicio-panel">
                             <children>
                                 <Label styleClass="inicio-panel-titulo" text="Últimas compras" />
@@ -107,7 +103,6 @@
                             </children>
                         </VBox>
 
-                        <!-- Centro: alertas de stock -->
                         <VBox styleClass="tarjeta, inicio-panel" GridPane.columnIndex="1">
                             <children>
                                 <Label styleClass="inicio-panel-titulo" text="Alertas de stock" />
@@ -120,7 +115,6 @@
                             </children>
                         </VBox>
 
-                        <!-- Derecha: accesos directos -->
                         <VBox styleClass="tarjeta, inicio-panel" GridPane.columnIndex="2">
                             <children>
                                 <Label styleClass="inicio-panel-titulo" text="Accesos directos" />

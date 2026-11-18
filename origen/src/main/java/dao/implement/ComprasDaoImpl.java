@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dao.implement;
 
 import com.mongodb.MongoException;
@@ -103,7 +99,6 @@ public class ComprasDaoImpl extends AccesoMongoDB implements ComprasDao{
                 throw new IllegalArgumentException("Ya existe una compra con la factura " + compra.getNumero_factura() + ".");
             }
 
-            // Los _id son enteros y el driver no los genera: siguiente = mayor + 1
             Compra ultima = coleccion.find().sort(Sorts.descending("_id")).first();
             if (ultima == null) {
                 compra.setId(1);

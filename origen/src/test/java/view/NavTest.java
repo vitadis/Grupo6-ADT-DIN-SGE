@@ -193,7 +193,7 @@ public class NavTest extends ApplicationTest {
         List<ToggleButton> botones = obtenerBotones();
         assertFalse(botones.isEmpty());
 
-        for (int i = botones.size() - 1; i >= 0; i--) { // en orden inverso
+        for (int i = botones.size() - 1; i >= 0; i--) {
             clickOn(botones.get(i));
             WaitForAsyncUtils.waitForFxEvents();
             verificarVistaActiva(i, botones.get(i).getText());

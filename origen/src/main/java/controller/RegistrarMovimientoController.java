@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package controller;
 
 import exceptions.DaoException;
@@ -26,6 +22,9 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import dao.implement.ComprasDaoImpl;
+import dao.implement.MovimientoDaoImpl;
+import dao.implement.ProveedorDaoImpl;
 import model.Movimiento;
 import services.MovimientoService;
 import util.AppLogger;
@@ -35,15 +34,12 @@ import util.AppLogger;
  *
  * Sirve para anotar un ingreso o un gasto que no es ni una compra ni una venta de la caja
  * (luz, nóminas, alquiler...). Lo abre {@link GestionEconomicaController}, que antes llama a
- * {@link #setDatos(int, List)} y, al cerrarse, consulta {@link #isGuardado()}.
+ * {@link #setUsuarioId(int)} y, al cerrarse, consulta {@link #isGuardado()}.
  *
  * @author anazk
  */
 public class RegistrarMovimientoController implements Initializable {
 
-    /**
-     * Logger de la aplicación (escribe en {@code logs/app.log}).
-     */
     private final AppLogger logger = AppLogger.getInstance();
 
     /**
@@ -53,9 +49,10 @@ public class RegistrarMovimientoController implements Initializable {
         "Seguros", "Impuestos", "Servicios", "Eventos", "Subvenciones", "Otros"};
 
     /**
-     * Service para validar y guardar el movimiento.
+     * Service para leer los registros anteriores y validar y guardar el movimiento.
      */
-    private final MovimientoService movimientoService = new MovimientoService();
+    private final MovimientoService movimientoService = new MovimientoService(
+            MovimientoDaoImpl.getInstance(), ComprasDaoImpl.getInstance(), ProveedorDaoImpl.getInstance());
 
     /**
      * Movimientos que ya había, para calcular la media de cada categoría.
@@ -70,69 +67,30 @@ public class RegistrarMovimientoController implements Initializable {
      */
     private boolean guardado = false;
 
-    /**
-     * Agrupa los dos botones de tipo para que solo se pueda elegir uno.
-     */
     @FXML
     private ToggleGroup grupoTipo;
-    /**
-     * Tipo de movimiento: ingreso.
-     */
     @FXML
     private ToggleButton tgIngreso;
-    /**
-     * Tipo de movimiento: gasto (seleccionado al abrir).
-     */
     @FXML
     private ToggleButton tgGasto;
-    /**
-     * Concepto del movimiento (obligatorio).
-     */
     @FXML
     private TextField txtConcepto;
-    /**
-     * Importe en euros (obligatorio, mayor que 0).
-     */
     @FXML
     private TextField txtImporte;
-    /**
-     * Fecha del movimiento (obligatoria; hoy al abrir).
-     */
     @FXML
     private DatePicker dpFecha;
-    /**
-     * Categoría: se elige de la lista o se escribe una nueva.
-     */
     @FXML
     private ComboBox<String> cbCategoria;
-    /**
-     * Observaciones (opcional).
-     */
     @FXML
     private TextArea txtObservaciones;
-    /**
-     * Caja ámbar del aviso de importe superior a la media.
-     */
     @FXML
     private VBox cajaAviso;
-    /**
-     * Texto del aviso de importe superior a la media.
-     */
     @FXML
     private Label lblAviso;
-    /**
-     * Muestra los errores de validación o de la base de datos.
-     */
     @FXML
     private Label lblError;
-    /**
-     * Cierra la ventana sin guardar.
-     */
     @FXML
     private Button btnCancelar;
-    /**
-     * Valida y guarda el movimiento.
-     */
     @FXML
     private Button btnGuardar;
 
@@ -143,7 +101,10 @@ public class RegistrarMovimientoController implements Initializable {
     }
 
     /**
-     * Pone la fecha de hoy y carga las categorías por defecto.
+     * Pone la fecha de hoy, carga las categorías por defecto y lee los registros que ya hay,
+     * para calcular la media de cada categoría. Las categorías de los registros metidos a mano
+     * que no estén en la lista se añaden al desplegable; las de compras y pedidos no, porque
+     * esos se apuntan solos.
      *
      * @param url ubicación del FXML (no se usa)
      * @param rb recursos de idioma (no se usa)
@@ -152,26 +113,29 @@ public class RegistrarMovimientoController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         dpFecha.setValue(LocalDate.now());
         cbCategoria.getItems().addAll(CATEGORIAS);
-    }
 
-    /**
-     * Recibe el usuario que registra el movimiento y los movimientos que ya había. Las
-     * categorías de esos movimientos que no estén en la lista se añaden al desplegable.
-     * Lo llama {@link GestionEconomicaController} antes de mostrar la ventana.
-     *
-     * @param usuarioId identificador del usuario con la sesión iniciada
-     * @param movimientos movimientos que ya había
-     */
-    public void setDatos(int usuarioId, List<Movimiento> movimientos) {
-        this.usuarioId = usuarioId;
-        anteriores.clear();
-        anteriores.addAll(movimientos);
+        try {
+            anteriores.addAll(movimientoService.listarMovimientos());
+        } catch (DaoException e) {
+            lblError.setText(e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage(), e);
+        }
 
-        for (Movimiento m : movimientos) {
-            if (!cbCategoria.getItems().contains(m.getCategoria())) {
+        for (Movimiento m : anteriores) {
+            if (m.getOrigen() == null && !cbCategoria.getItems().contains(m.getCategoria())) {
                 cbCategoria.getItems().add(m.getCategoria());
             }
         }
+    }
+
+    /**
+     * Indica qué usuario registra el movimiento.
+     * Lo llama {@link GestionEconomicaController} antes de mostrar la ventana.
+     *
+     * @param usuarioId identificador del usuario con la sesión iniciada
+     */
+    public void setUsuarioId(int usuarioId) {
+        this.usuarioId = usuarioId;
     }
 
     /**
@@ -245,7 +209,6 @@ public class RegistrarMovimientoController implements Initializable {
         }
 
         Movimiento m = new Movimiento();
-        // si no hay tipo o fecha se quedan en null y validar() da el error
         if (tgIngreso.isSelected()) {
             m.setTipo("ingreso");
         } else if (tgGasto.isSelected()) {

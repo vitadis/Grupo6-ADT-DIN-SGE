@@ -6,10 +6,10 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="320.0" prefWidth="852.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HistorialController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="365.0" prefWidth="854.0" spacing="20.0" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.HistorialController">
    <children>
-      <Label text="Historial de Pedidos" />
-      <TableView fx:id="tvPedido" prefHeight="200.0" prefWidth="200.0">
+      <Label styleClass="titulo" text="Historial de Pedidos" />
+      <TableView fx:id="tvPedido" prefHeight="237.0" prefWidth="809.0">
         <columns>
           <TableColumn fx:id="tcId" prefWidth="75.0" text="id" />
           <TableColumn fx:id="tcUsuarioId" prefWidth="75.0" text="usuario_id" />
