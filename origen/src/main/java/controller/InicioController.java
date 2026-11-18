@@ -127,19 +127,15 @@ public class InicioController implements Initializable, ActualizarDatos {
 
     /* Abre la vista que le mandes por parametro*/
     private void abrir(String ruta, String titulo) {
-        try {
-            InstanciarEscena.createNewStage(ruta, titulo, (c) -> {
-                HistorialController controlador = (HistorialController) c;
-                controlador.setCajaService(new CajaService(ProductoDaoImp.getInstance(), PedidoDaoImp.getInstance(),
-            MovimientoDaoImpl.getInstance()));
-            });
-            cargarDatos();
-        } catch (Exception e) {
-            e.printStackTrace();
-            Alertas.mostrarError("No se pudo abrir la ventana: " + e.getMessage());
-            logger.log(Level.SEVERE, "No se pudo abrir la ventana " + ruta, e);
-        }
+    try {
+        InstanciarEscena.createNewStage(ruta, titulo, null);
+        cargarDatos();
+    } catch (Exception e) {
+        e.printStackTrace();
+        Alertas.mostrarError("No se pudo abrir la ventana: " + e.getMessage());
+        logger.log(Level.SEVERE, "No se pudo abrir la ventana " + ruta, e);
     }
+}
 
     private void abrirHistorial() {
         try {
@@ -149,7 +145,7 @@ public class InicioController implements Initializable, ActualizarDatos {
                 @Override
                 public void accept(HistorialController controlador) {
                     controlador.setCajaService(
-                            new CajaService(ProductoDaoImp.getInstance(), PedidoDaoImp.getInstance()));
+                            new CajaService(ProductoDaoImp.getInstance(), PedidoDaoImp.getInstance(), MovimientoDaoImpl.getInstance()));
                 }
             });
             cargarDatos();
