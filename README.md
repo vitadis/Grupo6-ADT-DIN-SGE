@@ -256,8 +256,6 @@ public class ModuloController {
 | Gestión de stock | `view/gestionStock` | Inventario y movimientos de stock |
 | Economía | `view/economia` | Registros económicos |
 
-## 5. Funcionalidades
-
 ## 6. Autores
 
 | Nombre | Repositorio |
