@@ -1,0 +1,214 @@
+[{
+  "_id": 1,
+  "nombre": "Distribuciones Norte S.L.",
+  "nif_cif": "B48123451",
+  "contacto": {
+    "persona": "Mikel Fernández",
+    "telefono": "944123456",
+    "email": "ventas@distribucionesnorte.example",
+    "direccion": "C/ Ribera, 12, Bilbao"
+  },
+  "plazo_entrega": 2,
+  "dias_laborales": [
+    "lunes",
+    "martes",
+    "miercoles",
+    "jueves",
+    "viernes"
+  ],
+  "iban": "ES9121000418450200051332",
+  "activo": true
+},
+{
+  "_id": 2,
+  "nombre": "Alimentación Bizkaia S.L.",
+  "nif_cif": "B48234562",
+  "contacto": {
+    "persona": "Ane Martínez",
+    "telefono": "944234567",
+    "email": "pedidos@alimentacionbizkaia.example",
+    "direccion": "Pol. Ind. Asuaran, 8, Erandio"
+  },
+  "plazo_entrega": 1,
+  "dias_laborales": [
+    "lunes",
+    "martes",
+    "miercoles",
+    "jueves",
+    "viernes",
+    "sabado"
+  ],
+  "iban": "ES7620770024003102575766",
+  "activo": true
+},
+{
+  "_id": 3,
+  "nombre": "Cafés del Cantábrico S.L.",
+  "nif_cif": "B48345673",
+  "contacto": {
+    "persona": "Jon Etxeberria",
+    "telefono": "944345678",
+    "email": "comercial@cafescantabrico.example",
+    "direccion": "C/ Kareaga, 25, Barakaldo"
+  },
+  "plazo_entrega": 3,
+  "dias_laborales": [
+    "lunes",
+    "martes",
+    "miercoles",
+    "jueves",
+    "viernes"
+  ],
+  "iban": "ES6621000418401234567891",
+  "activo": true
+},
+{
+  "_id": 4,
+  "nombre": "Horno Artesano Bilbao S.L.",
+  "nif_cif": "B48456784",
+  "contacto": {
+    "persona": "Maite Rodríguez",
+    "telefono": "944456789",
+    "email": "pedidos@hornoartesano.example",
+    "direccion": "C/ Autonomía, 45, Bilbao"
+  },
+  "plazo_entrega": 1,
+  "dias_laborales": [
+    "lunes",
+    "martes",
+    "miercoles",
+    "jueves",
+    "viernes",
+    "sabado",
+    "domingo"
+  ],
+  "iban": "ES5721000813610123456789",
+  "activo": true
+},
+{
+  "_id": 5,
+  "nombre": "Lácteos del Valle S.L.",
+  "nif_cif": "B48567895",
+  "contacto": {
+    "persona": "Iñigo García",
+    "telefono": "945123456",
+    "email": "ventas@lacteosdelvalle.example",
+    "direccion": "Pol. Ind. Arriandi, 14, Iurreta"
+  },
+  "plazo_entrega": 2,
+  "dias_laborales": [
+    "lunes",
+    "martes",
+    "miercoles",
+    "jueves",
+    "viernes"
+  ],
+  "iban": "ES3421000418450200123456",
+  "activo": true
+},
+{
+  "_id": 6,
+  "nombre": "Higiene Profesional Norte S.L.",
+  "nif_cif": "B48678906",
+  "contacto": {
+    "persona": "Laura Sánchez",
+    "telefono": "944567890",
+    "email": "pedidos@higienenorte.example",
+    "direccion": "Pol. Ind. Ugaldeguren, 3, Zamudio"
+  },
+  "plazo_entrega": 3,
+  "dias_laborales": [
+    "lunes",
+    "martes",
+    "miercoles",
+    "jueves",
+    "viernes"
+  ],
+  "iban": "ES1821000418409876543210",
+  "activo": true
+},
+{
+  "_id": 7,
+  "nombre": "Frescos del Nervión S.L.",
+  "nif_cif": "B48789017",
+  "contacto": {
+    "persona": "Unai López",
+    "telefono": "944678901",
+    "email": "comercial@frescosnervion.example",
+    "direccion": "Mercabilbao, Basauri"
+  },
+  "plazo_entrega": 1,
+  "dias_laborales": [
+    "lunes",
+    "martes",
+    "miercoles",
+    "jueves",
+    "viernes",
+    "sabado"
+  ],
+  "iban": "ES8521000418450200678901",
+  "activo": true
+},
+{
+  "_id": 8,
+  "nombre": "Carnes y Embutidos Arriaga S.L.",
+  "nif_cif": "B48890128",
+  "contacto": {
+    "persona": "Nerea Gómez",
+    "telefono": "944789012",
+    "email": "pedidos@carnesiarriaga.example",
+    "direccion": "Pol. Ind. Etxebarri, 6, Etxebarri"
+  },
+  "plazo_entrega": 2,
+  "dias_laborales": [
+    "lunes",
+    "martes",
+    "miercoles",
+    "jueves",
+    "viernes"
+  ],
+  "iban": "ES4521000418401122334455",
+  "activo": true
+},
+{
+  "_id": 9,
+  "nombre": "Envases Hosteleros Euskadi S.L.",
+  "nif_cif": "B48901239",
+  "contacto": {
+    "persona": "Aitor Ruiz",
+    "telefono": "944890123",
+    "email": "ventas@envaseshosteleros.example",
+    "direccion": "Pol. Ind. Torrelarragoiti, 2, Zamudio"
+  },
+  "plazo_entrega": 4,
+  "dias_laborales": [
+    "lunes",
+    "martes",
+    "miercoles",
+    "jueves",
+    "viernes"
+  ],
+  "iban": "ES9521000418450200987654",
+  "activo": true
+},
+{
+  "_id": 10,
+  "nombre": "Congelados del País Vasco S.L.",
+  "nif_cif": "B48012340",
+  "contacto": {
+    "persona": "Leire Martín",
+    "telefono": "944901234",
+    "email": "pedidos@congeladospv.example",
+    "direccion": "Pol. Ind. Jundiz, 18, Vitoria-Gasteiz"
+  },
+  "plazo_entrega": 3,
+  "dias_laborales": [
+    "lunes",
+    "martes",
+    "miercoles",
+    "jueves",
+    "viernes"
+  ],
+  "iban": "ES2421000418405566778899",
+  "activo": true
+}]
